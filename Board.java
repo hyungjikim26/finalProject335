@@ -119,6 +119,7 @@ public class Board {
     				}
     				else if (grid[tempRow-1][column].equals(grid[tempRow][column])) {
     					grid[tempRow-1][column].merge(grid[tempRow][column]);
+    					break;
     				}
     				tempRow--;
     			}

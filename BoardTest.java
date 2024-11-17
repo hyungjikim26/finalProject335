@@ -29,6 +29,16 @@ class BoardTest {
 		System.out.println(board);
 		board.moveUp();
 		System.out.println(board);
+		
+		board = new Board(4, 0);
+		System.out.println(board);
+		board.addTile(0, 0, 2);
+		board.addTile(1, 0, 2);
+		board.addTile(2, 0, 2);
+		board.addTile(3, 0, 2);
+		System.out.println(board);
+		board.moveUp();
+		System.out.println(board);
 	}
 
 }

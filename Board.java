@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Board {
@@ -12,7 +13,7 @@ public class Board {
     /**
      * Constructor for the Board class.
      * 
-     * @pre none
+     * @pre numTiles >= 0 && numTiles <= size*size && size > 0
      * @post a new Board object is created
      * @param size the size of the board
      * @param numTiles the number of tiles to place on the board
@@ -39,25 +40,56 @@ public class Board {
         this(4, 2);
     }
     
+    /**
+     * @return size of the board
+     */
+    public int getSize() {
+    	return size;
+    }
+    
+    /**
+     * @param row		- row index of the tile
+     * @param column	- column index of the tile
+     * @return			- value of a tile at an index
+     */
+    public int getValue(int row, int column) {
+    	return grid[row][column].getValue();
+    }
+    
+    /**
+     * Returns a copy of the grid instance
+     * 
+     * @pre all cells in grid are not null
+     * @post return deep copy of the instance variable grid
+     * @return copy of the grid instance
+     */
+    public Tile[][] getGrid() {
+    	Tile[][] gridCopy = new Tile[size][size];
+    	for (int row = 0; row < size; row++) {
+    		for (int col = 0; col < size; col++) {
+    			gridCopy[row][col] = new Tile(grid[row][col].getValue());
+    		}
+    	}
+    	return gridCopy;
+    }
+    
 
     /**
      * Initialize the board by placing n empty tiles in random locations.
      * 
-     * @pre the board is empty
-     * @post the board has two tiles placed in random locations
+     * @pre the grid has null values in each cell
+     * @post the board has numTiles tiles placed in random locations
      * @param numTiles the number of tiles to place on the board
      * @return void
      */
     private void initializeBoard(int numTiles) {
+    	for (int row = 0; row < size; row++) {
+    		for (int column = 0; column < size; column++) {
+    			grid[row][column] = new Tile();
+    		}
+    	}
         for (int i = 0; i < numTiles; i++) {
             addRandomTile();
-        }
-        for (int row = 0; row < size; row++) {
-        	for (int column = 0; column < size; column++) {
-        		if (grid[row][column] == null) {
-        			grid[row][column] = new Tile();
-        		}
-        	}
         }
     }
 
@@ -68,15 +100,15 @@ public class Board {
     // For 4x4 board, it should be fine
     /**
      * Checks if the board is full.
-     * @pre none
-     * @post none
+     * @pre grid doesn't have null cells
+     * @post returns whether grid is full or not
      * @return true if the board is full, false otherwise
      */
     private boolean isFull() {
         // iterate through the board and check if any tile is empty
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
-                if (grid[row][col] == null) {
+                if (grid[row][col].isEmpty()) {
                     return false;
                 }
             }
@@ -87,25 +119,42 @@ public class Board {
 
     /**
      * Add a random tile to the board.
+     * If board is full, tile is not added 
      * 
-     * @pre the board is not full
-     * @post the board has one more tile
+     * @pre grid doesn't have empty cells
+     * @post the board has one more tile if it is not full
      * @return void
      */
     private void addRandomTile() {
-        int row, col;
+        int location;
+        ArrayList<Integer> emptyTiles = new ArrayList<Integer>();
         // find a random empty spot
-        do {
-            row = rand.nextInt(size);
-            col = rand.nextInt(size);
-        } while (grid[row][col] != null);
+        for (int i = 0; i < size; i++) {
+        	for (int j = 0; j < size; j++) {
+        		if (grid[i][j].isEmpty()) {
+        			location = i * size + j;
+        			emptyTiles.add(location);
+        		}
+        	}
+        }
+        if (emptyTiles.isEmpty())
+        	return;
+        int randIndex = rand.nextInt(emptyTiles.size());
 
+        int row = emptyTiles.get(randIndex) / size;
+        int col = emptyTiles.get(randIndex) % size;
         // place new tile in the empty spot with a NEW_TILE_PROBability of
         // tile with value 2, and 1-NEW_TILE_PROB of tile with value 4
         int val = rand.nextDouble() < NEW_TILE_PROB ? 2 : 4;
         grid[row][col] = new Tile(val);
     }
     
+    /**
+     * All nonempty tiles are moved up and merged if two 
+     * identical tiles are vertically adjacent or have 
+     * only empty tiles between them.
+     * 
+     */
     public void moveUp() {
     	int tempRow;
     	for (int row = 1; row < size; row++) {
@@ -127,6 +176,14 @@ public class Board {
     	}
     }
     
+    /**
+     * Exchanges tiles at two different locations
+     * 
+     * @param rowFirst 		- row index of the first tile
+     * @param columnFirst	- column ndex of the first tile
+     * @param rowSecond		- row index of the second tile
+     * @param columnSecond	- column index of the second tile
+     */
     private void exchangeTiles(int rowFirst, int columnFirst, int rowSecond, int columnSecond) {
     	Tile tile = grid[rowFirst][columnFirst];
     	grid[rowFirst][columnFirst] =  grid[rowSecond][columnSecond];
@@ -138,6 +195,9 @@ public class Board {
 		grid[row][column] = new Tile(value);
     }
     // for tests
+    /**
+     * @return text version of the Board object
+     */
     public String toString() {
     	String result = "";
     	String tile;

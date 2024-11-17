@@ -52,6 +52,13 @@ public class Board {
         for (int i = 0; i < numTiles; i++) {
             addRandomTile();
         }
+        for (int row = 0; row < size; row++) {
+        	for (int column = 0; column < size; column++) {
+        		if (grid[row][column] == null) {
+        			grid[row][column] = new Tile();
+        		}
+        	}
+        }
     }
 
 
@@ -97,5 +104,52 @@ public class Board {
         // tile with value 2, and 1-NEW_TILE_PROB of tile with value 4
         int val = rand.nextDouble() < NEW_TILE_PROB ? 2 : 4;
         grid[row][col] = new Tile(val);
+    }
+    
+    public void moveUp() {
+    	int tempRow;
+    	for (int row = 1; row < size; row++) {
+    		for (int column = 0; column < size; column++) {
+    			if (grid[row][column].isEmpty())
+    				continue;
+    			tempRow = row;
+    			while (tempRow > 0) {
+    				if (grid[tempRow-1][column].isEmpty()) {
+    					exchangeTiles(tempRow-1, column, tempRow, column);
+    				}
+    				else if (grid[tempRow-1][column].equals(grid[tempRow][column])) {
+    					grid[tempRow-1][column].merge(grid[tempRow][column]);
+    				}
+    				tempRow--;
+    			}
+    		}
+    	}
+    }
+    
+    private void exchangeTiles(int rowFirst, int columnFirst, int rowSecond, int columnSecond) {
+    	Tile tile = grid[rowFirst][columnFirst];
+    	grid[rowFirst][columnFirst] =  grid[rowSecond][columnSecond];
+    	grid[rowSecond][columnSecond] = tile;
+    }
+    
+    // temporary method for tests only
+    public void addTile(int row, int column, int value) {
+		grid[row][column] = new Tile(value);
+    }
+    // for tests
+    public String toString() {
+    	String result = "";
+    	String tile;
+    	for (int i = 0; i < size; i++) {
+    		for (int j = 0; j < size; j++) {
+    			if (grid[i][j].isEmpty())
+    				tile = "*";
+    			else
+    				tile = Integer.toString(grid[i][j].getValue());
+    			result += String.format("%-8s", tile);
+    		}
+    		result += "\n";
+    	}
+    	return result;
     }
 }

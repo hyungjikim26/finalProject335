@@ -156,16 +156,24 @@ public class Board {
      * 
      */
     public void moveUp() {
-    	int tempRow;
+    	// iterate through each tile that potentially needs to move up
+    	// we ignore first row because it is already at the top
+    	// we start with second row and move up each tile on this row, 
+    	// then move to lower row
     	for (int row = 1; row < size; row++) {
     		for (int column = 0; column < size; column++) {
-    			if (grid[row][column].isEmpty())
+    			if (grid[row][column].isEmpty())	// if tile empty, no need to move it
     				continue;
-    			tempRow = row;
+    			// if tile is not empty move it up until it touches the upper bound
+    			// or until it is merged with another tile of equal value
+    			int tempRow = row;
     			while (tempRow > 0) {
+    				// if upper tile is 0, exchange tiles
     				if (grid[tempRow-1][column].isEmpty()) {
     					exchangeTiles(tempRow-1, column, tempRow, column);
     				}
+    				// if upper tile is of the same value, 
+    				// merge given tile to the upper one and finish moving this tile
     				else if (grid[tempRow-1][column].equals(grid[tempRow][column])) {
     					grid[tempRow-1][column].merge(grid[tempRow][column]);
     					break;

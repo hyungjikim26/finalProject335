@@ -15,9 +15,22 @@ public class Tile {
         if (other.getValue() == value){
             value *= 2;
         }
+        other.destroy();
     }
 
     public int getValue(){
         return value;
+    }
+    
+    public boolean equals(Tile other) {
+    	return this.value == other.value;
+    }
+    
+    private void destroy() {
+    	this.value = 0;
+    }
+    
+    public boolean isEmpty() {
+    	return value == 0;
     }
 }

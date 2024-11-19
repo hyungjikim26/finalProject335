@@ -8,6 +8,7 @@ public class Board {
     private final Tile[][] grid;
     private final double NEW_TILE_PROB = 0.9;
     // CONSIDER: add a counter to keep track of no. of empty/valid tiles
+    private int emptyTiles;
 
 
     /**
@@ -125,7 +126,7 @@ public class Board {
      * @post the board has one more tile if it is not full
      * @return void
      */
-    private void addRandomTile() {
+    public void addRandomTile() {
         int location;
         ArrayList<Integer> emptyTiles = new ArrayList<Integer>();
         // find a random empty spot

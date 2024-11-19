@@ -10,9 +10,6 @@ public class Game {
         // which would mean we would get a new bord
         board = new Board();
         score = 0;
-
-
-
     }
 
 
@@ -21,16 +18,16 @@ public class Game {
         score = 0;
     }
 
+
     public int getScore() {
         return score;
     }
+
 
     public void printBoard() {
         System.out.println("Score: " + score);
         System.out.println(board.toString());
     }
-
-
 
 
     public static void main(String[] args) {
@@ -48,19 +45,22 @@ public class Game {
             String move = scanner.nextLine().toLowerCase();
             if (move.equals("w")) {
                 game.board.moveUp();
+                // score += game.board.moveUp();
             // } else if (move.equals("s")) {
-            //     game.board.moveDown();
+            //     score += game.board.moveDown();
             // } else if (move.equals("a")) {
-            //     game.board.moveLeft();
+            //     score += game.board.moveLeft();
             // } else if (move.equals("d")) {
-            //     game.board.moveRight();
+            //     score += game.board.moveRight();
             } else {
                 System.out.println("Invalid move. Please enter w, a, s, or d.");
                 continue;
             }
-            // game.score += game.board.getScore();
-
-            game.board.addRandomTile();
+            
+            // add a new tile only when the board changes
+            if (game.board.hasChanged()) {
+                game.board.addRandomTile();
+            }
 
             // TODO: add break condition here?
 
@@ -71,13 +71,6 @@ public class Game {
             // }
 
         }
-
-
-
-
-
-
-
     }
 	
 }

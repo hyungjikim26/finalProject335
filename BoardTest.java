@@ -60,6 +60,176 @@ class BoardTest {
 	}
 	
 	@Test
+	void test_moveRightMethod() {
+		Board board = new Board(2, 0);
+		System.out.println(board);
+		board.addTile(0, 0, 2);
+		board.addTile(0, 1, 2);
+		board.addTile(1, 0, 2);
+		board.addTile(1, 1, 2);
+		System.out.println(board);
+		assertEquals(2, board.getValue(0, 0));
+		assertEquals(2, board.getValue(0, 1));
+		assertEquals(2, board.getValue(1, 0));
+		assertEquals(2, board.getValue(1, 1));
+		board.moveRight();
+		System.out.println(board);
+		assertEquals(0, board.getValue(0, 0));
+		assertEquals(4, board.getValue(0, 1));
+		assertEquals(0, board.getValue(1, 0));
+		assertEquals(4, board.getValue(1, 1));
+		
+		board = new Board(4, 0);
+		System.out.println(board);
+		board.addTile(0, 0, 2);
+		board.addTile(0, 2, 2);
+		board.addTile(0, 3, 2);
+		board.addTile(2, 0, 4);
+		board.addTile(2, 3, 4);
+		board.addTile(3, 1, 8);
+		board.addTile(3, 2, 2);
+		board.addTile(3, 3, 4);
+		System.out.println(board);
+		board.moveRight();
+		System.out.println(board);
+		assertEquals(4, board.getValue(0, 3));
+		assertEquals(2, board.getValue(0, 2));
+		assertEquals(8, board.getValue(2, 3));
+		assertEquals(4, board.getValue(3, 3));
+		assertEquals(2, board.getValue(3, 2));
+		assertEquals(8, board.getValue(3, 1));
+		assertEquals(0, board.getValue(3, 0));
+		
+		board = new Board(4, 0);
+		System.out.println(board);
+		board.addTile(0, 0, 2);
+		board.addTile(1, 0, 2);
+		board.addTile(2, 0, 2);
+		board.addTile(3, 0, 2);
+		System.out.println(board);
+		board.moveRight();
+		System.out.println(board);
+		assertEquals(2, board.getValue(0, 3));
+		assertEquals(2, board.getValue(1, 3));
+		assertEquals(2, board.getValue(2, 3));
+		assertEquals(2, board.getValue(2, 3));
+	}
+	
+	@Test
+	void test_moveDownMethod() {
+		Board board = new Board(2, 0);
+		System.out.println(board);
+		board.addTile(0, 0, 2);
+		board.addTile(0, 1, 2);
+		board.addTile(1, 0, 2);
+		board.addTile(1, 1, 2);
+		System.out.println(board);
+		assertEquals(2, board.getValue(0, 0));
+		assertEquals(2, board.getValue(0, 1));
+		assertEquals(2, board.getValue(1, 0));
+		assertEquals(2, board.getValue(1, 1));
+		board.moveDown();
+		System.out.println(board);
+		assertEquals(0, board.getValue(0, 0));
+		assertEquals(0, board.getValue(0, 1));
+		assertEquals(4, board.getValue(1, 0));
+		assertEquals(4, board.getValue(1, 1));
+		
+		board = new Board(4, 0);
+		System.out.println(board);
+		board.addTile(0, 0, 2);
+		board.addTile(0, 2, 2);
+		board.addTile(0, 3, 2);
+		board.addTile(2, 0, 4);
+		board.addTile(2, 3, 4);
+		board.addTile(3, 1, 8);
+		board.addTile(3, 2, 2);
+		board.addTile(3, 3, 4);
+		System.out.println(board);
+		board.moveDown();
+		System.out.println(board);
+		assertEquals(4, board.getValue(3, 0));
+		assertEquals(2, board.getValue(2, 0));
+		assertEquals(8, board.getValue(3, 1));
+		assertEquals(4, board.getValue(3, 2));
+		assertEquals(8, board.getValue(3, 3));
+		assertEquals(2, board.getValue(2, 3));
+		assertEquals(0, board.getValue(0, 3));
+		
+		board = new Board(4, 0);
+		System.out.println(board);
+		board.addTile(0, 0, 2);
+		board.addTile(1, 0, 2);
+		board.addTile(2, 0, 2);
+		board.addTile(3, 0, 2);
+		System.out.println(board);
+		board.moveDown();
+		System.out.println(board);
+		assertEquals(4, board.getValue(3, 0));
+		assertEquals(4, board.getValue(2, 0));
+		assertEquals(0, board.getValue(1, 0));
+	}
+	
+	@Test
+	void test_moveLeftMethod() {
+		Board board = new Board(2, 0);
+		System.out.println(board);
+		board.addTile(0, 0, 2);
+		board.addTile(0, 1, 2);
+		board.addTile(1, 0, 2);
+		board.addTile(1, 1, 2);
+		System.out.println(board);
+		assertEquals(2, board.getValue(0, 0));
+		assertEquals(2, board.getValue(0, 1));
+		assertEquals(2, board.getValue(1, 0));
+		assertEquals(2, board.getValue(1, 1));
+		boolean isChanged = board.moveLeft();
+		System.out.println(board);
+		assertTrue(isChanged);
+		assertEquals(4, board.getValue(0, 0));
+		assertEquals(0, board.getValue(0, 1));
+		assertEquals(4, board.getValue(1, 0));
+		assertEquals(0, board.getValue(1, 1));
+		
+		board = new Board(4, 0);
+		System.out.println(board);
+		board.addTile(0, 0, 2);
+		board.addTile(0, 2, 2);
+		board.addTile(0, 3, 2);
+		board.addTile(2, 0, 4);
+		board.addTile(2, 3, 4);
+		board.addTile(3, 1, 8);
+		board.addTile(3, 2, 2);
+		board.addTile(3, 3, 4);
+		System.out.println(board);
+		boolean changed = board.moveLeft();
+		System.out.println(board);
+		assertTrue(changed);
+		assertEquals(4, board.getValue(0, 0));
+		assertEquals(2, board.getValue(0, 1));
+		assertEquals(8, board.getValue(2, 0));
+		assertEquals(8, board.getValue(3, 0));
+		assertEquals(2, board.getValue(3, 1));
+		assertEquals(4, board.getValue(3, 2));
+		assertEquals(0, board.getValue(3, 3));
+		
+		board = new Board(2, 0);
+		System.out.println(board);
+		board.addTile(0, 0, 2);
+		board.addTile(0, 1, 4);
+		board.addTile(1, 0, 8);
+		board.addTile(1, 1, 16);
+		System.out.println(board);
+		isChanged = board.moveLeft();
+		System.out.println(board);
+		assertFalse(isChanged);
+		assertEquals(2, board.getValue(0, 0));
+		assertEquals(4, board.getValue(0, 1));
+		assertEquals(8, board.getValue(1, 0));
+		assertEquals(16, board.getValue(1, 1));
+	}
+	
+	@Test
 	void test_initializingBoard() {
 		Board board = new Board(2, 5);
 		Tile[][] grid = board.getGrid();

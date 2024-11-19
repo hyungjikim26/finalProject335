@@ -62,13 +62,19 @@ public class Game {
                 game.board.addRandomTile();
             }
 
-            // TODO: add break condition here?
+            // game ending condition
+            if (game.board.loosingCondition() || game.board.winningCondition()){
+                game.printBoard();
+                System.out.println("Game over!");
 
-            // if (game.board.isGameOver()) {
-            //     game.printBoard();
-            //     System.out.println("Game over!");
-            //     break;
-            // }
+                if (game.board.loosingCondition()){
+                    System.out.println("You loose!");
+                } else{
+                    System.out.println("You win!");
+                }
+
+                break;
+            }
 
         }
     }

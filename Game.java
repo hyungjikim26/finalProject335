@@ -10,9 +10,6 @@ public class Game {
         // which would mean we would get a new bord
         board = new Board();
         score = 0;
-
-
-
     }
 
 
@@ -21,16 +18,16 @@ public class Game {
         score = 0;
     }
 
+
     public int getScore() {
         return score;
     }
+
 
     public void printBoard() {
         System.out.println("Score: " + score);
         System.out.println(board.toString());
     }
-
-
 
 
     public static void main(String[] args) {
@@ -48,36 +45,38 @@ public class Game {
             String move = scanner.nextLine().toLowerCase();
             if (move.equals("w")) {
                 game.board.moveUp();
+                // score += game.board.moveUp();
             // } else if (move.equals("s")) {
-            //     game.board.moveDown();
+            //     score += game.board.moveDown();
             // } else if (move.equals("a")) {
-            //     game.board.moveLeft();
+            //     score += game.board.moveLeft();
             // } else if (move.equals("d")) {
-            //     game.board.moveRight();
+            //     score += game.board.moveRight();
             } else {
                 System.out.println("Invalid move. Please enter w, a, s, or d.");
                 continue;
             }
-            // game.score += game.board.getScore();
+            
+            // add a new tile only when the board changes
+            if (game.board.hasChanged()) {
+                game.board.addRandomTile();
+            }
 
-            game.board.addRandomTile();
+            // game ending condition
+            if (game.board.loosingCondition() || game.board.winningCondition()){
+                game.printBoard();
+                System.out.println("Game over!");
 
-            // TODO: add break condition here?
+                if (game.board.loosingCondition()){
+                    System.out.println("You loose!");
+                } else{
+                    System.out.println("You win!");
+                }
 
-            // if (game.board.isGameOver()) {
-            //     game.printBoard();
-            //     System.out.println("Game over!");
-            //     break;
-            // }
+                break;
+            }
 
         }
-
-
-
-
-
-
-
     }
 	
 }

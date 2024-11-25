@@ -66,12 +66,12 @@ public class Game {
             }
 
             // game ending condition
-            if (game.board.loosingCondition() || game.board.winningCondition()){
+            if (game.board.losingCondition() || game.board.winningCondition()){
                 game.printBoard();
                 System.out.println("Game over!");
 
-                if (game.board.loosingCondition()){
-                    System.out.println("You loose!");
+                if (game.board.losingCondition()){
+                    System.out.println("You lose!");
                 } else{
                     System.out.println("You win!");
                 }

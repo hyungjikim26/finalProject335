@@ -394,11 +394,11 @@ public class Board {
     }
 
     /**
-     * Checks the loosing condtion
+     * Checks the losing condtion
      * 
      * @return true if the grid is full, false otherwise
      */
-    public boolean loosingCondition() {
+    public boolean losingCondition() {
         // Check if there is any empty tile
         if (!this.isFull()) {
             return false;

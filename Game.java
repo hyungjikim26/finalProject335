@@ -38,23 +38,26 @@ public class Game {
         Game game = new Game();
         Scanner scanner = new Scanner(System.in);
         
-        // TODO: add break condition
         while (true) {
             game.printBoard();
             System.out.println("Enter a move: (w) up, (s) down, (a) left, (d) right");
             String move = scanner.nextLine().toLowerCase();
-            if (move.equals("w")) {
-                game.board.moveUp();
-                // score += game.board.moveUp();
-            // } else if (move.equals("s")) {
-            //     score += game.board.moveDown();
-            // } else if (move.equals("a")) {
-            //     score += game.board.moveLeft();
-            // } else if (move.equals("d")) {
-            //     score += game.board.moveRight();
-            } else {
-                System.out.println("Invalid move. Please enter w, a, s, or d.");
-                continue;
+            switch (move) {
+                case "w":
+                    game.board.moveUp();
+                    break;
+                case "s":
+                    game.board.moveDown();
+                    break;
+                case "a":
+                    game.board.moveLeft();
+                    break;
+                case "d":
+                    game.board.moveRight();
+                    break;
+                default:
+                    System.out.println("Invalid move. Please enter w, a, s, or d.");
+                    continue;
             }
             
             // add a new tile only when the board changes

@@ -274,7 +274,7 @@ public class Board {
     				// merge given tile to the lower one and finish moving this tile
     				else if (grid[tempRow+1][column].equals(grid[tempRow][column])) {
     					grid[tempRow+1][column].merge(grid[tempRow][column]);
-    					score += grid[tempRow+1][column].getValue();isChanged = true;
+    					score += grid[tempRow+1][column].getValue();
     					isChanged = true;
     					break;
     				}

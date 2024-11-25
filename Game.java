@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class Game {
     private Board board;
     private int score;
+    private Leaderboard leaderboard;
 
 
     public Game() {
@@ -16,8 +17,8 @@ public class Game {
     public void start() {
         board = new Board();
         score = 0;
+        leaderboard = new Leaderboard();
     }
-
 
     public int getScore() {
         return score;
@@ -27,6 +28,23 @@ public class Game {
     public void printBoard() {
         System.out.println("Score: " + score);
         System.out.println(board.toString());
+    }
+
+    // update leaderboard with given name and score
+    public void updateLeaderboard(String name, int score) {
+        leaderboard.addScore(name, score);
+    }
+
+    public void printLeaderboardAll() {
+        for (Entry entry : leaderboard.getAllScores()) {
+            System.out.println(entry);
+        }
+    }
+
+    public void printLeaderboardTop() {
+        for (Entry entry : leaderboard.getTopScore()) {
+            System.out.println(entry);
+        }
     }
 
 
@@ -76,7 +94,35 @@ public class Game {
                     System.out.println("You win!");
                 }
 
-                break;
+                System.out.println("Your score: " + game.getScore());
+
+                // add score to leaderboard
+                System.out.print("Enter your name: ");
+                String name = scanner.nextLine();
+                game.updateLeaderboard(name, game.getScore());
+
+                // print leaderboard
+                System.out.println("Leaderboard:");
+
+                // player can thoose to see all scores or only top 10
+                System.out.println("Do you want to see all scores? (y/n)");
+                String allScores = scanner.nextLine().toLowerCase();
+                if (allScores.equals("y")) {
+                    game.printLeaderboardAll();
+                } else {
+                    game.printLeaderboardTop();
+                }
+
+                // player is able to play again
+                System.out.println("Do you want to play again? (y/n)");
+                String playAgain = scanner.nextLine().toLowerCase();
+                if (playAgain.equals("y")) {
+                    game.start();
+                } else {
+                    System.out.println("Goodbye!");
+                    scanner.close();
+                    break;
+                }
             }
 
         }

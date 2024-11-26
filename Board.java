@@ -400,7 +400,7 @@ public class Board {
 	 * @return true if the board is full, without any possible merge blocks, false
 	 *         otherwise
 	 */
-	public public boolean loosingCondition() {
+	public boolean loosingCondition() {
 		// Check if there is any empty tile
 		if (!this.isFull()) {
 			return false;
@@ -419,19 +419,6 @@ public class Board {
 			}
 			return true;
 		}
-	}
-
-	/**
-	 * Checks it the board has changed. Board change is defined by either tiles
-	 * being moved or merged.
-	 * 
-	 * @pre none
-	 * @post none
-	 * @param none
-	 * @return true if the board has changed, false otherwise
-	 */
-	public boolean hasChanged() {
-
 	}
 
 	/**

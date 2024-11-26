@@ -278,7 +278,7 @@ class BoardTest {
 	void testLoosingCondition() {
 		Board boardA = new Board(4, 0);
 		boardA.addTile(0, 0, 2);
-		assertFalse(boardA.loosingCondition());
+		assertFalse(boardA.losingCondition());
 
 		Board boardB = new Board(4, 0);
 		int[][] values = {{2, 4, 2, 4}, {4, 2, 4, 2}, {2, 4, 2, 4}, {4, 2, 4, 2}};
@@ -287,7 +287,7 @@ class BoardTest {
 				boardB.addTile(i, j, values[i][j]);
 			}
 		}
-		assertTrue(boardB.loosingCondition());
+		assertTrue(boardB.losingCondition());
 
 		Board boardC = new Board(4, 0);
 		int[][] valuesC = {{8, 4, 2, 4}, {8, 2, 4, 2}, {2, 4, 2, 4}, {4, 2, 4, 2}};
@@ -296,7 +296,7 @@ class BoardTest {
 				boardC.addTile(i, j, valuesC[i][j]);
 			}
 		}
-		assertFalse(boardC.loosingCondition());
+		assertFalse(boardC.losingCondition());
 		
 		Board boardD = new Board(4, 0);
 		int[][] valuesD = {{2, 4, 2, 4}, {8, 8, 4, 2}, {2, 4, 2, 4}, {4, 2, 4, 2}};
@@ -305,7 +305,7 @@ class BoardTest {
 				boardD.addTile(i, j, valuesD[i][j]);
 			}
 		}
-		assertFalse(boardD.loosingCondition());
+		assertFalse(boardD.losingCondition());
 		
 		Board boardE = new Board(4, 0);
 		int[][] valuesE = {{2, 4, 2, 4}, {4, 2, 4, 2}, {2, 4, 2, 8}, {4, 2, 4, 8}};
@@ -314,7 +314,7 @@ class BoardTest {
 				boardE.addTile(i, j, valuesE[i][j]);
 			}
 		}
-		assertFalse(boardE.loosingCondition());
+		assertFalse(boardE.losingCondition());
 		
 		Board boardF = new Board(4, 0);
 		int[][] valuesF = {{2, 4, 2, 4}, {4, 2, 8, 8}, {2, 4, 2, 4}, {4, 2, 4, 2}};
@@ -323,7 +323,7 @@ class BoardTest {
 				boardF.addTile(i, j, valuesF[i][j]);
 			}
 		}
-		assertFalse(boardF.loosingCondition());
+		assertFalse(boardF.losingCondition());
 	}
 	
 	@Test

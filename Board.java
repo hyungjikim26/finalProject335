@@ -48,7 +48,10 @@ public class Board {
     public int getSize() {
         return size;
     }
-
+    
+    public int getScore() {
+    	return score;
+    }
     /**
      * @param row    - row index of the tile
      * @param column - column index of the tile
@@ -399,7 +402,7 @@ public class Board {
     }
 
     /**
-     * Checks the losing condtion
+     * Checks the losing condition
      * 
      * @return true if the grid is full, false otherwise
      */

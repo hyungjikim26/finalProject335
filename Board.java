@@ -386,8 +386,8 @@ public class Board {
      * @return true if one of the tile reached 2048, false otherwise
      */
     public boolean winningCondition() {
-        for (int r = 0; r < 4; r++) {
-            for (int c = 0; c < 4; c++) {
+        for (int r = 0; r < size; r++) {
+            for (int c = 0; c < size; c++) {
                 if (grid[r][c].getValue() == 2048) {
                     return true;
                 }
@@ -405,26 +405,25 @@ public class Board {
         // Check if there is any empty tile
         if (!this.isFull()) {
             return false;
-        } else {
+        }
             // Check if any tiles can be merged
-            for (int r = 0; r < 4; r++) {
-                for (int c = 0; c < 4; c++) {
-                    // Check upper tile
-                    if (r != 0 && grid[r][c].getValue() == grid[r - 1][c].getValue()) {
-                        return false; 
-                    }
-                    // Check downside tile
-                    if (r != 3 && grid[r][c].getValue() == grid[r + 1][c].getValue()) {
-                        return false; 
-                    }
-                    // Check left tile
-                    if (c != 0 && grid[r][c] == grid[r][c - 1]) {
-                        return false; 
-                    }
-                    // Check right tile
-                    if (c != 3 && grid[r][c] == grid[r][c + 1]) {
-                        return false; 
-                    }
+        for (int r = 0; r < size; r++) {
+            for (int c = 0; c < size; c++) {
+                // Check upper tile
+                if (r != 0 && grid[r][c].equals(grid[r - 1][c])) {
+                    return false; 
+                }
+                // Check lower tile
+                if (r != size-1 && grid[r][c].equals(grid[r + 1][c])) {
+                    return false; 
+                }
+                // Check left tile
+                if (c != 0 && grid[r][c].equals(grid[r][c - 1])) {
+                    return false; 
+                }
+                // Check right tile
+                if (c != size-1 && grid[r][c].equals(grid[r][c + 1])) {
+                    return false; 
                 }
             }
         }

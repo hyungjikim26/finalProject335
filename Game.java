@@ -20,6 +20,35 @@ public class Game {
         leaderboard = new Leaderboard();
     }
 
+    /**
+     * 
+     * Call move methods of the board object and adds 
+     */
+    public void makeMove(String direction) {
+        boolean boardChanged = false;
+        switch (direction) {
+            case "w":
+                boardChanged = board.moveUp();
+                break;
+            case "s":
+                boardChanged = board.moveDown();
+                break;
+            case "a":
+                boardChanged = board.moveLeft();
+                break;
+            case "d":
+                boardChanged = board.moveRight();
+                break;
+            default:
+                System.out.println("Invalid move. Please enter w, a, s, or d.");
+                break;
+        }
+
+        if (boardChanged) {
+            board.addRandomTile();
+        }
+    }
+
     public int getScore() {
         return score;
     }
@@ -60,28 +89,7 @@ public class Game {
             game.printBoard();
             System.out.println("Enter a move: (w) up, (s) down, (a) left, (d) right");
             String move = scanner.nextLine().toLowerCase();
-            switch (move) {
-                case "w":
-                    game.board.moveUp();
-                    break;
-                case "s":
-                    game.board.moveDown();
-                    break;
-                case "a":
-                    game.board.moveLeft();
-                    break;
-                case "d":
-                    game.board.moveRight();
-                    break;
-                default:
-                    System.out.println("Invalid move. Please enter w, a, s, or d.");
-                    continue;
-            }
-            
-            // add a new tile only when the board changes
-            if (game.board.hasChanged()) {
-                game.board.addRandomTile();
-            }
+            game.makeMove(move);
 
             // game ending condition
             if (game.board.losingCondition() || game.board.winningCondition()){

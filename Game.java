@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class Game {
     private Board board;
     private int score;
+    private Leaderboard leaderboard;
 
 
     public Game() {
@@ -16,8 +17,8 @@ public class Game {
     public void start() {
         board = new Board();
         score = 0;
+        leaderboard = new Leaderboard();
     }
-
 
     public int getScore() {
         return score;
@@ -29,6 +30,23 @@ public class Game {
         System.out.println(board.toString());
     }
 
+    // update leaderboard with given name and score
+    public void updateLeaderboard(String name, int score) {
+        leaderboard.addScore(name, score);
+    }
+
+    public void printLeaderboardAll() {
+        for (Entry entry : leaderboard.getAllScores()) {
+            System.out.println(entry);
+        }
+    }
+
+    public void printLeaderboardTop() {
+        for (Entry entry : leaderboard.getTopScore()) {
+            System.out.println(entry);
+        }
+    }
+
 
     public static void main(String[] args) {
         System.out.println("=====================================");
@@ -38,23 +56,26 @@ public class Game {
         Game game = new Game();
         Scanner scanner = new Scanner(System.in);
         
-        // TODO: add break condition
         while (true) {
             game.printBoard();
             System.out.println("Enter a move: (w) up, (s) down, (a) left, (d) right");
             String move = scanner.nextLine().toLowerCase();
-            if (move.equals("w")) {
-                game.board.moveUp();
-                // score += game.board.moveUp();
-            // } else if (move.equals("s")) {
-            //     score += game.board.moveDown();
-            // } else if (move.equals("a")) {
-            //     score += game.board.moveLeft();
-            // } else if (move.equals("d")) {
-            //     score += game.board.moveRight();
-            } else {
-                System.out.println("Invalid move. Please enter w, a, s, or d.");
-                continue;
+            switch (move) {
+                case "w":
+                    game.board.moveUp();
+                    break;
+                case "s":
+                    game.board.moveDown();
+                    break;
+                case "a":
+                    game.board.moveLeft();
+                    break;
+                case "d":
+                    game.board.moveRight();
+                    break;
+                default:
+                    System.out.println("Invalid move. Please enter w, a, s, or d.");
+                    continue;
             }
             
             // add a new tile only when the board changes
@@ -63,17 +84,45 @@ public class Game {
             }
 
             // game ending condition
-            if (game.board.loosingCondition() || game.board.winningCondition()){
+            if (game.board.losingCondition() || game.board.winningCondition()){
                 game.printBoard();
                 System.out.println("Game over!");
 
-                if (game.board.loosingCondition()){
-                    System.out.println("You loose!");
+                if (game.board.losingCondition()){
+                    System.out.println("You lose!");
                 } else{
                     System.out.println("You win!");
                 }
 
-                break;
+                System.out.println("Your score: " + game.getScore());
+
+                // add score to leaderboard
+                System.out.print("Enter your name: ");
+                String name = scanner.nextLine();
+                game.updateLeaderboard(name, game.getScore());
+
+                // print leaderboard
+                System.out.println("Leaderboard:");
+
+                // player can thoose to see all scores or only top 10
+                System.out.println("Do you want to see all scores? (y/n)");
+                String allScores = scanner.nextLine().toLowerCase();
+                if (allScores.equals("y")) {
+                    game.printLeaderboardAll();
+                } else {
+                    game.printLeaderboardTop();
+                }
+
+                // player is able to play again
+                System.out.println("Do you want to play again? (y/n)");
+                String playAgain = scanner.nextLine().toLowerCase();
+                if (playAgain.equals("y")) {
+                    game.start();
+                } else {
+                    System.out.println("Goodbye!");
+                    scanner.close();
+                    break;
+                }
             }
 
         }

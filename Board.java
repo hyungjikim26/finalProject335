@@ -58,6 +58,10 @@ public class Board {
         return grid[row][column].getValue();
     }
 
+    public int getScore(){
+        return this.score;
+    }
+
     /**
      * Returns a copy of the grid instance
      * 

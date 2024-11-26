@@ -275,7 +275,7 @@ public class Board {
     				// merge given tile to the lower one and finish moving this tile
     				else if (grid[tempRow+1][column].equals(grid[tempRow][column])) {
     					grid[tempRow+1][column].merge(grid[tempRow][column]);
-    					score += grid[tempRow+1][column].getValue();isChanged = true;
+    					score += grid[tempRow+1][column].getValue();
     					isChanged = true;
     					break;
     				}
@@ -395,11 +395,11 @@ public class Board {
     }
 
     /**
-     * Checks the loosing condtion
+     * Checks the losing condtion
      * 
      * @return true if the grid is full, false otherwise
      */
-    public boolean loosingCondition() {
+    public boolean losingCondition() {
         // Check if there is any empty tile
         if (!this.isFull()) {
             return false;
@@ -427,5 +427,15 @@ public class Board {
             }
         }
         return true;
+    }
+
+    public GameState checkState() {
+        if (winningCondition()) {
+            return GameState.WIN;
+        } else if (losingCondition()) {
+            return GameState.LOSE;
+        } else {
+            return GameState.CONTINUE;
+        }
     }
 }

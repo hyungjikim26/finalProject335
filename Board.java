@@ -427,17 +427,4 @@ public class Board {
         }
         return true;
     }
-
-    /**
-     * Checks it the board has changed. Board change is defined by either
-     * tiles being moved or merged.
-     * 
-     * @pre none
-     * @post none
-     * @param none
-     * @return true if the board has changed, false otherwise
-     */
-    public boolean hasChanged() {
-
-    }
 }

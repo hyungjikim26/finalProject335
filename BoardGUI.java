@@ -26,9 +26,9 @@ public class BoardGUI implements java.awt.event.KeyListener{
                 board.moveLeft();
                 break;
         }
-        if(board.hasChanged()){
-            board.addRandomTile();
-        }
+        //if(board.hasChanged()){
+        //    board.addRandomTile();
+        //}
         updateGrid();
     }
 
@@ -53,9 +53,9 @@ public class BoardGUI implements java.awt.event.KeyListener{
                 board.moveLeft();
                 break;
         }
-        if(board.hasChanged()){
-            board.addRandomTile();
-        }
+        //if(board.hasChanged()){
+        //    board.addRandomTile();
+        //}
         updateGrid();
 
     }

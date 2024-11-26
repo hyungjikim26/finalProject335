@@ -58,9 +58,9 @@ public class Game {
             }
             
             // add a new tile only when the board changes
-            if (game.board.hasChanged()) {
-                game.board.addRandomTile();
-            }
+            //if (game.board.hasChanged()) {
+            //    game.board.addRandomTile();
+            //}
 
             // game ending condition
             if (game.board.loosingCondition() || game.board.winningCondition()){

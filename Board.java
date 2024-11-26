@@ -249,23 +249,13 @@ public class Board {
             // Check if any tiles can be merged
             for (int r = 0; r < 4; r++) {
                 for (int c = 0; c < 4; c++) {
-                    // Check upper tile
-                    if (r != 0 && grid[r][c].getValue() == grid[r - 1][c].getValue()) {
-                        return false; 
-                    }
-                    // Check downside tile
-                    if (r != 3 && grid[r][c].getValue() == grid[r + 1][c].getValue()) {
-                        return false; 
-                    }
-                    // Check left tile
-                    if (c != 0 && grid[r][c] == grid[r][c - 1]) {
-                        return false; 
-                    }
-                    // Check right tile
-                    if (c != 3 && grid[r][c] == grid[r][c + 1]) {
-                        return false; 
-                    }
-                }
+                    // Check adjacent tiles for the same value
+                    if ((r > 0 && grid[r][c].getValue() == grid[r - 1][c].getValue()) || // Up
+                        (r < size - 1 && grid[r][c].getValue() == grid[r + 1][c].getValue()) || // Down
+                        (c > 0 && grid[r][c].getValue() == grid[r][c - 1].getValue()) || // Left
+                        (c < size - 1 && grid[r][c].getValue() == grid[r][c + 1].getValue())) { // Right
+                        return false;
+                        }
             }
         }
         return true;

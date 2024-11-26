@@ -81,7 +81,7 @@ public class Controller {
 	 * @return true if the player lost can't make any move, false otherwise
 	 */
 	public boolean lost() {
-		return board.loosingCondition();
+		return board.losingCondition();
 	}
 	
 	public int getScore() {

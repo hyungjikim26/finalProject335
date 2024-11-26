@@ -193,6 +193,7 @@ public class Board {
     			}
     		}
     	}
+        System.out.println(this.toString());
     	return isChanged;
     }
     

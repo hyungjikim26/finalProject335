@@ -97,7 +97,7 @@ public class BoardGUI implements java.awt.event.KeyListener{
 
         updateGrid();
 
-        frame.addKeyListener(this);
+        tiles.addKeyListener(this);
 
         frame.add(scoreLabel,"North");
         frame.add(tiles);
@@ -106,7 +106,10 @@ public class BoardGUI implements java.awt.event.KeyListener{
     }
 
     public void changeTile(Tile tile, int slotNum){
-        if(tile.getValue()!=0){
+        if(tile.getValue()==0){
+            slots[slotNum].setText("");
+        }
+        else{
             slots[slotNum].setText(Integer.toString(tile.getValue()));
         }
         slots[slotNum].setFont(new Font("", Font.PLAIN, 60));

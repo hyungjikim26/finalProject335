@@ -60,6 +60,7 @@ public class Game {
 
         if (boardChanged) {
             board.addRandomTile();
+            score = board.getScore();
             currentState = board.checkState();
         }
     }

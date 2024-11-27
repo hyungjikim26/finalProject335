@@ -1,13 +1,16 @@
+import java.util.ArrayList;
 
 public class Controller {
 	
 	private Board board;
+	private Leaderboard leaderboard;
 	
 	/**
 	 * Default constructor for controller class
 	 */
 	public Controller() {
 		board = new Board();
+		leaderboard = new Leaderboard();
 	}
 	
 	/**
@@ -84,7 +87,31 @@ public class Controller {
 		return board.losingCondition();
 	}
 	
+	/**
+	 * @return current board score
+	 */
 	public int getScore() {
 		return board.getScore();
+	}
+	/**
+	 * @param name - name of person playing
+	 * @param score - score of the board after finishing game
+	 */
+	public void addScore(String name, int score) {
+		leaderboard.addScore(name, score);
+	}
+	
+	/**
+	 * @return get 10 (by default) top scores
+	 */
+	public ArrayList<Entry> getTopScores() {
+		return leaderboard.getTopScore();
+	}
+	
+	/**
+	 * @return get all resulting scores
+	 */
+	public ArrayList<Entry> getAllScores() {
+		return leaderboard.getAllScores();
 	}
 }

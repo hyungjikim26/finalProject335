@@ -3,6 +3,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 class BoardTest {
+	
+	Board createBoard(int[][] matrix) {
+		Board board = new Board(matrix.length, 0);
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[0].length; j++) {
+				board.addTile(i, j, matrix[i][j]);
+			}
+		}
+		return board;
+	}
 
 	@Test
 	void test_moveUpMethod() {
@@ -280,49 +290,39 @@ class BoardTest {
 		boardA.addTile(0, 0, 2);
 		assertFalse(boardA.losingCondition());
 
-		Board boardB = new Board(4, 0);
-		int[][] values = {{2, 4, 2, 4}, {4, 2, 4, 2}, {2, 4, 2, 4}, {4, 2, 4, 2}};
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				boardB.addTile(i, j, values[i][j]);
-			}
-		}
+		int[][] values = {{2, 4, 2, 4}, 
+			              {4, 2, 4, 2}, 
+			              {2, 4, 2, 4}, 
+			              {4, 2, 4, 2}};
+		Board boardB = createBoard(values);
 		assertTrue(boardB.losingCondition());
 
-		Board boardC = new Board(4, 0);
-		int[][] valuesC = {{8, 4, 2, 4}, {8, 2, 4, 2}, {2, 4, 2, 4}, {4, 2, 4, 2}};
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				boardC.addTile(i, j, valuesC[i][j]);
-			}
-		}
+		int[][] valuesC = {{8, 4, 2, 4}, 
+				           {8, 2, 4, 2}, 
+				           {2, 4, 2, 4}, 
+				           {4, 2, 4, 2}};
+		Board boardC = createBoard(valuesC);
 		assertFalse(boardC.losingCondition());
 		
-		Board boardD = new Board(4, 0);
-		int[][] valuesD = {{2, 4, 2, 4}, {8, 8, 4, 2}, {2, 4, 2, 4}, {4, 2, 4, 2}};
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				boardD.addTile(i, j, valuesD[i][j]);
-			}
-		}
+		int[][] valuesD = {{2, 4, 2, 4}, 
+				           {8, 8, 4, 2}, 
+				           {2, 4, 2, 4}, 
+				           {4, 2, 4, 2}};
+		Board boardD = createBoard(valuesD);
 		assertFalse(boardD.losingCondition());
 		
-		Board boardE = new Board(4, 0);
-		int[][] valuesE = {{2, 4, 2, 4}, {4, 2, 4, 2}, {2, 4, 2, 8}, {4, 2, 4, 8}};
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				boardE.addTile(i, j, valuesE[i][j]);
-			}
-		}
+		int[][] valuesE = {{2, 4, 2, 4}, 
+				           {4, 2, 4, 2}, 
+				           {2, 4, 2, 8}, 
+				           {4, 2, 4, 8}};
+		Board boardE = createBoard(valuesE);
 		assertFalse(boardE.losingCondition());
 		
-		Board boardF = new Board(4, 0);
-		int[][] valuesF = {{2, 4, 2, 4}, {4, 2, 8, 8}, {2, 4, 2, 4}, {4, 2, 4, 2}};
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				boardF.addTile(i, j, valuesF[i][j]);
-			}
-		}
+		int[][] valuesF = {{2, 4, 2, 4}, 
+				           {4, 2, 8, 8}, 
+				           {2, 4, 2, 4}, 
+				           {4, 2, 4, 2}};
+		Board boardF = createBoard(valuesF);
 		assertFalse(boardF.losingCondition());
 	}
 	

@@ -61,6 +61,10 @@ public class Board {
         return grid[row][column].getValue();
     }
 
+    public int getScore(){
+        return this.score;
+    }
+
     /**
      * Returns a copy of the grid instance
      * 
@@ -196,6 +200,7 @@ public class Board {
     			}
     		}
     	}
+        System.out.println(this.toString());
     	return isChanged;
     }
     

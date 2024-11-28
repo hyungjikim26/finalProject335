@@ -1,3 +1,3 @@
 public enum GameState {
-    CONTINUE, WIN, LOSE, QUIT, TIMEUP
+    CONTINUE, WIN, LOSE, QUIT, TIMEUP, MOVEUP
 }

@@ -162,9 +162,9 @@ public class Game {
             case "2":
                 game.timeTrialMode(game, scanner);
                 break;
-            // case "3":
-            // game.moveLimitMode(game, scanner);
-            // break;
+            case "3":
+                game.moveLimitMode(game, scanner);
+                break;
             case "4":
                 System.out.println("Thank you for playing.");
                 scanner.close();
@@ -245,6 +245,47 @@ public class Game {
                     break;
             }
         }
+    }
+
+    private void moveLimitMode(Game game, Scanner scanner){
+        int moveLeft = 125;
+
+        while (true) {
+            game.printBoard();
+            System.out.println("Enter a move: (w) up, (s) down, (a) left, (d) right, (n) new game (q) quit");
+            System.out.println("You have " + moveLeft + " moves left");
+            String move = scanner.nextLine().toLowerCase();
+            game.makeMove(move);
+            moveLeft --;
+
+            if (moveLeft == 0){
+                currentState = GameState.MOVEUP;
+            }
+
+            switch (game.currentState) {
+                case WIN:
+                    System.out.println("You win!");
+                    game.handleEnd(game, scanner);
+                    break;
+                case LOSE:
+                    System.out.println("You lose!");
+                    game.handleEnd(game, scanner);
+                    break;
+                case MOVEUP:
+                    System.out.println("You used all moves");
+                    game.handleEnd(game, scanner);
+                    moveLeft = 125;
+                    break;
+                case QUIT:
+                    System.out.println("Goodbye!");
+                    scanner.close();
+                    System.exit(0);
+                    break;
+                default:
+                    break;
+            }
+        }
+
     }
 
 

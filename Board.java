@@ -7,6 +7,7 @@ public class Board {
     private final int size;
     private final Tile[][] grid;
     private final double NEW_TILE_PROB = 0.9;
+    private int score;
     // CONSIDER: add a counter to keep track of no. of empty/valid tiles
     private int emptyTiles;
 
@@ -23,6 +24,8 @@ public class Board {
         // create board with the given size
         this.size = size;
         grid = new Tile[size][size];
+        // set the score to zero
+        score = 0;
         // initialize the board with two tiles
         initializeBoard(numTiles);
     }
@@ -45,7 +48,10 @@ public class Board {
     public int getSize() {
         return size;
     }
-
+    
+    public int getScore() {
+    	return score;
+    }
     /**
      * @param row    - row index of the tile
      * @param column - column index of the tile
@@ -53,6 +59,10 @@ public class Board {
      */
     public int getValue(int row, int column) {
         return grid[row][column].getValue();
+    }
+
+    public int getScore(){
+        return this.score;
     }
 
     /**
@@ -151,36 +161,191 @@ public class Board {
      * identical tiles are vertically adjacent or have
      * only empty tiles between them.
      * 
+     * @return true if board was changed during move, false if not
      */
-    public void moveUp() {
-        // iterate through each tile that potentially needs to move up
-        // we ignore first row because it is already at the top
-        // we start with second row and move up each tile on this row,
-        // then move to lower row
-        for (int row = 1; row < size; row++) {
-            for (int column = 0; column < size; column++) {
-                if (grid[row][column].isEmpty()) // if tile empty, no need to move it
-                    continue;
-                // if tile is not empty move it up until it touches the upper bound
-                // or until it is merged with another tile of equal value
-                int tempRow = row;
-                while (tempRow > 0) {
-                    // if upper tile is 0, exchange tiles
-                    if (grid[tempRow - 1][column].isEmpty()) {
-                        exchangeTiles(tempRow - 1, column, tempRow, column);
-                    }
-                    // if upper tile is of the same value,
-                    // merge given tile to the upper one and finish moving this tile
-                    else if (grid[tempRow - 1][column].equals(grid[tempRow][column])) {
-                        grid[tempRow - 1][column].merge(grid[tempRow][column]);
-                        break;
-                    }
-                    tempRow--;
-                }
-            }
-        }
+    public boolean moveUp() {
+    	// iterate through each tile that potentially needs to move up
+    	// we ignore first row because it is already at the top
+    	// we start with second row and move up each tile on this row, 
+    	boolean isChanged = false;
+    	// then move to lower row
+    	for (int row = 1; row < size; row++) {
+    		for (int column = 0; column < size; column++) {
+    			if (grid[row][column].isEmpty())	// if tile empty, no need to move it
+    				continue;
+    			// if tile is not empty move it up until it touches the upper bound
+    			// or until it is merged with another tile of equal value
+    			// or until it touches the tile with different value
+    			int tempRow = row;
+    			while (tempRow > 0) {
+    				// if upper tile is 0, exchange tiles
+    				if (grid[tempRow-1][column].isEmpty()) {
+    					exchangeTiles(tempRow-1, column, tempRow, column);
+    					isChanged = true;
+    				}
+    				// if upper tile is of the same value, 
+    				// merge given tile to the upper one and finish moving this tile
+    				else if (grid[tempRow-1][column].equals(grid[tempRow][column])) {
+    					grid[tempRow-1][column].merge(grid[tempRow][column]);
+    					score += grid[tempRow-1][column].getValue();
+    					isChanged = true;
+    					break;
+    				}
+    				// otherwise tile touches the other tile which is not empty and not equal
+    				// this means that it reached the end so break
+    				else {
+    					break;
+    				}
+    				tempRow--;
+    			}
+    		}
+    	}
+        System.out.println(this.toString());
+    	return isChanged;
+    }
+    
+    /**
+     * All nonempty tiles are moved right and merged if two 
+     * identical tiles are horizontally adjacent or have 
+     * only empty tiles between them.
+     * 
+     * @return true if board was changed during move, false if not
+     */
+    public boolean moveRight() {
+    	// iterate through each tile that potentially needs to move right
+    	// we ignore last column because it is already at the right
+    	// we start with pre-last column and move right each tile on this column, 
+    	// then do the same with the column to the left
+    	boolean isChanged = false;
+    	for (int column = size-2; column >= 0; column--) {
+    		for (int row = 0; row < size; row++) {
+    			if (grid[row][column].isEmpty())	// if tile empty, no need to move it
+    				continue;
+    			// if tile is not empty move it up until it touches the right bound
+    			// or until it is merged with another tile of equal value
+    			// or until it touches the tile with different value
+    			int tempColumn = column;
+    			while (tempColumn < size-1) {
+    				// if tile to the right is 0, exchange tiles
+    				if (grid[row][tempColumn+1].isEmpty()) {
+    					exchangeTiles(row, tempColumn+1, row, tempColumn);
+    					isChanged = true;
+    				}
+    				// if tile to the right is of the same value, 
+    				// merge given tile to the right one and finish moving this tile
+    				else if (grid[row][tempColumn+1].equals(grid[row][tempColumn])) {
+    					grid[row][tempColumn+1].merge(grid[row][tempColumn]);
+    					isChanged = true;
+    					score += grid[row][tempColumn+1].getValue();
+    					break;
+    				}
+    				// otherwise tile touches the other tile which is not empty and not equal
+    				// this means that it reached the end so break
+    				else {
+    					break;
+    				}
+    				tempColumn++;
+    			}
+    		}
+    	} 
+    	return isChanged;
     }
 
+    /**
+     * All nonempty tiles are moved down and merged if two 
+     * identical tiles are vertically adjacent or have 
+     * only empty tiles between them.
+     * 
+     * @return true if board was changed during move, false if not
+     */
+    public boolean moveDown() {
+    	// iterate through each tile that potentially needs to move down
+    	// we ignore last row because it is already at the bottom
+    	// we start with pre-last row and move down each tile on this row, 
+    	// then move to upper row
+    	boolean isChanged = false;
+    	for (int row = size-2; row >= 0; row--) {
+    		for (int column = 0; column < size; column++) {
+    			if (grid[row][column].isEmpty())	// if tile empty, no need to move it
+    				continue;
+    			// if tile is not empty move it down until it touches the lower bound
+    			// or until it is merged with another tile of equal value
+    			// or until it touches the tile with different value
+    			int tempRow = row;
+    			while (tempRow < size-1) {
+    				// if lower tile is 0, exchange tiles
+    				if (grid[tempRow+1][column].isEmpty()) {
+    					exchangeTiles(tempRow+1, column, tempRow, column);
+    					isChanged = true;
+    				}
+    				// if lower tile is of the same value, 
+    				// merge given tile to the lower one and finish moving this tile
+    				else if (grid[tempRow+1][column].equals(grid[tempRow][column])) {
+    					grid[tempRow+1][column].merge(grid[tempRow][column]);
+    					score += grid[tempRow+1][column].getValue();
+    					isChanged = true;
+    					break;
+    				}
+    				// otherwise tile touches the other tile which is not empty and not equal
+    				// this means that it reached the end so break
+    				else {
+    					break;
+    				}
+    				tempRow++;
+    			}
+    		}
+    	}
+    	return isChanged;
+    }
+    
+    /**
+     * All nonempty tiles are moved left and merged if two 
+     * identical tiles are horizontally adjacent or have 
+     * only empty tiles between them.
+     * 
+     * @return true if board was changed during move, false if not
+     */
+    public boolean moveLeft() {
+    	// iterate through each tile that potentially needs to move left
+    	// we ignore first column because it is already at the left
+    	// we start with second column and move left each tile on this column, 
+    	// then do the same with the column to the right
+    	boolean isChanged = false;
+    	for (int column = 1; column < size; column++) {
+    		for (int row = 0; row < size; row++) {
+    			if (grid[row][column].isEmpty())	// if tile empty, no need to move it
+    				continue;
+    			// if tile is not empty move it up until it touches the left bound
+    			// or until it is merged with another tile of equal value
+    			// or until it touches the tile with different value
+    			int tempColumn = column;
+    			while (tempColumn > 0) {
+    				// if tile to the left is 0, exchange tiles
+    				if (grid[row][tempColumn-1].isEmpty()) {
+    					exchangeTiles(row, tempColumn-1, row, tempColumn);
+    					isChanged = true;
+    				}
+    				// if tile to the left is of the same value, 
+    				// merge given tile to the left one and finish moving this tile
+    				else if (grid[row][tempColumn-1].equals(grid[row][tempColumn])) {
+    					grid[row][tempColumn-1].merge(grid[row][tempColumn]);
+    					isChanged = true;
+    					score += grid[row][tempColumn-1].getValue();
+    					break;
+    				}
+    				// otherwise tile touches the other tile which is not empty and not equal
+    				// this means that it reached the end so break
+    				else {
+    					break;
+    				}
+    				tempColumn--;
+    			}
+    		}
+    	} 
+    	return isChanged;
+    }
+    
+    
     /**
      * Exchanges tiles at two different locations
      * 
@@ -226,8 +391,8 @@ public class Board {
      * @return true if one of the tile reached 2048, false otherwise
      */
     public boolean winningCondition() {
-        for (int r = 0; r < 4; r++) {
-            for (int c = 0; c < 4; c++) {
+        for (int r = 0; r < size; r++) {
+            for (int c = 0; c < size; c++) {
                 if (grid[r][c].getValue() == 2048) {
                     return true;
                 }
@@ -237,19 +402,19 @@ public class Board {
     }
 
     /**
-     * Checks the loosing condtion
+     * Checks the losing condition
      * 
      * @return true if the grid is full, false otherwise
      */
-    public boolean loosingCondition() {
+    public boolean losingCondition() {
         // Check if there is any empty tile
         if (!this.isFull()) {
             return false;
-        } else {
+        }
             // Check if any tiles can be merged
-            for (int r = 0; r < 4; r++) {
-                for (int c = 0; c < 4; c++) {
-                    // Check adjacent tiles for the same value
+        for (int r = 0; r < size; r++) {
+            for (int c = 0; c < size; c++) {
+                // Check adjacent tiles for the same value
                     if ((r > 0 && grid[r][c].getValue() == grid[r - 1][c].getValue()) || // Up
                         (r < size - 1 && grid[r][c].getValue() == grid[r + 1][c].getValue()) || // Down
                         (c > 0 && grid[r][c].getValue() == grid[r][c - 1].getValue()) || // Left
@@ -259,5 +424,15 @@ public class Board {
             }
         }
         return true;
+    }
+
+    public GameState checkState() {
+        if (winningCondition()) {
+            return GameState.WIN;
+        } else if (losingCondition()) {
+            return GameState.LOSE;
+        } else {
+            return GameState.CONTINUE;
+        }
     }
 }

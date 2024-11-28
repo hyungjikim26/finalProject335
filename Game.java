@@ -1,29 +1,31 @@
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Game {
     private Board board;
     private int score;
+    private Leaderboard leaderboard;
+    private GameState currentState;
+
 
     public Game() {
         // it is possible to play the game multiple times
         // which would mean we would get a new bord
         board = new Board();
         score = 0;
+        currentState = GameState.CONTINUE;
+        leaderboard = new Leaderboard();
     }
+
 
     public void start() {
         board = new Board();
-        currentState = GameState.CONTINUE;
         score = 0;
+        leaderboard = new Leaderboard();
     }
 
-<<<<<<< Updated upstream
-=======
     /**
      * 
-     * Call move methods of the board object and adds
+     * Call move methods of the board object and adds 
      */
     public void makeMove(String direction) {
         // check got early exit
@@ -66,19 +68,17 @@ public class Game {
     public GameState getGameState() {
         return currentState;
     }
->>>>>>> Stashed changes
 
     public int getScore() {
         return score;
     }
+
 
     public void printBoard() {
         System.out.println("Score: " + score);
         System.out.println(board.toString());
     }
 
-<<<<<<< Updated upstream
-=======
     // update leaderboard with given name and score
     public void updateLeaderboard(String name, int score) {
         leaderboard.addScore(name, score);
@@ -136,8 +136,8 @@ public class Game {
                 System.out.println("Invalid choice.");
                 System.exit(0);
         }
-    }
->>>>>>> Stashed changes
+    } 
+
 
     public static void main(String[] args) {
         System.out.println("=====================================");
@@ -145,98 +145,8 @@ public class Game {
         System.out.println("=====================================");
 
         Game game = new Game();
-        while (true){
-            chooseMode(game);
-        }
-
-    }
-
-    private static void chooseMode(Game game) {
         Scanner scanner = new Scanner(System.in);
-<<<<<<< Updated upstream
         
-        // TODO: add break condition
-=======
-        System.out.println("Chooose the game mode: (1) Traditional Mode, (2) Time Trial Mode, (3) Move Limit Mode, (4) Exit");
-        String mode = scanner.nextLine();
-
-        switch (mode) {
-            case "1":
-                game.traditionalMode(game, scanner);
-                break;
-            case "2":
-                game.timeTrialMode(game, scanner);
-                break;
-            // case "3":
-            // game.moveLimitMode(game, scanner);
-            // break;
-            case "4":
-                System.out.println("Thank you for playing.");
-                scanner.close();
-                System.exit(0);
-            default:
-                System.out.println("Invalid mode. Please try again.");
-                break;
-        }
-
-    }
-
-    private void traditionalMode(Game game, Scanner scanner) {
->>>>>>> Stashed changes
-        while (true) {
-            game.printBoard();
-            System.out.println("Enter a move: (w) up, (s) down, (a) left, (d) right");
-            String move = scanner.nextLine().toLowerCase();
-            if (move.equals("w")) {
-                game.board.moveUp();
-                // score += game.board.moveUp();
-            // } else if (move.equals("s")) {
-            //     score += game.board.moveDown();
-            // } else if (move.equals("a")) {
-            //     score += game.board.moveLeft();
-            // } else if (move.equals("d")) {
-            //     score += game.board.moveRight();
-            } else {
-                System.out.println("Invalid move. Please enter w, a, s, or d.");
-                continue;
-            }
-            
-            // add a new tile only when the board changes
-            if (game.board.hasChanged()) {
-                game.board.addRandomTile();
-            }
-
-            // game ending condition
-            if (game.board.loosingCondition() || game.board.winningCondition()){
-                game.printBoard();
-                System.out.println("Game over!");
-
-                if (game.board.loosingCondition()){
-                    System.out.println("You loose!");
-                } else{
-                    System.out.println("You win!");
-                }
-
-                break;
-            }
-
-        }
-    }
-
-    private void timeTrialMode(Game game, Scanner scanner) {
-        Timer timer = new Timer();
-
-        TimerTask timerTask = new TimerTask(){
-            @Override
-            public void run(){
-                currentState = GameState.TIMEUP;
-                timer.cancel();
-            }
-        };
-
-        System.out.println("You have 2 minuites.");
-        timer.schedule(timerTask, 12000);
-
         while (true) {
             game.printBoard();
             System.out.println("Enter a move: (w) up, (s) down, (a) left, (d) right, (n) new game (q) quit");
@@ -257,14 +167,10 @@ public class Game {
                     scanner.close();
                     System.exit(0);
                     break;
-                case TIMEUP:
-                    System.out.println("Time is up!");
-                    game.handleEnd(game, scanner);
-                    break;
                 default:
                     break;
             }
         }
     }
-
+	
 }

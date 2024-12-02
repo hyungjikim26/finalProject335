@@ -1,6 +1,6 @@
 public class MoveLimitMode implements GameMode {
-    private static final int MOVE_LIMIT = 5;
-    public int movesLeft = MOVE_LIMIT;
+    private static final int MOVE_LIMIT = 125;
+    private int movesLeft = MOVE_LIMIT;
     private final Board board;
 
     public MoveLimitMode(Board board) {
@@ -9,13 +9,29 @@ public class MoveLimitMode implements GameMode {
 
     @Override
     public boolean isGameOver() {
-        return movesLeft == 0 || board.losingCondition() || board.winningCondition();
+        if (movesLeft == 0) {
+            return true;
+        } else if (board.losingCondition()) {
+            return true;
+        } else if (board.winningCondition()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // @Override
     // public void updateGameState() {
     //     movesLeft--;
     // }
+
+    public void updateGateState() {
+        movesLeft--;
+    }
+
+    public int getMovesLeft() {
+        return movesLeft;
+    }
 
     // @Override
     // public void updateLeaderboard() {

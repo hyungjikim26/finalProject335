@@ -6,9 +6,12 @@ public class BoardGUI implements java.awt.event.KeyListener{
     private int score = 0;
     private JLabel[] slots = new JLabel[16];
     private JLabel scoreLabel;
-    private GameState currentState;
+    // private GameState currentState;
     private Leaderboard leaderboard;
     private GameMode gameMode;
+    private JLabel timerLabel;
+    private JLabel movesLeftLabel;
+    private JLabel modeLabel;
 
     public static void main(String[] args) {
 		new BoardGUI();
@@ -16,7 +19,7 @@ public class BoardGUI implements java.awt.event.KeyListener{
 
     public BoardGUI() {
         GameModeType selectedMode = chooseGameMode();
-        initializeGame(GameModeType.TRADITIONAL);
+        initializeGame(selectedMode);
     }
 
     public GameModeType chooseGameMode() {
@@ -82,7 +85,7 @@ public class BoardGUI implements java.awt.event.KeyListener{
         }
         if (boardChanged) {
             board.addRandomTile();
-            currentState = board.checkState();
+            // currentState = board.checkState();
         }
         updateGrid();
     }
@@ -111,7 +114,11 @@ public class BoardGUI implements java.awt.event.KeyListener{
         }
         if (boardChanged) {
             board.addRandomTile();
-            currentState = board.checkState();
+            // update moves left for move limit mode
+            if (gameMode instanceof MoveLimitMode) {
+                gameMode.updateGameState();
+            }
+            // currentState = board.checkState();
         }
         updateGrid();
 
@@ -127,6 +134,11 @@ public class BoardGUI implements java.awt.event.KeyListener{
             }
         }
         scoreLabel.setText("Current Score: "+Integer.toString(board.getScore()));
+
+        // update mode-specific info
+        if (gameMode instanceof MoveLimitMode moveLimitMode) {
+            movesLeftLabel.setText("Moves Left: " + moveLimitMode.movesLeft);
+        }
     }
 
     private void setup(GameModeType modeType) {
@@ -137,9 +149,26 @@ public class BoardGUI implements java.awt.event.KeyListener{
 
         scoreLabel = new JLabel("Current Score: "+score);
         //scoreLabel.setSize(750, 30);
+        modeLabel = new JLabel("Game Mode: " + getModeString(modeType));
+
         
-        JPanel top = new JPanel();
+        // JPanel top = new JPanel();
+        JPanel top = new JPanel(new GridLayout(1, 3));
+
         top.add(scoreLabel);
+        top.add(modeLabel);
+
+        // add moves left label for move limit mode
+        if (gameMode instanceof MoveLimitMode moveLimitMode) {
+            movesLeftLabel = new JLabel("Moves Left: " + moveLimitMode.movesLeft);
+            top.add(movesLeftLabel);
+        }
+
+        // add timer label for time limit mode
+        // if (gameMode instanceof TimeTrialMode timeTrialMode) {
+        //     top.add(timerLabel);
+        // }
+
         
         JPanel tiles = new JPanel();
         tiles.setSize(750,750);
@@ -157,7 +186,7 @@ public class BoardGUI implements java.awt.event.KeyListener{
 
         tiles.addKeyListener(this);
 
-        frame.add(scoreLabel,"North");
+        frame.add(top,"North");
         frame.add(tiles);
         frame.setVisible(true);
         tiles.setFocusable(true);

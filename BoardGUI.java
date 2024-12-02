@@ -3,6 +3,7 @@ import java.awt.*;
 
 public class BoardGUI implements java.awt.event.KeyListener{
     private Board board = new Board();
+    private Controller controller = new Controller();
     private int score = 0;
     private JLabel[] slots = new JLabel[16];
     private JLabel scoreLabel;
@@ -14,24 +15,19 @@ public class BoardGUI implements java.awt.event.KeyListener{
 
     public void keyTyped(java.awt.event.KeyEvent e){
         int keyChar = e.getKeyChar();
-        boolean boardChanged = false;
         switch ( keyChar ) {
             case 'w':
-                boardChanged = board.moveUp();
+                controller.moveBoardUp();
                 break;
             case 's':
-                boardChanged = board.moveDown();
+                controller.moveBoardDown();
                 break;
             case 'd':
-                boardChanged = board.moveRight();
+                controller.moveBoardRight();
                 break;
             case 'a':
-                boardChanged = board.moveLeft();
+                controller.moveBoardLeft();
                 break;
-        }
-        if (boardChanged) {
-            board.addRandomTile();
-            currentState = board.checkState();
         }
         updateGrid();
     }
@@ -43,31 +39,26 @@ public class BoardGUI implements java.awt.event.KeyListener{
     @Override
     public void keyPressed(java.awt.event.KeyEvent e) {
         int keyCode = e.getKeyCode();
-        boolean boardChanged = false;
         switch ( keyCode ) {
             case java.awt.event.KeyEvent.VK_UP:
-                boardChanged = board.moveUp();
+                controller.moveBoardUp();
                 break;
             case java.awt.event.KeyEvent.VK_DOWN:
-                boardChanged = board.moveDown();
+                controller.moveBoardDown();
                 break;
             case java.awt.event.KeyEvent.VK_RIGHT:
-                boardChanged = board.moveRight();
+                controller.moveBoardRight();
                 break;
             case java.awt.event.KeyEvent.VK_LEFT:
-                boardChanged = board.moveLeft();
+                controller.moveBoardLeft();
                 break;
-        }
-        if (boardChanged) {
-            board.addRandomTile();
-            currentState = board.checkState();
         }
         updateGrid();
 
     }
 
     private void updateGrid(){
-        Tile[][] curGrid = board.getGrid();
+        Tile[][] curGrid = controller.getGrid();
         int slotNum = 0;
         for(int j = 0; j<=3; j++){
             for( int k = 0; k<=3; k++){
@@ -75,7 +66,7 @@ public class BoardGUI implements java.awt.event.KeyListener{
                 slotNum++;
             }
         }
-        scoreLabel.setText("Current Score: "+Integer.toString(board.getScore()));
+        scoreLabel.setText("Current Score: "+Integer.toString(controller.getScore()));
     }
 
     public BoardGUI(){

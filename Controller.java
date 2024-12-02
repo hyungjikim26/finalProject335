@@ -87,4 +87,8 @@ public class Controller {
 	public int getScore() {
 		return board.getScore();
 	}
+
+	public Tile[][] getGrid(){
+		return board.getGrid();
+	}
 }

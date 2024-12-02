@@ -48,10 +48,6 @@ public class Board {
     public int getSize() {
         return size;
     }
-    
-    public int getScore() {
-    	return score;
-    }
     /**
      * @param row    - row index of the tile
      * @param column - column index of the tile
@@ -59,6 +55,13 @@ public class Board {
      */
     public int getValue(int row, int column) {
         return grid[row][column].getValue();
+    }
+
+    /**
+     * @return score of this board
+     */
+    public int getScore() {
+        return this.score;
     }
 
     /**
@@ -165,15 +168,16 @@ public class Board {
     	// we start with second row and move up each tile on this row, 
     	boolean isChanged = false;
     	// then move to lower row
-    	for (int row = 1; row < size; row++) {
-    		for (int column = 0; column < size; column++) {
+    	for (int column = 0; column < size; column++) {
+    		int boundRow = 0; // for each column the tiles below this row are not merged
+    		for (int row = 1; row < size; row++) {
     			if (grid[row][column].isEmpty())	// if tile empty, no need to move it
     				continue;
     			// if tile is not empty move it up until it touches the upper bound
     			// or until it is merged with another tile of equal value
     			// or until it touches the tile with different value
     			int tempRow = row;
-    			while (tempRow > 0) {
+    			while (tempRow > boundRow) {
     				// if upper tile is 0, exchange tiles
     				if (grid[tempRow-1][column].isEmpty()) {
     					exchangeTiles(tempRow-1, column, tempRow, column);
@@ -185,6 +189,7 @@ public class Board {
     					grid[tempRow-1][column].merge(grid[tempRow][column]);
     					score += grid[tempRow-1][column].getValue();
     					isChanged = true;
+    					boundRow++;
     					break;
     				}
     				// otherwise tile touches the other tile which is not empty and not equal
@@ -213,15 +218,16 @@ public class Board {
     	// we start with pre-last column and move right each tile on this column, 
     	// then do the same with the column to the left
     	boolean isChanged = false;
-    	for (int column = size-2; column >= 0; column--) {
-    		for (int row = 0; row < size; row++) {
+    	for (int row = 0; row < size; row++) {
+    		int boundColumn = size-1; // for each row the tiles to the right of this column are not merged
+    		for (int column = size-2; column >= 0; column--) {
     			if (grid[row][column].isEmpty())	// if tile empty, no need to move it
     				continue;
     			// if tile is not empty move it up until it touches the right bound
     			// or until it is merged with another tile of equal value
     			// or until it touches the tile with different value
     			int tempColumn = column;
-    			while (tempColumn < size-1) {
+    			while (tempColumn < boundColumn) {
     				// if tile to the right is 0, exchange tiles
     				if (grid[row][tempColumn+1].isEmpty()) {
     					exchangeTiles(row, tempColumn+1, row, tempColumn);
@@ -233,6 +239,7 @@ public class Board {
     					grid[row][tempColumn+1].merge(grid[row][tempColumn]);
     					isChanged = true;
     					score += grid[row][tempColumn+1].getValue();
+    					boundColumn--;
     					break;
     				}
     				// otherwise tile touches the other tile which is not empty and not equal
@@ -260,15 +267,16 @@ public class Board {
     	// we start with pre-last row and move down each tile on this row, 
     	// then move to upper row
     	boolean isChanged = false;
-    	for (int row = size-2; row >= 0; row--) {
-    		for (int column = 0; column < size; column++) {
+    	for (int column = 0; column < size; column++) {
+    		int boundRow = size-1; // for each column the tiles above this row are not merged
+    		for (int row = size-2; row >= 0; row--) {
     			if (grid[row][column].isEmpty())	// if tile empty, no need to move it
     				continue;
     			// if tile is not empty move it down until it touches the lower bound
     			// or until it is merged with another tile of equal value
     			// or until it touches the tile with different value
     			int tempRow = row;
-    			while (tempRow < size-1) {
+    			while (tempRow < boundRow) {
     				// if lower tile is 0, exchange tiles
     				if (grid[tempRow+1][column].isEmpty()) {
     					exchangeTiles(tempRow+1, column, tempRow, column);
@@ -280,6 +288,7 @@ public class Board {
     					grid[tempRow+1][column].merge(grid[tempRow][column]);
     					score += grid[tempRow+1][column].getValue();
     					isChanged = true;
+    					boundRow--;
     					break;
     				}
     				// otherwise tile touches the other tile which is not empty and not equal
@@ -307,15 +316,16 @@ public class Board {
     	// we start with second column and move left each tile on this column, 
     	// then do the same with the column to the right
     	boolean isChanged = false;
-    	for (int column = 1; column < size; column++) {
-    		for (int row = 0; row < size; row++) {
+    	for (int row = 0; row < size; row++) {
+    		int boundColumn = 0; // for each row the tiles to the left of this column are not merged
+    		for (int column = 1; column < size; column++) {
     			if (grid[row][column].isEmpty())	// if tile empty, no need to move it
     				continue;
     			// if tile is not empty move it up until it touches the left bound
     			// or until it is merged with another tile of equal value
     			// or until it touches the tile with different value
     			int tempColumn = column;
-    			while (tempColumn > 0) {
+    			while (tempColumn > boundColumn) {
     				// if tile to the left is 0, exchange tiles
     				if (grid[row][tempColumn-1].isEmpty()) {
     					exchangeTiles(row, tempColumn-1, row, tempColumn);
@@ -327,6 +337,7 @@ public class Board {
     					grid[row][tempColumn-1].merge(grid[row][tempColumn]);
     					isChanged = true;
     					score += grid[row][tempColumn-1].getValue();
+    					boundColumn--;
     					break;
     				}
     				// otherwise tile touches the other tile which is not empty and not equal
@@ -387,8 +398,8 @@ public class Board {
      * @return true if one of the tile reached 2048, false otherwise
      */
     public boolean winningCondition() {
-        for (int r = 0; r < 4; r++) {
-            for (int c = 0; c < 4; c++) {
+        for (int r = 0; r < size; r++) {
+            for (int c = 0; c < size; c++) {
                 if (grid[r][c].getValue() == 2048) {
                     return true;
                 }
@@ -406,39 +417,29 @@ public class Board {
         // Check if there is any empty tile
         if (!this.isFull()) {
             return false;
-        } else {
+        }
             // Check if any tiles can be merged
-            for (int r = 0; r < 4; r++) {
-                for (int c = 0; c < 4; c++) {
-                    // Check upper tile
-                    if (r != 0 && grid[r][c].getValue() == grid[r - 1][c].getValue()) {
-                        return false; 
-                    }
-                    // Check downside tile
-                    if (r != 3 && grid[r][c].getValue() == grid[r + 1][c].getValue()) {
-                        return false; 
-                    }
-                    // Check left tile
-                    if (c != 0 && grid[r][c] == grid[r][c - 1]) {
-                        return false; 
-                    }
-                    // Check right tile
-                    if (c != 3 && grid[r][c] == grid[r][c + 1]) {
-                        return false; 
-                    }
-                }
+        for (int r = 0; r < size; r++) {
+            for (int c = 0; c < size; c++) {
+                // Check adjacent tiles for the same value
+                    if ((r > 0 && grid[r][c].getValue() == grid[r - 1][c].getValue()) || // Up
+                        (r < size - 1 && grid[r][c].getValue() == grid[r + 1][c].getValue()) || // Down
+                        (c > 0 && grid[r][c].getValue() == grid[r][c - 1].getValue()) || // Left
+                        (c < size - 1 && grid[r][c].getValue() == grid[r][c + 1].getValue())) { // Right
+                        return false;
+                        }
             }
         }
         return true;
     }
 
-    public GameState checkState() {
-        if (winningCondition()) {
-            return GameState.WIN;
-        } else if (losingCondition()) {
-            return GameState.LOSE;
-        } else {
-            return GameState.CONTINUE;
-        }
-    }
+    // public GameState checkState() {
+    //     if (winningCondition()) {
+    //         return GameState.WIN;
+    //     } else if (losingCondition()) {
+    //         return GameState.LOSE;
+    //     } else {
+    //         return GameState.CONTINUE;
+    //     }
+    // }
 }

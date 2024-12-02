@@ -1,0 +1,9 @@
+s;96
+s;16
+what;16
+what;16
+HJ;8
+HJ;8
+what;8
+w;8
+juwon;4

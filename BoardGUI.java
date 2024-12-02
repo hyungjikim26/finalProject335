@@ -124,7 +124,8 @@ public class BoardGUI implements java.awt.event.KeyListener{
             board.addRandomTile();
             // update moves left for move limit mode
             if (gameMode instanceof MoveLimitMode) {
-                gameMode.updateGameState();
+                // gameMode.updateGateState();
+                ((MoveLimitMode) gameMode).updateGateState();
             }
             // currentState = board.checkState();
         }
@@ -148,7 +149,7 @@ public class BoardGUI implements java.awt.event.KeyListener{
 
         // update mode-specific info
         if (gameMode instanceof MoveLimitMode moveLimitMode) {
-            movesLeftLabel.setText("Moves Left: " + moveLimitMode.movesLeft);
+            movesLeftLabel.setText("Moves Left: " + moveLimitMode.getMovesLeft());
         }
     }
 
@@ -171,7 +172,7 @@ public class BoardGUI implements java.awt.event.KeyListener{
 
         // add moves left label for move limit mode
         if (gameMode instanceof MoveLimitMode moveLimitMode) {
-            movesLeftLabel = new JLabel("Moves Left: " + moveLimitMode.movesLeft);
+            movesLeftLabel = new JLabel("Moves Left: " + moveLimitMode.getMovesLeft());
             top.add(movesLeftLabel);
         }
 

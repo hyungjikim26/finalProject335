@@ -10,7 +10,6 @@ public class TraditionalMode implements GameMode {
         return board.losingCondition() || board.winningCondition();
     }
 
-    @Override
     public void updateGameState() {
         // no states to update in traditional mode
     }

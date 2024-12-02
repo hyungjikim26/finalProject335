@@ -13,60 +13,88 @@ class BoardTest {
 		}
 		return board;
 	}
+	
+	void checkBoard(Board board, int[][] result) {
+		for (int i = 0; i < result.length; i++) {
+			for (int j = 0; j < result[0].length; j++) {
+				assertEquals(result[i][j], board.getValue(i, j));
+			}
+		}
+	}
 
 	@Test
 	void test_moveUpMethod() {
-		Board board = new Board(2, 0);
-		System.out.println(board);
-		board.addTile(0, 0, 2);
-		board.addTile(0, 1, 2);
-		board.addTile(1, 0, 2);
-		board.addTile(1, 1, 2);
-		System.out.println(board);
-		assertEquals(2, board.getValue(0, 0));
-		assertEquals(2, board.getValue(0, 1));
-		assertEquals(2, board.getValue(1, 0));
-		assertEquals(2, board.getValue(1, 1));
-		board.moveUp();
-		System.out.println(board);
-		assertEquals(4, board.getValue(0, 0));
-		assertEquals(4, board.getValue(0, 1));
-		assertEquals(0, board.getValue(1, 0));
-		assertEquals(0, board.getValue(1, 1));
+		int[][] valuesA = {{2, 2}, 
+						   {2, 2}};
+		Board boardA = createBoard(valuesA);
+		System.out.println(boardA);
+		assertEquals(2, boardA.getValue(0, 0));
+		assertEquals(2, boardA.getValue(0, 1));
+		assertEquals(2, boardA.getValue(1, 0));
+		assertEquals(2, boardA.getValue(1, 1));
+		boardA.moveUp();
+		System.out.println(boardA);
+		assertEquals(4, boardA.getValue(0, 0));
+		assertEquals(4, boardA.getValue(0, 1));
+		assertEquals(0, boardA.getValue(1, 0));
+		assertEquals(0, boardA.getValue(1, 1));
 
-		board = new Board(4, 0);
-		System.out.println(board);
-		board.addTile(0, 0, 2);
-		board.addTile(0, 2, 2);
-		board.addTile(0, 3, 2);
-		board.addTile(2, 0, 4);
-		board.addTile(2, 3, 4);
-		board.addTile(3, 1, 8);
-		board.addTile(3, 2, 2);
-		board.addTile(3, 3, 4);
-		System.out.println(board);
-		board.moveUp();
-		System.out.println(board);
-		assertEquals(2, board.getValue(0, 0));
-		assertEquals(8, board.getValue(0, 1));
-		assertEquals(4, board.getValue(0, 2));
-		assertEquals(2, board.getValue(0, 3));
-		assertEquals(4, board.getValue(1, 0));
-		assertEquals(0, board.getValue(1, 2));
-		assertEquals(8, board.getValue(1, 3));
+		int[][] valuesB = {{2, 0, 2, 2}, 
+						   {0, 0, 0, 0}, 
+						   {4, 0, 0, 4}, 
+						   {0, 8, 2, 4}};
+		Board boardB = createBoard(valuesB);
+		System.out.println(boardB);
+		boardB.moveUp();
+		System.out.println(boardB);
+		assertEquals(2, boardB.getValue(0, 0));
+		assertEquals(8, boardB.getValue(0, 1));
+		assertEquals(4, boardB.getValue(0, 2));
+		assertEquals(2, boardB.getValue(0, 3));
+		assertEquals(4, boardB.getValue(1, 0));
+		assertEquals(0, boardB.getValue(1, 2));
+		assertEquals(8, boardB.getValue(1, 3));
 
-		board = new Board(4, 0);
-		System.out.println(board);
-		board.addTile(0, 0, 2);
-		board.addTile(1, 0, 2);
-		board.addTile(2, 0, 2);
-		board.addTile(3, 0, 2);
-		System.out.println(board);
-		board.moveUp();
-		System.out.println(board);
-		assertEquals(4, board.getValue(0, 0));
-		assertEquals(4, board.getValue(1, 0));
-		assertEquals(0, board.getValue(2, 0));
+		int[][] valuesC = {{2, 32, 4, 0}, 
+				   		   {2, 8, 0, 128}, 
+				           {2, 32, 2, 0}, 
+				           {2, 0, 0, 16}};
+		Board boardC = createBoard(valuesC);
+		int[][] resultC = {{4, 32, 4, 128}, 
+		   		   		   {4, 8, 2, 16}, 
+		   		   		   {0, 32, 0, 0}, 
+		   		   		   {0, 0, 0, 0}};
+		boardC.moveUp();
+		checkBoard(boardC, resultC);
+		
+		int[][] valuesD = {{2, 0, 0, 0}, 
+		   		   		   {2, 0, 0, 0}, 
+		                   {4, 0, 0, 0}, 
+		                   {0, 0, 0, 0}};
+		Board boardD = createBoard(valuesD);
+		
+		int[][] resultD = {{4, 0, 0, 0}, 
+		   		           {4, 0, 0, 0}, 
+                           {0, 0, 0, 0}, 
+                           {0, 0, 0, 0}};
+		boardD.moveUp();
+		checkBoard(boardD, resultD);
+		
+		int[][] valuesE = {{2, 16, 2, 32, 4},
+			 			   {0, 0, 2, 16, 4},
+		                   {2, 0, 2, 16, 4},
+		                   {0, 16, 2, 0, 4},
+		                   {4, 32, 2, 0, 16}};
+		
+		Board boardE = createBoard(valuesE);
+		int[][] resultE = {{4, 32, 4, 32, 8},
+						   {4, 32, 4, 32, 8},
+	 			   		   {0, 0, 2, 0, 16},
+	 			   		   {0, 0, 0, 0, 0},
+	 			   		   {0, 0, 0, 0, 0}};
+		boardE.moveUp();
+		checkBoard(boardE, resultE);
+		
 	}
 
 	@Test

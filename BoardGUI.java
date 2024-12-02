@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 public class BoardGUI implements java.awt.event.KeyListener{
@@ -241,6 +242,7 @@ public class BoardGUI implements java.awt.event.KeyListener{
         textArea.setEditable(false);
 
         StringBuilder sb = new StringBuilder();
+        ArrayList<Entry> scores;
 
         // show all scores or only the top 10
         // let user choose
@@ -254,14 +256,19 @@ public class BoardGUI implements java.awt.event.KeyListener{
 
         if (selected == 0) {
             sb.append("All Scores:\n");
-            for (Entry entry: leaderboard.getAllScores()) {
-                sb.append(entry).append("\n");
-            }
+            scores = leaderboard.getAllScores();
+            
         } else {
             sb.append("Top 10 Scores:\n");
-            for (Entry entry: leaderboard.getTopScore()) {
-                sb.append(entry).append("\n");
-            }
+            scores = leaderboard.getTopScore();
+        }
+
+        for (int i = 0; i < scores.size(); i++) {
+            Entry entry = scores.get(i);
+            sb.append(i + 1);
+            sb.append(". ");
+            sb.append(entry);
+            sb.append("\n");
         }
 
         textArea.setText(sb.toString());

@@ -70,4 +70,9 @@ public class Leaderboard {
         // return unmodifiable list
         return new ArrayList<>(entries);
     }
+
+    public void clear() {
+        entries.clear();
+        save();
+    }
 }

@@ -122,6 +122,9 @@ public class BoardGUI implements java.awt.event.KeyListener{
         }
         updateGrid();
 
+        if (gameMode.isGameOver()) {
+            handleGameOver();
+        }
     }
 
     private void updateGrid(){
@@ -245,12 +248,12 @@ public class BoardGUI implements java.awt.event.KeyListener{
         if (selected == 0) {
             sb.append("All Scores:\n");
             for (Entry entry: leaderboard.getAllScores()) {
-                sb.append(entry);
+                sb.append(entry + "\n");
             }
         } else {
             sb.append("Top 10 Scores:\n");
             for (Entry entry: leaderboard.getTopScore()) {
-                sb.append(entry);
+                sb.append(entry + "\n");
             }
         }
 

@@ -27,33 +27,22 @@ class BoardTest {
 		int[][] valuesA = {{2, 2}, 
 						   {2, 2}};
 		Board boardA = createBoard(valuesA);
-		System.out.println(boardA);
-		assertEquals(2, boardA.getValue(0, 0));
-		assertEquals(2, boardA.getValue(0, 1));
-		assertEquals(2, boardA.getValue(1, 0));
-		assertEquals(2, boardA.getValue(1, 1));
+		int[][] resultA = {{4, 4}, 
+				   		   {0, 0}};
 		boardA.moveUp();
-		System.out.println(boardA);
-		assertEquals(4, boardA.getValue(0, 0));
-		assertEquals(4, boardA.getValue(0, 1));
-		assertEquals(0, boardA.getValue(1, 0));
-		assertEquals(0, boardA.getValue(1, 1));
+		checkBoard(boardA, resultA);
 
 		int[][] valuesB = {{2, 0, 2, 2}, 
 						   {0, 0, 0, 0}, 
 						   {4, 0, 0, 4}, 
 						   {0, 8, 2, 4}};
 		Board boardB = createBoard(valuesB);
-		System.out.println(boardB);
+		int[][] resultB = {{2, 8, 4, 2}, 
+				   		   {4, 0, 0, 8}, 
+				   		   {0, 0, 0, 0}, 
+				   		   {0, 0, 0, 0}};
 		boardB.moveUp();
-		System.out.println(boardB);
-		assertEquals(2, boardB.getValue(0, 0));
-		assertEquals(8, boardB.getValue(0, 1));
-		assertEquals(4, boardB.getValue(0, 2));
-		assertEquals(2, boardB.getValue(0, 3));
-		assertEquals(4, boardB.getValue(1, 0));
-		assertEquals(0, boardB.getValue(1, 2));
-		assertEquals(8, boardB.getValue(1, 3));
+		checkBoard(boardB, resultB);
 
 		int[][] valuesC = {{2, 32, 4, 0}, 
 				   		   {2, 8, 0, 128}, 
@@ -99,172 +88,107 @@ class BoardTest {
 
 	@Test
 	void test_moveRightMethod() {
-		Board board = new Board(2, 0);
-		System.out.println(board);
-		board.addTile(0, 0, 2);
-		board.addTile(0, 1, 2);
-		board.addTile(1, 0, 2);
-		board.addTile(1, 1, 2);
-		System.out.println(board);
-		assertEquals(2, board.getValue(0, 0));
-		assertEquals(2, board.getValue(0, 1));
-		assertEquals(2, board.getValue(1, 0));
-		assertEquals(2, board.getValue(1, 1));
-		board.moveRight();
-		System.out.println(board);
-		assertEquals(0, board.getValue(0, 0));
-		assertEquals(4, board.getValue(0, 1));
-		assertEquals(0, board.getValue(1, 0));
-		assertEquals(4, board.getValue(1, 1));
+		int[][] valuesA = {{2, 2}, 
+				           {2, 2}};
+		Board boardA = createBoard(valuesA);
+		int[][] resultA = {{0, 4}, 
+				   		   {0, 4}};
+		boardA.moveRight();
+		checkBoard(boardA, resultA);
+		
 
-		board = new Board(4, 0);
-		System.out.println(board);
-		board.addTile(0, 0, 2);
-		board.addTile(0, 2, 2);
-		board.addTile(0, 3, 2);
-		board.addTile(2, 0, 4);
-		board.addTile(2, 3, 4);
-		board.addTile(3, 1, 8);
-		board.addTile(3, 2, 2);
-		board.addTile(3, 3, 4);
-		System.out.println(board);
-		board.moveRight();
-		System.out.println(board);
-		assertEquals(4, board.getValue(0, 3));
-		assertEquals(2, board.getValue(0, 2));
-		assertEquals(8, board.getValue(2, 3));
-		assertEquals(4, board.getValue(3, 3));
-		assertEquals(2, board.getValue(3, 2));
-		assertEquals(8, board.getValue(3, 1));
-		assertEquals(0, board.getValue(3, 0));
+		int[][] valuesB = {{2, 0, 2, 2}, 
+						   {0, 0, 0, 0}, 
+						   {4, 0, 0, 4}, 
+						   {0, 8, 2, 4}};
+		Board boardB = createBoard(valuesB);
+		int[][] resultB = {{0, 0, 2, 4}, 
+					   	   {0, 0, 0, 0}, 
+					       {0, 0, 0, 8}, 
+					       {0, 8, 2, 4}};
+		boardB.moveRight();
+		checkBoard(boardB, resultB);
 
-		board = new Board(4, 0);
-		System.out.println(board);
-		board.addTile(0, 0, 2);
-		board.addTile(1, 0, 2);
-		board.addTile(2, 0, 2);
-		board.addTile(3, 0, 2);
-		System.out.println(board);
-		board.moveRight();
-		System.out.println(board);
-		assertEquals(2, board.getValue(0, 3));
-		assertEquals(2, board.getValue(1, 3));
-		assertEquals(2, board.getValue(2, 3));
-		assertEquals(2, board.getValue(2, 3));
+		int[][] valuesC = {{2, 0, 0, 0}, 
+			   	   		  {2, 0, 0, 0}, 
+			   	   		  {2, 0, 0, 0}, 
+			   	   		  {2, 0, 0, 0}};
+		Board boardC = createBoard(valuesC);
+		int[][] resultC = {{0, 0, 0, 2}, 
+				   		   {0, 0, 0, 2}, 
+				   		   {0, 0, 0, 2}, 
+				   		   {0, 0, 0, 2}};
+		boardC.moveRight();
+		checkBoard(boardC, resultC);
 	}
 
 	@Test
 	void test_moveDownMethod() {
-		Board board = new Board(2, 0);
-		System.out.println(board);
-		board.addTile(0, 0, 2);
-		board.addTile(0, 1, 2);
-		board.addTile(1, 0, 2);
-		board.addTile(1, 1, 2);
-		System.out.println(board);
-		assertEquals(2, board.getValue(0, 0));
-		assertEquals(2, board.getValue(0, 1));
-		assertEquals(2, board.getValue(1, 0));
-		assertEquals(2, board.getValue(1, 1));
-		board.moveDown();
-		System.out.println(board);
-		assertEquals(0, board.getValue(0, 0));
-		assertEquals(0, board.getValue(0, 1));
-		assertEquals(4, board.getValue(1, 0));
-		assertEquals(4, board.getValue(1, 1));
+		int[][] valuesA = {{2, 2}, 
+				   		   {2, 2}};
+		Board boardA = createBoard(valuesA);
+		int[][] resultA = {{0, 0}, 
+				   		   {4, 4}};
+		boardA.moveDown();
+		checkBoard(boardA, resultA);
 
-		board = new Board(4, 0);
-		System.out.println(board);
-		board.addTile(0, 0, 2);
-		board.addTile(0, 2, 2);
-		board.addTile(0, 3, 2);
-		board.addTile(2, 0, 4);
-		board.addTile(2, 3, 4);
-		board.addTile(3, 1, 8);
-		board.addTile(3, 2, 2);
-		board.addTile(3, 3, 4);
-		System.out.println(board);
-		board.moveDown();
-		System.out.println(board);
-		assertEquals(4, board.getValue(3, 0));
-		assertEquals(2, board.getValue(2, 0));
-		assertEquals(8, board.getValue(3, 1));
-		assertEquals(4, board.getValue(3, 2));
-		assertEquals(8, board.getValue(3, 3));
-		assertEquals(2, board.getValue(2, 3));
-		assertEquals(0, board.getValue(0, 3));
+		int[][] valuesB = {{2, 0, 2, 2}, 
+				   		   {0, 0, 0, 0}, 
+				   		   {4, 0, 0, 4}, 
+				   		   {0, 8, 2, 4}};
+		Board boardB = createBoard(valuesB);
+		int[][] resultB = {{0, 0, 0, 0}, 
+				   		   {0, 0, 0, 0}, 
+				   		   {2, 0, 0, 2}, 
+				   		   {4, 8, 4, 8}};
+		boardB.moveDown();
+		checkBoard(boardB, resultB);
 
-		board = new Board(4, 0);
-		System.out.println(board);
-		board.addTile(0, 0, 2);
-		board.addTile(1, 0, 2);
-		board.addTile(2, 0, 2);
-		board.addTile(3, 0, 2);
-		System.out.println(board);
-		board.moveDown();
-		System.out.println(board);
-		assertEquals(4, board.getValue(3, 0));
-		assertEquals(4, board.getValue(2, 0));
-		assertEquals(0, board.getValue(1, 0));
+		int[][] valuesC = {{2, 0, 0, 0}, 
+		   		   		   {2, 0, 0, 0}, 
+		   		   		   {2, 0, 0, 0}, 
+		   		   		   {2, 0, 0, 0}};
+		Board boardC = createBoard(valuesC);
+		int[][] resultC = {{0, 0, 0, 0}, 
+				   		   {0, 0, 0, 0}, 
+				   		   {4, 0, 0, 0}, 
+				   		   {4, 0, 0, 0}};
+		boardC.moveDown();
+		checkBoard(boardC, resultC);
 	}
 
 	@Test
 	void test_moveLeftMethod() {
-		Board board = new Board(2, 0);
-		System.out.println(board);
-		board.addTile(0, 0, 2);
-		board.addTile(0, 1, 2);
-		board.addTile(1, 0, 2);
-		board.addTile(1, 1, 2);
-		System.out.println(board);
-		assertEquals(2, board.getValue(0, 0));
-		assertEquals(2, board.getValue(0, 1));
-		assertEquals(2, board.getValue(1, 0));
-		assertEquals(2, board.getValue(1, 1));
-		boolean isChanged = board.moveLeft();
-		System.out.println(board);
-		assertTrue(isChanged);
-		assertEquals(4, board.getValue(0, 0));
-		assertEquals(0, board.getValue(0, 1));
-		assertEquals(4, board.getValue(1, 0));
-		assertEquals(0, board.getValue(1, 1));
+		int[][] valuesA = {{2, 2}, 
+		   		   		   {2, 2}};
+		Board boardA = createBoard(valuesA);
+		int[][] resultA = {{4, 0}, 
+				   		   {4, 0}};
+		boolean isChangedA = boardA.moveLeft();
+		checkBoard(boardA, resultA);
+		assertTrue(isChangedA);
 
-		board = new Board(4, 0);
-		System.out.println(board);
-		board.addTile(0, 0, 2);
-		board.addTile(0, 2, 2);
-		board.addTile(0, 3, 2);
-		board.addTile(2, 0, 4);
-		board.addTile(2, 3, 4);
-		board.addTile(3, 1, 8);
-		board.addTile(3, 2, 2);
-		board.addTile(3, 3, 4);
-		System.out.println(board);
-		boolean changed = board.moveLeft();
-		System.out.println(board);
-		assertTrue(changed);
-		assertEquals(4, board.getValue(0, 0));
-		assertEquals(2, board.getValue(0, 1));
-		assertEquals(8, board.getValue(2, 0));
-		assertEquals(8, board.getValue(3, 0));
-		assertEquals(2, board.getValue(3, 1));
-		assertEquals(4, board.getValue(3, 2));
-		assertEquals(0, board.getValue(3, 3));
+		int[][] valuesB = {{2, 0, 2, 2}, 
+		   		   		   {0, 0, 0, 0}, 
+		   		   		   {4, 0, 0, 4}, 
+		   		   		   {0, 8, 2, 4}};
+		Board boardB = createBoard(valuesB);
+		int[][] resultB = {{4, 2, 0, 0}, 
+		   		   		   {0, 0, 0, 0}, 
+		   		   		   {8, 0, 0, 0}, 
+		   		   		   {8, 2, 4, 0}};
+		boolean isChangedB = boardB.moveLeft();
+		checkBoard(boardB, resultB);
+		assertTrue(isChangedB);
 
-		board = new Board(2, 0);
-		System.out.println(board);
-		board.addTile(0, 0, 2);
-		board.addTile(0, 1, 4);
-		board.addTile(1, 0, 8);
-		board.addTile(1, 1, 16);
-		System.out.println(board);
-		isChanged = board.moveLeft();
-		System.out.println(board);
-		assertFalse(isChanged);
-		assertEquals(2, board.getValue(0, 0));
-		assertEquals(4, board.getValue(0, 1));
-		assertEquals(8, board.getValue(1, 0));
-		assertEquals(16, board.getValue(1, 1));
+		int[][] valuesC = {{2, 4}, 
+		   		   		   {8, 16}};
+		Board boardC = createBoard(valuesC);
+		int[][] resultC = {{2, 4}, 
+				   		   {8, 16}};
+		boolean isChangedC = boardC.moveLeft();
+		checkBoard(boardC, resultC);
+		assertFalse(isChangedC);
 	}
 
 	@Test

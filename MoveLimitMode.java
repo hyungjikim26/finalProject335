@@ -1,6 +1,6 @@
 public class MoveLimitMode implements GameMode {
     private static final int MOVE_LIMIT = 125;
-    private int movesLeft = MOVE_LIMIT;
+    public int movesLeft = MOVE_LIMIT;
     private final Board board;
 
     public MoveLimitMode(Board board) {

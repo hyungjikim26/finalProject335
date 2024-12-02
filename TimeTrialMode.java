@@ -20,10 +20,10 @@ public class TimeTrialMode implements GameMode {
         elapsedTime = currentTime - startTime;    
     }
 
-    @Override
-    public void updateLeaderboard() {
+    // @Override
+    // public void updateLeaderboard() {
 
-    }
+    // }
 
     @Override
     public String getGameOverMessage() {

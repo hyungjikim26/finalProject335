@@ -220,4 +220,42 @@ public class BoardGUI implements java.awt.event.KeyListener{
     private String getGameOverMessage() {
         return gameMode.getGameOverMessage();
     }
+
+    private void displayLeaderboard() {
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Leaderboard");
+        dialog.setSize(300, 300);
+        dialog.setLocationRelativeTo(null);
+
+        JTextArea textArea = new JTextArea();
+        textArea.setEditable(false);
+
+        StringBuilder sb = new StringBuilder();
+
+        // show all scores or only the top 10
+        // let user choose
+        Object[] options = {"All Scores", "Top 10"};
+        int selected = JOptionPane.showOptionDialog(null, 
+            "Select a Leaderboard Display Option", 
+            "Leaderboard Display", 
+            JOptionPane.DEFAULT_OPTION, 
+            JOptionPane.INFORMATION_MESSAGE, 
+            null, options, options[0]);
+
+        if (selected == 0) {
+            sb.append("All Scores:\n");
+            for (Entry entry: leaderboard.getAllScores()) {
+                sb.append(entry);
+            }
+        } else {
+            sb.append("Top 10 Scores:\n");
+            for (Entry entry: leaderboard.getTopScore()) {
+                sb.append(entry);
+            }
+        }
+
+        textArea.setText(sb.toString());
+        dialog.add(textArea);
+        dialog.setVisible(true);        
+    }
 }

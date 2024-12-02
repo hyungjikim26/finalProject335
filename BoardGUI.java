@@ -258,4 +258,21 @@ public class BoardGUI implements java.awt.event.KeyListener{
         dialog.add(textArea);
         dialog.setVisible(true);        
     }
+
+    private void handleGameOver() {
+        int finalScore = board.getScore();
+
+        String gameOverMessage = getGameOverMessage();
+        String playerName = JOptionPane.showInputDialog(
+            null, 
+            gameOverMessage + "\nYour score: " + finalScore + "\nEnter your name: ", 
+            "Enter Name", 
+            JOptionPane.INFORMATION_MESSAGE);
+
+        if (playerName != null && !playerName.isEmpty()) {
+            leaderboard.addScore(playerName, finalScore);
+
+            displayLeaderboard();
+        }
+    }
 }

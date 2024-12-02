@@ -1,6 +1,6 @@
 public interface GameMode {
     boolean isGameOver();
-    void updateGameState();
+    // void updateGameState();
     // void updateLeaderboard();
     String getGameOverMessage();
 }

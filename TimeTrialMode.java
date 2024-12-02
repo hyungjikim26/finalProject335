@@ -14,11 +14,11 @@ public class TimeTrialMode implements GameMode {
         return elapsedTime >= TIME_LIMIT || board.losingCondition() || board.winningCondition();
     }
 
-    @Override
-    public void updateGameState() {
-        long currentTime = System.currentTimeMillis();
-        elapsedTime = currentTime - startTime;    
-    }
+    // @Override
+    // public void updateGameState() {
+    //     long currentTime = System.currentTimeMillis();
+    //     elapsedTime = currentTime - startTime;    
+    // }
 
     // @Override
     // public void updateLeaderboard() {

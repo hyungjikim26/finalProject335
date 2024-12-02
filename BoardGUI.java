@@ -1,5 +1,5 @@
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class BoardGUI implements java.awt.event.KeyListener{
     private Board board = new Board();
@@ -7,10 +7,61 @@ public class BoardGUI implements java.awt.event.KeyListener{
     private JLabel[] slots = new JLabel[16];
     private JLabel scoreLabel;
     private GameState currentState;
+    private Leaderboard leaderboard;
+    private GameMode gameMode;
 
     public static void main(String[] args) {
 		new BoardGUI();
 	}
+
+    public BoardGUI() {
+        GameModeType selectedMode = chooseGameMode();
+        initializeGame(GameModeType.TRADITIONAL);
+    }
+
+    public GameModeType chooseGameMode() {
+        Object[] options = {"Traditional", "Time Limit", "Move Limit"};
+        int selected = JOptionPane.showOptionDialog(null, 
+            "Select a Game Mode", 
+            "Game Mode Selection", 
+            JOptionPane.DEFAULT_OPTION, 
+            JOptionPane.INFORMATION_MESSAGE, 
+            null, options, options[0]);
+        
+        switch (selected) {
+            case 0:
+                return GameModeType.TRADITIONAL;
+            case 1:
+                return GameModeType.TIME_LIMIT;
+            case 2:
+                return GameModeType.MOVE_LIMIT;
+            default:
+                return GameModeType.TRADITIONAL;
+        }
+    }
+
+    public void initializeGame(GameModeType modeType) {
+        board = new Board();
+        leaderboard = new Leaderboard();
+
+        switch (modeType) {
+            case TRADITIONAL:
+                gameMode = new TraditionalMode(board);
+                break;
+            case TIME_LIMIT:
+                gameMode = new TimeTrialMode(board);
+                break;
+            case MOVE_LIMIT:
+                gameMode = new MoveLimitMode(board);
+                break;
+            default:
+                gameMode = new TraditionalMode(board);
+        }
+
+        setup(modeType);
+    }
+
+    
 
     public void keyTyped(java.awt.event.KeyEvent e){
         int keyChar = e.getKeyChar();
@@ -78,7 +129,7 @@ public class BoardGUI implements java.awt.event.KeyListener{
         scoreLabel.setText("Current Score: "+Integer.toString(board.getScore()));
     }
 
-    public BoardGUI(){
+    private void setup(GameModeType modeType) {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(750,780);
@@ -122,5 +173,22 @@ public class BoardGUI implements java.awt.event.KeyListener{
         slots[slotNum].setFont(new Font("", Font.PLAIN, 60));
         slots[slotNum].setBackground(tile.getColor());
         slots[slotNum].setOpaque(true);
+    }
+
+    private String getModeString(GameModeType modeType) {
+        switch (modeType) {
+            case TRADITIONAL:
+                return "Traditional";
+            case TIME_LIMIT:
+                return "Time Limit";
+            case MOVE_LIMIT:
+                return "Move Limit";
+            default:
+                return "Traditional";
+        }
+    }
+
+    private String getGameOverMessage() {
+        return gameMode.getGameOverMessage();
     }
 }

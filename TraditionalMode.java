@@ -7,15 +7,18 @@ public class TraditionalMode implements GameMode {
 
     @Override
     public boolean isGameOver() {
-        return board.losingCondition() || board.winningCondition();
-    }
-
-    public void updateGameState() {
-        // no states to update in traditional mode
+        if (board.losingCondition()) {
+            return true;
+        } else if (board.winningCondition()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // @Override
     // public void updateLeaderboard() {
+    //     // no states to update in traditional mode
     // }
 
     @Override

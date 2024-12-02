@@ -426,13 +426,13 @@ public class Board {
         return true;
     }
 
-    public GameState checkState() {
-        if (winningCondition()) {
-            return GameState.WIN;
-        } else if (losingCondition()) {
-            return GameState.LOSE;
-        } else {
-            return GameState.CONTINUE;
-        }
-    }
+    // public GameState checkState() {
+    //     if (winningCondition()) {
+    //         return GameState.WIN;
+    //     } else if (losingCondition()) {
+    //         return GameState.LOSE;
+    //     } else {
+    //         return GameState.CONTINUE;
+    //     }
+    // }
 }

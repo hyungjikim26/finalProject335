@@ -12,6 +12,8 @@ public class BoardGUI implements java.awt.event.KeyListener{
     private JLabel timerLabel;
     private JLabel movesLeftLabel;
     private JLabel modeLabel;
+    private boolean isGameOver = false;
+
 
     public static void main(String[] args) {
 		new BoardGUI();
@@ -96,6 +98,11 @@ public class BoardGUI implements java.awt.event.KeyListener{
 
     @Override
     public void keyPressed(java.awt.event.KeyEvent e) {
+        // prevent further moves when game is over
+        if (isGameOver) {
+            return;
+        }
+
         int keyCode = e.getKeyCode();
         boolean boardChanged = false;
         switch ( keyCode ) {
@@ -248,21 +255,23 @@ public class BoardGUI implements java.awt.event.KeyListener{
         if (selected == 0) {
             sb.append("All Scores:\n");
             for (Entry entry: leaderboard.getAllScores()) {
-                sb.append(entry + "\n");
+                sb.append(entry).append("\n");
             }
         } else {
             sb.append("Top 10 Scores:\n");
             for (Entry entry: leaderboard.getTopScore()) {
-                sb.append(entry + "\n");
+                sb.append(entry).append("\n");
             }
         }
 
         textArea.setText(sb.toString());
         dialog.add(textArea);
-        dialog.setVisible(true);        
+        dialog.setVisible(true);
     }
 
     private void handleGameOver() {
+        isGameOver = true;
+
         int finalScore = board.getScore();
 
         String gameOverMessage = getGameOverMessage();
@@ -277,5 +286,11 @@ public class BoardGUI implements java.awt.event.KeyListener{
 
             displayLeaderboard();
         }
+
+        // prevent further moves
+        // disable key listener
+
+        // remove focus from the game board
+
     }
 }

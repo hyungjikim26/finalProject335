@@ -1,5 +1,5 @@
 public class MoveLimitMode implements GameMode {
-    private static final int MOVE_LIMIT = 125;
+    private static final int MOVE_LIMIT = 1;
     public int movesLeft = MOVE_LIMIT;
     private final Board board;
 
@@ -17,9 +17,9 @@ public class MoveLimitMode implements GameMode {
         movesLeft--;
     }
 
-    @Override
-    public void updateLeaderboard() {
-    }
+    // @Override
+    // public void updateLeaderboard() {
+    // }
 
     @Override
     public String getGameOverMessage() {

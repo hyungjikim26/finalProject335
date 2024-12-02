@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 public class BoardGUI implements java.awt.event.KeyListener{
@@ -12,6 +13,8 @@ public class BoardGUI implements java.awt.event.KeyListener{
     private JLabel timerLabel;
     private JLabel movesLeftLabel;
     private JLabel modeLabel;
+    private boolean isGameOver = false;
+
 
     public static void main(String[] args) {
 		new BoardGUI();
@@ -96,6 +99,11 @@ public class BoardGUI implements java.awt.event.KeyListener{
 
     @Override
     public void keyPressed(java.awt.event.KeyEvent e) {
+        // prevent further moves when game is over
+        if (isGameOver) {
+            return;
+        }
+
         int keyCode = e.getKeyCode();
         boolean boardChanged = false;
         switch ( keyCode ) {
@@ -122,6 +130,9 @@ public class BoardGUI implements java.awt.event.KeyListener{
         }
         updateGrid();
 
+        if (gameMode.isGameOver()) {
+            handleGameOver();
+        }
     }
 
     private void updateGrid(){
@@ -219,5 +230,74 @@ public class BoardGUI implements java.awt.event.KeyListener{
 
     private String getGameOverMessage() {
         return gameMode.getGameOverMessage();
+    }
+
+    private void displayLeaderboard() {
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Leaderboard");
+        dialog.setSize(300, 300);
+        dialog.setLocationRelativeTo(null);
+
+        JTextArea textArea = new JTextArea();
+        textArea.setEditable(false);
+
+        StringBuilder sb = new StringBuilder();
+        ArrayList<Entry> scores;
+
+        // show all scores or only the top 10
+        // let user choose
+        Object[] options = {"All Scores", "Top 10"};
+        int selected = JOptionPane.showOptionDialog(null, 
+            "Select a Leaderboard Display Option", 
+            "Leaderboard Display", 
+            JOptionPane.DEFAULT_OPTION, 
+            JOptionPane.INFORMATION_MESSAGE, 
+            null, options, options[0]);
+
+        if (selected == 0) {
+            sb.append("All Scores:\n");
+            scores = leaderboard.getAllScores();
+            
+        } else {
+            sb.append("Top 10 Scores:\n");
+            scores = leaderboard.getTopScore();
+        }
+
+        for (int i = 0; i < scores.size(); i++) {
+            Entry entry = scores.get(i);
+            sb.append(i + 1);
+            sb.append(". ");
+            sb.append(entry);
+            sb.append("\n");
+        }
+
+        textArea.setText(sb.toString());
+        dialog.add(textArea);
+        dialog.setVisible(true);
+    }
+
+    private void handleGameOver() {
+        isGameOver = true;
+
+        int finalScore = board.getScore();
+
+        String gameOverMessage = getGameOverMessage();
+        String playerName = JOptionPane.showInputDialog(
+            null, 
+            gameOverMessage + "\nYour score: " + finalScore + "\nEnter your name: ", 
+            "Enter Name", 
+            JOptionPane.INFORMATION_MESSAGE);
+
+        if (playerName != null && !playerName.isEmpty()) {
+            leaderboard.addScore(playerName, finalScore);
+
+            displayLeaderboard();
+        }
+
+        // prevent further moves
+        // disable key listener
+
+        // remove focus from the game board
+
     }
 }

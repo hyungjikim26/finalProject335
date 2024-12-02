@@ -15,9 +15,9 @@ public class TraditionalMode implements GameMode {
         // no states to update in traditional mode
     }
 
-    @Override
-    public void updateLeaderboard() {
-    }
+    // @Override
+    // public void updateLeaderboard() {
+    // }
 
     @Override
     public String getGameOverMessage() {

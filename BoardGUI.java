@@ -7,6 +7,9 @@ public class BoardGUI implements java.awt.event.KeyListener {
     private int score = 0;
     private JLabel[] slots = new JLabel[16];
     private JLabel scoreLabel;
+    private CardLayout layout;
+    private JFrame frame;
+    private JPanel cardPanel;
     // private GameState currentState;
     private Leaderboard leaderboard;
     private GameMode gameMode;
@@ -136,7 +139,10 @@ public class BoardGUI implements java.awt.event.KeyListener {
     }
 
     private void setup(GameModeType modeType) {
-        JFrame frame = new JFrame();
+        frame = new JFrame();
+        cardPanel = new JPanel();
+        layout = new CardLayout();
+        cardPanel.setLayout(layout);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(750, 780);
         frame.setLocationRelativeTo(null);
@@ -193,10 +199,13 @@ public class BoardGUI implements java.awt.event.KeyListener {
 
         tiles.addKeyListener(this);
 
-        frame.add(top, "North");
-        frame.add(tiles);
-        frame.setVisible(true);
+        JSplitPane split = new JSplitPane(SwingConstants.HORIZONTAL, top, tiles);
+
+        cardPanel.add(split);
+        cardPanel.setVisible(true);
+        frame.add(cardPanel);
         tiles.setFocusable(true);
+        frame.setVisible(true);
     }
 
     public void changeTile(Tile tile, int slotNum) {
@@ -228,10 +237,12 @@ public class BoardGUI implements java.awt.event.KeyListener {
     }
 
     private void displayLeaderboard() {
-        JDialog dialog = new JDialog();
-        dialog.setTitle("Leaderboard");
-        dialog.setSize(300, 300);
-        dialog.setLocationRelativeTo(null);
+        JPanel leaders = new JPanel();
+        
+        //JDialog dialog = new JDialog();
+        //dialog.setTitle("Leaderboard");
+        //dialog.setSize(300, 300);
+        //dialog.setLocationRelativeTo(null);
 
         JTextArea textArea = new JTextArea();
         textArea.setEditable(false);
@@ -267,8 +278,10 @@ public class BoardGUI implements java.awt.event.KeyListener {
         }
 
         textArea.setText(sb.toString());
-        dialog.add(textArea);
-        dialog.setVisible(true);
+        leaders.add(textArea);
+        leaders.setVisible(true);
+        cardPanel.add(leaders);
+        layout.next(cardPanel);
     }
 
     private void handleGameOver() {

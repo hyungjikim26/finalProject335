@@ -2,8 +2,8 @@
  * File: Leaderboard.java
  * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
  *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
- * Purpose:
- * 
+ * Purpose: Defines the Leaderboard class, which stores final scores of
+ * players and saves them to an external file.
  */
 
 import java.io.BufferedReader;
@@ -21,19 +21,38 @@ public class Leaderboard {
     private static final int MAX_ENTRIES = 10;
     private final ArrayList<Entry> entries;
 
+    /**
+     * Constructor for Leaderboard. Loads the entries list from the file.
+     */
     public Leaderboard() {
         entries = new ArrayList<>();
+        // load existing leaderboard
         load();
     }
 
+    
+    /**
+     * 
+     * Adds a new score to the leaderboard and saves the updated leaderboard
+     * to the text file.
+     * 
+     * @param name the name of the player
+     * @param score the score of the player
+     * @pre name is not null, score >= 0
+     * @post entries is updated with the new score and saved to the file
+     */
     public void addScore(String name, int score) {
         entries.add(new Entry(name, score));
+        // will sort the entries in descending order
         Collections.sort(entries);
         // save the updated leaderboard
         save();
     }
 
+
     /**
+     * Load the entries saved in the external file into the entries list.
+     * Creates a new file if it doesn't exist.
      * 
      * @pre leaderboard.txt either doesn't exist or, it exists, is readable, and
      * has the correct format
@@ -53,6 +72,13 @@ public class Leaderboard {
         }
     }
 
+
+    /**
+     * Save the entries list to the external file leaderboard.txt.
+     * 
+     * @pre entries is not null
+     * @post leaderboard.txt is updated with the entries
+     */
     private void save() {
         // write to the external file leaderboard.txt
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILENAME))) {
@@ -64,7 +90,14 @@ public class Leaderboard {
         }
     }
 
-
+    
+    /**
+     * Gets the top 10 scores from the entries list.
+     * 
+     * @return the top 10 scores from the entries list
+     * @pre entries is not null
+     * @post the top 10 scores are returned
+     */
     public ArrayList<Entry> getTopScore() {
         // return only the top 10 scores
         // handle case where there are less than 10 scores
@@ -74,13 +107,30 @@ public class Leaderboard {
         return new ArrayList<>(entries.subList(0, MAX_ENTRIES));
     }
 
+
+    /**
+     * Gets all the scores from the entries list.
+     * 
+     * @return all the scores from the entries list
+     * @pre entries is not null
+     * @post all the scores are returned
+     */
     public ArrayList<Entry> getAllScores() {
         // return unmodifiable list
         return new ArrayList<>(entries);
     }
 
+
+    /**
+     * Clears the entries list and saves the updated leaderboard to the file.
+     * Used for testing purposes.
+     * 
+     * @pre entries is not null
+     * @post entries is cleared and saved to the file
+     */
     public void clear() {
         entries.clear();
         save();
     }
 }
+

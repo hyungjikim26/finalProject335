@@ -1,17 +1,40 @@
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class TimeTrialMode implements GameMode {
-    private static final long TIME_LIMIT = 12000;
-    private final long startTime;
-    private long elapsedTime;
+    private static final long TIME_LIMIT = 120000;
+    private final Timer timer;
     private final Board board;
+    private boolean timeUp;
 
     public TimeTrialMode(Board board) {
         this.board = board;
-        this.startTime = System.currentTimeMillis();
+        timeUp = false;
+        timer = new Timer();
+    }
+
+    public void start(TimeListener listener){
+        TimerTask task = new TimerTask() {
+            long remaining = TIME_LIMIT;
+
+            @Override
+            public void run(){
+                remaining -= 1000;
+                listener.onTimeUpdate(remaining);
+
+                if (remaining <= 0){
+                    timeUp = true;
+                    timer.cancel();
+                }
+            }
+        };
+
+        timer.scheduleAtFixedRate(task, 0, 1000);
     }
 
     @Override
     public boolean isGameOver() {
-        return elapsedTime >= TIME_LIMIT || board.losingCondition() || board.winningCondition();
+        return timeUp || board.losingCondition() || board.winningCondition();
     }
 
     // may or may not need this
@@ -29,6 +52,13 @@ public class TimeTrialMode implements GameMode {
 
     @Override
     public String getGameOverMessage() {
-        return elapsedTime >= TIME_LIMIT ? "Time's up!" : board.winningCondition() ? "You win!" : "You lose!";
+        if (board.winningCondition()) {
+            return "You win!";
+        } else if (timeUp) {
+            return "Time is up. You lose!";
+        }  else {
+            return "You lose!";
+        }
+
     }
 }

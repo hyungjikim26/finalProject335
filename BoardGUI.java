@@ -2,7 +2,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
-public class BoardGUI implements java.awt.event.KeyListener{
+public class BoardGUI implements java.awt.event.KeyListener {
     private Board board = new Board();
     private int score = 0;
     private JLabel[] slots = new JLabel[16];
@@ -15,10 +15,9 @@ public class BoardGUI implements java.awt.event.KeyListener{
     private JLabel modeLabel;
     private boolean isGameOver = false;
 
-
     public static void main(String[] args) {
-		new BoardGUI();
-	}
+        new BoardGUI();
+    }
 
     public BoardGUI() {
         GameModeType selectedMode = chooseGameMode();
@@ -26,14 +25,14 @@ public class BoardGUI implements java.awt.event.KeyListener{
     }
 
     public GameModeType chooseGameMode() {
-        Object[] options = {"Traditional", "Time Limit", "Move Limit"};
-        int selected = JOptionPane.showOptionDialog(null, 
-            "Select a Game Mode", 
-            "Game Mode Selection", 
-            JOptionPane.DEFAULT_OPTION, 
-            JOptionPane.INFORMATION_MESSAGE, 
-            null, options, options[0]);
-        
+        Object[] options = { "Traditional", "Time Limit", "Move Limit" };
+        int selected = JOptionPane.showOptionDialog(null,
+                "Select a Game Mode",
+                "Game Mode Selection",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null, options, options[0]);
+
         switch (selected) {
             case 0:
                 return GameModeType.TRADITIONAL;
@@ -67,12 +66,10 @@ public class BoardGUI implements java.awt.event.KeyListener{
         setup(modeType);
     }
 
-    
-
-    public void keyTyped(java.awt.event.KeyEvent e){
+    public void keyTyped(java.awt.event.KeyEvent e) {
         int keyChar = e.getKeyChar();
         boolean boardChanged = false;
-        switch ( keyChar ) {
+        switch (keyChar) {
             case 'w':
                 boardChanged = board.moveUp();
                 break;
@@ -93,7 +90,7 @@ public class BoardGUI implements java.awt.event.KeyListener{
         updateGrid();
     }
 
-    public void keyReleased(java.awt.event.KeyEvent e ){
+    public void keyReleased(java.awt.event.KeyEvent e) {
 
     }
 
@@ -106,7 +103,7 @@ public class BoardGUI implements java.awt.event.KeyListener{
 
         int keyCode = e.getKeyCode();
         boolean boardChanged = false;
-        switch ( keyCode ) {
+        switch (keyCode) {
             case java.awt.event.KeyEvent.VK_UP:
                 boardChanged = board.moveUp();
                 break;
@@ -136,16 +133,16 @@ public class BoardGUI implements java.awt.event.KeyListener{
         }
     }
 
-    private void updateGrid(){
+    private void updateGrid() {
         Tile[][] curGrid = board.getGrid();
         int slotNum = 0;
-        for(int j = 0; j<=3; j++){
-            for( int k = 0; k<=3; k++){
+        for (int j = 0; j <= 3; j++) {
+            for (int k = 0; k <= 3; k++) {
                 changeTile(curGrid[j][k], slotNum);
                 slotNum++;
             }
         }
-        scoreLabel.setText("Current Score: "+Integer.toString(board.getScore()));
+        scoreLabel.setText("Current Score: " + Integer.toString(board.getScore()));
 
         // update mode-specific info
         if (gameMode instanceof MoveLimitMode moveLimitMode) {
@@ -156,14 +153,13 @@ public class BoardGUI implements java.awt.event.KeyListener{
     private void setup(GameModeType modeType) {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(750,780);
+        frame.setSize(750, 780);
         frame.setLocationRelativeTo(null);
 
-        scoreLabel = new JLabel("Current Score: "+score);
-        //scoreLabel.setSize(750, 30);
+        scoreLabel = new JLabel("Current Score: " + score);
+        // scoreLabel.setSize(750, 30);
         modeLabel = new JLabel("Game Mode: " + getModeString(modeType));
 
-        
         // JPanel top = new JPanel();
         JPanel top = new JPanel(new GridLayout(1, 3));
 
@@ -177,19 +173,29 @@ public class BoardGUI implements java.awt.event.KeyListener{
         }
 
         // add timer label for time limit mode
-        // if (gameMode instanceof TimeTrialMode timeTrialMode) {
-        //     top.add(timerLabel);
-        // }
+        if (gameMode instanceof TimeTrialMode timeTrialMode) {
+            timerLabel = new JLabel("Time Remaining: 120 s");
+            
+            timeTrialMode.start(new TimeListener() {
+                @Override
+                public void onTimeUpdate(long remainingTime) {
+                    SwingUtilities.invokeLater(() -> {
+                        timerLabel.setText("Time Remaining: " + remainingTime / 1000 + " s");
+                    });
+                }
+            });
 
-        
+            top.add(timerLabel);
+        }
+
         JPanel tiles = new JPanel();
-        tiles.setSize(750,750);
+        tiles.setSize(750, 750);
 
-        GridLayout grid = new GridLayout(4,4);
+        GridLayout grid = new GridLayout(4, 4);
         tiles.setLayout(grid);
 
-        for(int i = 0; i<=15; i++){
-            slots[i] = new JLabel("",SwingConstants.CENTER);
+        for (int i = 0; i <= 15; i++) {
+            slots[i] = new JLabel("", SwingConstants.CENTER);
             slots[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
             tiles.add(slots[i]);
         }
@@ -198,17 +204,16 @@ public class BoardGUI implements java.awt.event.KeyListener{
 
         tiles.addKeyListener(this);
 
-        frame.add(top,"North");
+        frame.add(top, "North");
         frame.add(tiles);
         frame.setVisible(true);
         tiles.setFocusable(true);
     }
 
-    public void changeTile(Tile tile, int slotNum){
-        if(tile.getValue()==0){
+    public void changeTile(Tile tile, int slotNum) {
+        if (tile.getValue() == 0) {
             slots[slotNum].setText("");
-        }
-        else{
+        } else {
             slots[slotNum].setText(Integer.toString(tile.getValue()));
         }
         slots[slotNum].setFont(new Font("", Font.PLAIN, 60));
@@ -247,18 +252,18 @@ public class BoardGUI implements java.awt.event.KeyListener{
 
         // show all scores or only the top 10
         // let user choose
-        Object[] options = {"All Scores", "Top 10"};
-        int selected = JOptionPane.showOptionDialog(null, 
-            "Select a Leaderboard Display Option", 
-            "Leaderboard Display", 
-            JOptionPane.DEFAULT_OPTION, 
-            JOptionPane.INFORMATION_MESSAGE, 
-            null, options, options[0]);
+        Object[] options = { "All Scores", "Top 10" };
+        int selected = JOptionPane.showOptionDialog(null,
+                "Select a Leaderboard Display Option",
+                "Leaderboard Display",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null, options, options[0]);
 
         if (selected == 0) {
             sb.append("All Scores:\n");
             scores = leaderboard.getAllScores();
-            
+
         } else {
             sb.append("Top 10 Scores:\n");
             scores = leaderboard.getTopScore();
@@ -284,10 +289,10 @@ public class BoardGUI implements java.awt.event.KeyListener{
 
         String gameOverMessage = getGameOverMessage();
         String playerName = JOptionPane.showInputDialog(
-            null, 
-            gameOverMessage + "\nYour score: " + finalScore + "\nEnter your name: ", 
-            "Enter Name", 
-            JOptionPane.INFORMATION_MESSAGE);
+                null,
+                gameOverMessage + "\nYour score: " + finalScore + "\nEnter your name: ",
+                "Enter Name",
+                JOptionPane.INFORMATION_MESSAGE);
 
         if (playerName != null && !playerName.isEmpty()) {
             leaderboard.addScore(playerName, finalScore);

@@ -181,6 +181,10 @@ public class BoardGUI implements java.awt.event.KeyListener {
                 public void onTimeUpdate(long remainingTime) {
                     SwingUtilities.invokeLater(() -> {
                         timerLabel.setText("Time Remaining: " + remainingTime / 1000 + " s");
+                        isGameOver = timeTrialMode.getTimeUp();
+                        if (isGameOver){
+                            handleGameOver();
+                        }
                     });
                 }
             });

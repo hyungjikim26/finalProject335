@@ -2,7 +2,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class TimeTrialMode implements GameMode {
-    private static final long TIME_LIMIT = 120000;
+    private static final long TIME_LIMIT = 5000;
     private final Timer timer;
     private final Board board;
     private boolean timeUp;
@@ -60,5 +60,9 @@ public class TimeTrialMode implements GameMode {
             return "You lose!";
         }
 
+    }
+
+    public boolean getTimeUp(){
+        return timeUp;
     }
 }

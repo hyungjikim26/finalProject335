@@ -2,14 +2,13 @@
  * File: MoveLimitModeTest.java
  * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
  *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
- * Purpose:
- * 
+ * Purpose: Contains unit tests for the MoveLimitMode class.
  */
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 
 class MoveLimitModeTest {
 	Board createBoard(int[][] matrix) {

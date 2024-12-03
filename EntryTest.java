@@ -2,7 +2,7 @@
  * File: EntryTest.java
  * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
  *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
- * Purpose:
+ * Purpose: Contains unit tests for the Entry class.
  * 
  */
 
@@ -45,3 +45,4 @@ class EntryTest {
 		assertEquals("B: 200", entry2.toString());
 	}
 }
+

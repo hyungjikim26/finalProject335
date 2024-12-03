@@ -107,10 +107,7 @@ public class Board {
         }
     }
 
-    // CONSIDER: could utilize counter to check if the board is full
-    // that way, we don't have to iterate through the entire board
-    // which could be expensive for larger boards
-    // For 4x4 board, it should be fine
+
     /**
      * Checks if the board is full.
      * 

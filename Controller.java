@@ -102,6 +102,25 @@ public class Controller {
 	}
 
 	/**
+	 * @param mode - the GameMode that was selected
+	 */
+	public void setMode(GameMode mode) {
+		board.setType(mode);
+	}
+
+	public GameMode newTraditional() {
+		return new TraditionalMode(board);
+	}
+
+	public GameMode newTime() {
+		return new TimeTrialMode(board);
+	}
+
+	public GameMode newMove() {
+		return new MoveLimitMode(board);
+	}
+
+	/**
 	 * @param name - name of person playing
 	 * @param score - score of the board after finishing game
 	 */

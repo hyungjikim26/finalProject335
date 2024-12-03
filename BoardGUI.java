@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 public class BoardGUI implements java.awt.event.KeyListener {
-    private Board board = new Board();
     private Controller controller = new Controller();
     private int score = 0;
     private JLabel[] slots = new JLabel[16];
@@ -47,30 +46,28 @@ public class BoardGUI implements java.awt.event.KeyListener {
     }
 
     public void initializeGame(GameModeType modeType) {
-        board = new Board();
         leaderboard = new Leaderboard();
 
         switch (modeType) {
             case TRADITIONAL:
-                gameMode = new TraditionalMode(board);
+                gameMode = controller.newTraditional();
                 break;
             case TIME_LIMIT:
-                gameMode = new TimeTrialMode(board);
+                gameMode = controller.newTime();
                 break;
             case MOVE_LIMIT:
-                gameMode = new MoveLimitMode(board);
+                gameMode = controller.newMove();
                 break;
             default:
-                gameMode = new TraditionalMode(board);
+                gameMode = controller.newTraditional();
         }
-        board.setType(gameMode);
+        controller.setMode(gameMode);
 
         setup(modeType);
     }
 
     public void keyTyped(java.awt.event.KeyEvent e) {
         int keyChar = e.getKeyChar();
-        boolean boardChanged = false;
         switch (keyChar) {
             case 'w':
                 controller.moveBoardUp();
@@ -100,7 +97,6 @@ public class BoardGUI implements java.awt.event.KeyListener {
         }
 
         int keyCode = e.getKeyCode();
-        boolean boardChanged = false;
         switch (keyCode) {
             case java.awt.event.KeyEvent.VK_UP:
                 controller.moveBoardUp();
@@ -123,7 +119,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
     }
 
     private void updateGrid() {
-        Tile[][] curGrid = board.getGrid();
+        Tile[][] curGrid = controller.getGrid();
         int slotNum = 0;
         for (int j = 0; j <= 3; j++) {
             for (int k = 0; k <= 3; k++) {
@@ -131,7 +127,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
                 slotNum++;
             }
         }
-        scoreLabel.setText("Current Score: " + Integer.toString(board.getScore()));
+        scoreLabel.setText("Current Score: " + Integer.toString(controller.getScore()));
 
         // update mode-specific info
         if (gameMode instanceof MoveLimitMode moveLimitMode) {
@@ -278,7 +274,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
     private void handleGameOver() {
         isGameOver = true;
 
-        int finalScore = board.getScore();
+        int finalScore = controller.getScore();
 
         String gameOverMessage = getGameOverMessage();
         String playerName = JOptionPane.showInputDialog(

@@ -93,6 +93,14 @@ public class Controller {
 	public int getScore() {
 		return board.getScore();
 	}
+
+	/**
+	 * @return current grid
+	 */
+	public Tile[][] getGrid() {
+		return board.getGrid();
+	}
+
 	/**
 	 * @param name - name of person playing
 	 * @param score - score of the board after finishing game

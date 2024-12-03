@@ -8,6 +8,7 @@ public class Board {
     private final Tile[][] grid;
     private final double NEW_TILE_PROB = 0.9;
     private int score;
+    private GameMode gameMode;
     // CONSIDER: add a counter to keep track of no. of empty/valid tiles
     private int emptyTiles;
 
@@ -123,6 +124,10 @@ public class Board {
         return true;
     }
 
+    public void setType(GameMode mode){
+        gameMode = mode;
+    }
+
     /**
      * Add a random tile to the board.
      * If board is full, tile is not added
@@ -182,6 +187,9 @@ public class Board {
     				if (grid[tempRow-1][column].isEmpty()) {
     					exchangeTiles(tempRow-1, column, tempRow, column);
     					isChanged = true;
+                        if (gameMode instanceof MoveLimitMode) {
+                            ((MoveLimitMode) gameMode).updateGateState();
+                        }
     				}
     				// if upper tile is of the same value, 
     				// merge given tile to the upper one and finish moving this tile
@@ -189,6 +197,9 @@ public class Board {
     					grid[tempRow-1][column].merge(grid[tempRow][column]);
     					score += grid[tempRow-1][column].getValue();
     					isChanged = true;
+                        if (gameMode instanceof MoveLimitMode) {
+                            ((MoveLimitMode) gameMode).updateGateState();
+                        }
     					boundRow++;
     					break;
     				}
@@ -232,13 +243,20 @@ public class Board {
     				if (grid[row][tempColumn+1].isEmpty()) {
     					exchangeTiles(row, tempColumn+1, row, tempColumn);
     					isChanged = true;
+                        if (gameMode instanceof MoveLimitMode) {
+                            ((MoveLimitMode) gameMode).updateGateState();
+                        }
     				}
     				// if tile to the right is of the same value, 
     				// merge given tile to the right one and finish moving this tile
     				else if (grid[row][tempColumn+1].equals(grid[row][tempColumn])) {
     					grid[row][tempColumn+1].merge(grid[row][tempColumn]);
     					isChanged = true;
+                        if (gameMode instanceof MoveLimitMode) {
+                            ((MoveLimitMode) gameMode).updateGateState();
+                        }
     					score += grid[row][tempColumn+1].getValue();
+                        System.out.println(score);
     					boundColumn--;
     					break;
     				}
@@ -247,6 +265,7 @@ public class Board {
     				else {
     					break;
     				}
+
     				tempColumn++;
     			}
     		}
@@ -281,6 +300,9 @@ public class Board {
     				if (grid[tempRow+1][column].isEmpty()) {
     					exchangeTiles(tempRow+1, column, tempRow, column);
     					isChanged = true;
+                        if (gameMode instanceof MoveLimitMode) {
+                            ((MoveLimitMode) gameMode).updateGateState();
+                        }
     				}
     				// if lower tile is of the same value, 
     				// merge given tile to the lower one and finish moving this tile
@@ -288,6 +310,9 @@ public class Board {
     					grid[tempRow+1][column].merge(grid[tempRow][column]);
     					score += grid[tempRow+1][column].getValue();
     					isChanged = true;
+                        if (gameMode instanceof MoveLimitMode) {
+                            ((MoveLimitMode) gameMode).updateGateState();
+                        }
     					boundRow--;
     					break;
     				}
@@ -296,6 +321,7 @@ public class Board {
     				else {
     					break;
     				}
+
     				tempRow++;
     			}
     		}
@@ -330,12 +356,18 @@ public class Board {
     				if (grid[row][tempColumn-1].isEmpty()) {
     					exchangeTiles(row, tempColumn-1, row, tempColumn);
     					isChanged = true;
+                        if (gameMode instanceof MoveLimitMode) {
+                            ((MoveLimitMode) gameMode).updateGateState();
+                        }
     				}
     				// if tile to the left is of the same value, 
     				// merge given tile to the left one and finish moving this tile
     				else if (grid[row][tempColumn-1].equals(grid[row][tempColumn])) {
     					grid[row][tempColumn-1].merge(grid[row][tempColumn]);
     					isChanged = true;
+                        if (gameMode instanceof MoveLimitMode) {
+                            ((MoveLimitMode) gameMode).updateGateState();
+                        }
     					score += grid[row][tempColumn-1].getValue();
     					boundColumn--;
     					break;
@@ -345,6 +377,7 @@ public class Board {
     				else {
     					break;
     				}
+
     				tempColumn--;
     			}
     		}

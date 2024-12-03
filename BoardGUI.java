@@ -64,6 +64,7 @@ public class BoardGUI implements java.awt.event.KeyListener{
             default:
                 gameMode = new TraditionalMode(board);
         }
+        board.setType(gameMode);
 
         setup(modeType);
     }
@@ -85,10 +86,6 @@ public class BoardGUI implements java.awt.event.KeyListener{
             case 'a':
                 controller.moveBoardLeft();
                 break;
-        }
-        if (boardChanged) {
-            board.addRandomTile();
-            // currentState = board.checkState();
         }
         updateGrid();
     }
@@ -118,15 +115,6 @@ public class BoardGUI implements java.awt.event.KeyListener{
             case java.awt.event.KeyEvent.VK_LEFT:
                 controller.moveBoardLeft();
                 break;
-        }
-        if (boardChanged) {
-            board.addRandomTile();
-            // update moves left for move limit mode
-            if (gameMode instanceof MoveLimitMode) {
-                // gameMode.updateGateState();
-                ((MoveLimitMode) gameMode).updateGateState();
-            }
-            // currentState = board.checkState();
         }
         updateGrid();
 

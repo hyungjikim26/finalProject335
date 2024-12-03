@@ -1,3 +1,11 @@
+/**
+ * File: Entry.java
+ * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
+ *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
+ * Purpose:
+ * 
+ */
+
 public class Entry implements Comparable<Entry> {
     private final String name;
     private final int score;

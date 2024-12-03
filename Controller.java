@@ -1,3 +1,11 @@
+/**
+ * File: Controller.java
+ * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
+ *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
+ * Purpose:
+ * 
+ */
+
 import java.util.ArrayList;
 
 public class Controller {

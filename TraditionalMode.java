@@ -1,3 +1,11 @@
+/**
+ * File: TraditionalMode.java
+ * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
+ *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
+ * Purpose:
+ * 
+ */
+
 public class TraditionalMode implements GameMode {
     private final Board board;
 

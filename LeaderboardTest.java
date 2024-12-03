@@ -1,3 +1,11 @@
+/**
+ * File: LeaderboardTest.java
+ * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
+ *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
+ * Purpose:
+ * 
+ */
+
 import java.io.File;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;

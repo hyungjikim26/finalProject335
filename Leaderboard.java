@@ -1,3 +1,11 @@
+/**
+ * File: Leaderboard.java
+ * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
+ *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
+ * Purpose:
+ * 
+ */
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;

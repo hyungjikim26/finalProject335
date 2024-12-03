@@ -1,3 +1,11 @@
+/**
+ * File: TileTest.java
+ * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
+ *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
+ * Purpose:
+ * 
+ */
+
 import static org.junit.Assert.*;
 
 import org.junit.Test;

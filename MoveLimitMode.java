@@ -1,3 +1,11 @@
+/**
+ * File: MoveLimitMode.java
+ * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
+ *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
+ * Purpose:
+ * 
+ */
+
 public class MoveLimitMode implements GameMode {
     private static final int MOVE_LIMIT = 125;
     private int movesLeft = MOVE_LIMIT;

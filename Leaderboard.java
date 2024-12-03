@@ -20,8 +20,7 @@ public class Leaderboard {
 
     public void addScore(String name, int score) {
         entries.add(new Entry(name, score));
-        // sort in descending order
-        Collections.sort(entries, Collections.reverseOrder());
+        Collections.sort(entries);
         // save the updated leaderboard
         save();
     }
@@ -60,11 +59,20 @@ public class Leaderboard {
 
     public ArrayList<Entry> getTopScore() {
         // return only the top 10 scores
+        // handle case where there are less than 10 scores
+        if (entries.size() < MAX_ENTRIES) {
+            return new ArrayList<>(entries);
+        }
         return new ArrayList<>(entries.subList(0, MAX_ENTRIES));
     }
 
     public ArrayList<Entry> getAllScores() {
         // return unmodifiable list
         return new ArrayList<>(entries);
+    }
+
+    public void clear() {
+        entries.clear();
+        save();
     }
 }

@@ -3,7 +3,6 @@
  * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
  *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
  * Purpose: Contains unit tests for the Entry class.
- * 
  */
 
 import static org.junit.jupiter.api.Assertions.*;

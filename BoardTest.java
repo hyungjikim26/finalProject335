@@ -2,8 +2,7 @@
  * File: BoardTest.java
  * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
  *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
- * Purpose:
- * 
+ * Purpose: Contains unit tests for the Board class.
  */
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 class BoardTest {
-	
 	Board createBoard(int[][] matrix) {
 		Board board = new Board(matrix.length, 0);
 		for (int i = 0; i < matrix.length; i++) {
@@ -378,3 +376,4 @@ class BoardTest {
         assertEquals(0, boardE.getScore());
     }
 }
+

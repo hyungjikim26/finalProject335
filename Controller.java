@@ -2,8 +2,7 @@
  * File: Controller.java
  * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
  *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
- * Purpose:
- * 
+ * Purpose: Defines the controller class that handles the game logic.
  */
 
 import java.util.ArrayList;
@@ -116,14 +115,23 @@ public class Controller {
 		board.setType(mode);
 	}
 
+	/**
+	 * @return the game in traditional mode
+	 */
 	public GameMode newTraditional() {
 		return new TraditionalMode(board);
 	}
 
+	/**
+	 * @return the game in time trial mode
+	 */
 	public GameMode newTime() {
 		return new TimeTrialMode(board);
 	}
 
+	/**
+	 * @return the game in move limit mode
+	 */
 	public GameMode newMove() {
 		return new MoveLimitMode(board);
 	}
@@ -150,3 +158,4 @@ public class Controller {
 		return leaderboard.getAllScores();
 	}
 }
+

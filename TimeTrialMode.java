@@ -9,12 +9,18 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class TimeTrialMode extends Board {
-    private static final long TIME_LIMIT = 5000;
+    private static final long TIME_LIMIT = 120000;
     private final Timer timer;
     private boolean timeUp;
 
     public TimeTrialMode() {
     	super();
+        timeUp = false;
+        timer = new Timer();
+    }
+     
+    public TimeTrialMode(int size, int numTiles) {
+        super(size, numTiles);
         timeUp = false;
         timer = new Timer();
     }

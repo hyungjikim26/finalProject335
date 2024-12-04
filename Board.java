@@ -16,7 +16,6 @@ public class Board {
     private final Tile[][] grid;
     private final double NEW_TILE_PROB = 0.9;
     private int score;
-    private GameMode gameMode;
 
     /**
      * Constructor for the Board class.
@@ -127,10 +126,6 @@ public class Board {
         return true;
     }
 
-    public void setType(GameMode mode){
-        gameMode = mode;
-    }
-
     /**
      * Add a random tile to the board.
      * If board is full, tile is not added
@@ -209,10 +204,6 @@ public class Board {
     			}
     		}
     	}
-        //System.out.println(this.toString());
-        if (isChanged && gameMode instanceof MoveLimitMode) {
-            ((MoveLimitMode) gameMode).updateGateState();
-        }
     	return isChanged;
     }
     
@@ -264,9 +255,6 @@ public class Board {
     			}
     		}
     	} 
-        if (isChanged && gameMode instanceof MoveLimitMode) {
-            ((MoveLimitMode) gameMode).updateGateState();
-        }
     	return isChanged;
     }
 
@@ -317,9 +305,6 @@ public class Board {
     			}
     		}
     	}
-        if (isChanged && gameMode instanceof MoveLimitMode) {
-            ((MoveLimitMode) gameMode).updateGateState();
-        }
     	return isChanged;
     }
     
@@ -371,9 +356,6 @@ public class Board {
     			}
     		}
     	} 
-        if (isChanged && gameMode instanceof MoveLimitMode) {
-            ((MoveLimitMode) gameMode).updateGateState();
-        }
     	return isChanged;
     }
     
@@ -456,5 +438,13 @@ public class Board {
             }
         }
         return true;
+    }
+    
+    public boolean isGameOver() {
+        return this.losingCondition() || this.winningCondition();
+    }
+    
+    public String getGameOverMessage() {
+        return this.winningCondition() ? "You win!" : "You lose!";
     }
 }

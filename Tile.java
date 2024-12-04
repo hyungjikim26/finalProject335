@@ -25,8 +25,8 @@ public class Tile {
     public void merge(Tile other){
         if (other.getValue() == value){
             value *= 2;
+            other.destroy();
         }
-        other.destroy();
     }
 
     public int getValue(){

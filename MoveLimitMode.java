@@ -5,17 +5,20 @@
  * Purpose: Defines the game mode where the player has limited number of moves.
  */
 
-public class MoveLimitMode implements GameMode {
+public class MoveLimitMode extends Board {
     private static final int MOVE_LIMIT = 125;
     private int movesLeft = MOVE_LIMIT;
-    private final Board board;
 
     /**
      * Constructor
      * @param board the board to play on
      */
-    public MoveLimitMode(Board board) {
-        this.board = board;
+    public MoveLimitMode() {
+        super();
+    }
+    
+    public MoveLimitMode(int size, int numTiles) {
+        super(size, numTiles);
     }
 
 
@@ -28,24 +31,55 @@ public class MoveLimitMode implements GameMode {
     public boolean isGameOver() {
         if (movesLeft == 0) {
             return true;
-        } else if (board.losingCondition()) {
+        } else if (this.losingCondition()) {
             return true;
-        } else if (board.winningCondition()) {
+        } else if (this.winningCondition()) {
             return true;
         } else {
             return false;
         }
     }
-
-
-    /**
-     * Updates the gate state by decrementing the number of moves left.
-     * @pre movesLeft > 0
-     * @post movesLeft is decremented by 1
-     */
+    
     public void updateGateState() {
-        movesLeft--;
+    	movesLeft--;
     }
+    
+    @Override
+    public boolean moveUp() {
+    	boolean isChanged = super.moveUp();
+    	if (isChanged) {
+    		updateGateState();
+    	}
+    	return isChanged;
+    }
+    
+    @Override
+    public boolean moveRight() {
+    	boolean isChanged = super.moveRight();
+    	if (isChanged) {
+    		updateGateState();
+    	}
+    	return isChanged;
+    }
+    
+    @Override
+    public boolean moveDown() {
+    	boolean isChanged = super.moveDown();
+    	if (isChanged) {
+    		updateGateState();
+    	}
+    	return isChanged;
+    }
+    
+    @Override
+    public boolean moveLeft() {
+    	boolean isChanged = super.moveLeft();
+    	if (isChanged) {
+    		updateGateState();
+    	}
+    	return isChanged;
+    }
+    
 
 
     /**
@@ -56,7 +90,10 @@ public class MoveLimitMode implements GameMode {
     public int getMovesLeft() {
         return movesLeft;
     }
-
+    
+    public int getMoveLimit() {
+        return MOVE_LIMIT;
+    }
 
     /**
      * Returns the message to display when the game is over.
@@ -64,7 +101,7 @@ public class MoveLimitMode implements GameMode {
      */
     @Override
     public String getGameOverMessage() {
-        if (board.winningCondition()) {
+        if (this.winningCondition()) {
             return "You win!";
         } else if (movesLeft == 0) {
             return "No moves left. You lose!";

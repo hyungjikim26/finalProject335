@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 
 
 class MoveLimitModeTest {
-	Board createBoard(int[][] matrix) {
-		Board board = new Board(matrix.length, 0);
+	MoveLimitMode createMoveLimitBoard(int[][] matrix) {
+		MoveLimitMode board = new MoveLimitMode(matrix.length, 0);
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[0].length; j++) {
 				board.addTile(i, j, matrix[i][j]);
@@ -30,8 +30,7 @@ class MoveLimitModeTest {
             {32, 64, 128, 256},
         };
         
-        Board board = createBoard(matrix);
-        MoveLimitMode moveLimitMode = new MoveLimitMode(board);
+        MoveLimitMode moveLimitMode = createMoveLimitBoard(matrix);
         assertNotEquals(0, moveLimitMode.getMovesLeft());
         assertTrue(moveLimitMode.isGameOver());
         
@@ -48,8 +47,7 @@ class MoveLimitModeTest {
             {32, 64, 128, 256}
         };
         
-        Board board = createBoard(matrix);
-        MoveLimitMode moveLimitMode = new MoveLimitMode(board);
+        MoveLimitMode moveLimitMode = createMoveLimitBoard(matrix);
         assertNotEquals(0, moveLimitMode.getMovesLeft());
         assertTrue(moveLimitMode.isGameOver());
         
@@ -68,10 +66,9 @@ class MoveLimitModeTest {
             {32, 64, 128, 256}
         };
         
-        Board board = createBoard(matrix);
-        MoveLimitMode moveLimitMode = new MoveLimitMode(board);
+        MoveLimitMode moveLimitMode = createMoveLimitBoard(matrix);
         // moveLimitMode.movesLeft = 0;
-        for (int i = 0; i < 125; i++) {
+        for (int i = 0; i < moveLimitMode.getMoveLimit(); i++) {
             moveLimitMode.updateGateState();
         }
         assertEquals(0, moveLimitMode.getMovesLeft());
@@ -90,10 +87,9 @@ class MoveLimitModeTest {
             {32, 64, 128, 256},
         };
         
-        Board board = createBoard(matrix);
-        MoveLimitMode moveLimitMode = new MoveLimitMode(board);
+        MoveLimitMode moveLimitMode = createMoveLimitBoard(matrix);
         // moveLimitMode.movesLeft = 0;
-        for (int i = 0; i < 125; i++) {
+        for (int i = 0; i < moveLimitMode.getMoveLimit(); i++) {
             moveLimitMode.updateGateState();
         }
         assertEquals(0, moveLimitMode.getMovesLeft());
@@ -112,8 +108,7 @@ class MoveLimitModeTest {
             {32, 64, 128, 256}
         };
         
-        Board board = createBoard(matrix);
-        MoveLimitMode moveLimitMode = new MoveLimitMode(board);
+        MoveLimitMode moveLimitMode = createMoveLimitBoard(matrix);
         assertTrue(moveLimitMode.isGameOver());
     }
 
@@ -126,8 +121,7 @@ class MoveLimitModeTest {
             {32, 64, 128, 256}
         };
         
-        Board board = createBoard(matrix);
-        MoveLimitMode moveLimitMode = new MoveLimitMode(board);
+        MoveLimitMode moveLimitMode = createMoveLimitBoard(matrix);
         assertFalse(moveLimitMode.isGameOver());
     }
 
@@ -140,8 +134,28 @@ class MoveLimitModeTest {
             {32, 64, 128, 256}
         };
 
-        Board board = createBoard(matrix);
-        MoveLimitMode moveLimitMode = new MoveLimitMode(board);
+        MoveLimitMode moveLimitMode = createMoveLimitBoard(matrix);
         assertTrue(moveLimitMode.isGameOver());
+    }
+    
+    @Test
+    void test_moveMethods() {
+        int[][] matrix = {
+            {2, 2, 8, 16},
+            {32, 64, 128, 256},
+            {512, 2048, 8, 16},
+            {32, 64, 128, 256}
+        };
+
+        MoveLimitMode moveLimitMode = createMoveLimitBoard(matrix);
+        int movesLeftInitial = moveLimitMode.getMovesLeft();
+        assertTrue(moveLimitMode.moveLeft());
+        int movesLeftNext = moveLimitMode.getMovesLeft();
+        assertEquals(1, movesLeftInitial - movesLeftNext);
+        moveLimitMode.addTile(0, 3, 2);
+        assertFalse(moveLimitMode.moveLeft());
+        int movesLeftFinal = moveLimitMode.getMovesLeft();
+        assertEquals(0, movesLeftNext - movesLeftFinal);
+        
     }
 }

@@ -16,6 +16,10 @@ public class MoveLimitMode extends Board {
     public MoveLimitMode() {
         super();
     }
+    
+    public MoveLimitMode(int size, int numTiles) {
+        super(size, numTiles);
+    }
 
 
     /**
@@ -36,11 +40,15 @@ public class MoveLimitMode extends Board {
         }
     }
     
+    public void updateGateState() {
+    	movesLeft--;
+    }
+    
     @Override
     public boolean moveUp() {
     	boolean isChanged = super.moveUp();
     	if (isChanged) {
-    		movesLeft--;
+    		updateGateState();
     	}
     	return isChanged;
     }
@@ -49,7 +57,7 @@ public class MoveLimitMode extends Board {
     public boolean moveRight() {
     	boolean isChanged = super.moveRight();
     	if (isChanged) {
-    		movesLeft--;
+    		updateGateState();
     	}
     	return isChanged;
     }
@@ -58,7 +66,7 @@ public class MoveLimitMode extends Board {
     public boolean moveDown() {
     	boolean isChanged = super.moveDown();
     	if (isChanged) {
-    		movesLeft--;
+    		updateGateState();
     	}
     	return isChanged;
     }
@@ -67,7 +75,7 @@ public class MoveLimitMode extends Board {
     public boolean moveLeft() {
     	boolean isChanged = super.moveLeft();
     	if (isChanged) {
-    		movesLeft--;
+    		updateGateState();
     	}
     	return isChanged;
     }
@@ -82,7 +90,10 @@ public class MoveLimitMode extends Board {
     public int getMovesLeft() {
         return movesLeft;
     }
-
+    
+    public int getMoveLimit() {
+        return MOVE_LIMIT;
+    }
 
     /**
      * Returns the message to display when the game is over.

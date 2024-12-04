@@ -147,13 +147,6 @@ public class Controller {
 	}
 
 	/**
-	 * @param mode - the GameMode that was selected
-	 */
-	public void setMode(GameMode mode) {
-		board.setType(mode);
-	}
-
-	/**
 	 * @param name - name of person playing
 	 * @param score - score of the board after finishing game
 	 */

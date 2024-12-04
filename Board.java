@@ -16,7 +16,6 @@ public class Board {
     private final Tile[][] grid;
     private final double NEW_TILE_PROB = 0.9;
     private int score;
-    private GameMode gameMode;
 
     /**
      * Constructor for the Board class.
@@ -125,10 +124,6 @@ public class Board {
             }
         }
         return true;
-    }
-
-    public void setType(GameMode mode){
-        gameMode = mode;
     }
 
     /**

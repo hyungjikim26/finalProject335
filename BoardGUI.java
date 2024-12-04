@@ -80,6 +80,10 @@ public class BoardGUI implements java.awt.event.KeyListener {
                 break;
         }
         updateGrid();
+        
+        if (controller.isGameOver()) {
+            handleGameOver();
+        }
     }
 
     public void keyReleased(java.awt.event.KeyEvent e) {

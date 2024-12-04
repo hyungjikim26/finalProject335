@@ -1,34 +1,69 @@
-public class TimeTrialMode implements GameMode {
-    private static final long TIME_LIMIT = 12000;
-    private final long startTime;
-    private long elapsedTime;
-    private final Board board;
+/**
+ * File: TimeTrialMode.java
+ * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
+ *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
+ * Purpose: Defines the game mode where the player has limited time to play.
+ */
 
-    public TimeTrialMode(Board board) {
-        this.board = board;
-        this.startTime = System.currentTimeMillis();
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class TimeTrialMode extends Board {
+    private static final long TIME_LIMIT = 5000;
+    private final Timer timer;
+    private boolean timeUp;
+
+    public TimeTrialMode() {
+    	super();
+        timeUp = false;
+        timer = new Timer();
     }
 
+    public void start(TimeListener listener){
+        TimerTask task = new TimerTask() {
+            long remaining = TIME_LIMIT;
+
+            @Override
+            public void run(){
+                remaining -= 1000;
+                listener.onTimeUpdate(remaining);
+
+                if (remaining <= 0){
+                    timeUp = true;
+                    timer.cancel();
+                }
+            }
+        };
+
+        timer.scheduleAtFixedRate(task, 0, 1000);
+    }
+
+    /**
+     * Determines if the game is over.
+     * @return true if the game is over, false otherwise
+     */
     @Override
     public boolean isGameOver() {
-        return elapsedTime >= TIME_LIMIT || board.losingCondition() || board.winningCondition();
+        return timeUp || this.losingCondition() || this.winningCondition();
     }
 
-    // may or may not need this
-    // @Override
-    // public void updateGameState() {
-    //     long currentTime = System.currentTimeMillis();
-    //     elapsedTime = currentTime - startTime;    
-    // }
-
-
-    // @Override
-    // public void updateLeaderboard() {
-
-    // }
-
+    /**
+     * Returns the message to display when the game is over.
+     * @return the game over message
+     */
     @Override
     public String getGameOverMessage() {
-        return elapsedTime >= TIME_LIMIT ? "Time's up!" : board.winningCondition() ? "You win!" : "You lose!";
+        if (this.winningCondition()) {
+            return "You win!";
+        } else if (timeUp) {
+            return "Time is up. You lose!";
+        }  else {
+            return "You lose!";
+        }
+
+    }
+
+    public boolean getTimeUp(){
+        return timeUp;
     }
 }

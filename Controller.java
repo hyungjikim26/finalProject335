@@ -52,6 +52,9 @@ public class Controller {
 		if (isChanged) {
 			board.addRandomTile();			
 		}
+		if (gameMode instanceof MoveLimitMode moveLimitMode) {
+			moveLimitMode.updateGateState();
+		}
 	}
 	
 	/**
@@ -63,6 +66,9 @@ public class Controller {
 		boolean isChanged = board.moveRight();
 		if (isChanged) {
 			board.addRandomTile();			
+		}
+		if (gameMode instanceof MoveLimitMode moveLimitMode) {
+			moveLimitMode.updateGateState();
 		}
 	}
 	
@@ -76,6 +82,9 @@ public class Controller {
 		if (isChanged) {
 			board.addRandomTile();			
 		}
+		if (gameMode instanceof MoveLimitMode moveLimitMode) {
+			moveLimitMode.updateGateState();
+		}
 	}
 	
 	/**
@@ -87,6 +96,9 @@ public class Controller {
 		boolean isChanged = board.moveLeft();
 		if (isChanged) {
 			board.addRandomTile();			
+		}
+		if (gameMode instanceof MoveLimitMode moveLimitMode) {
+			moveLimitMode.updateGateState();
 		}
 	}
 	

@@ -46,6 +46,12 @@ public class Controller {
 		}
 	}
 	
+	public Controller(GameModeType mode) {
+		board = null;
+		leaderboard = new Leaderboard();
+		newGame(mode);
+	}
+	
 	/**
 	 * Move all tiles in the board up
 	 * 
@@ -144,6 +150,10 @@ public class Controller {
 	 */
 	public Tile[][] getGrid() {
 		return board.getGrid();
+	}
+	
+	public void addTile(int row, int column, int value) {
+		board.addTile(row, column, value);
 	}
 
 	/**

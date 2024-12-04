@@ -8,14 +8,13 @@
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class TimeTrialMode implements GameMode {
+public class TimeTrialMode extends Board {
     private static final long TIME_LIMIT = 5000;
     private final Timer timer;
-    private final Board board;
     private boolean timeUp;
 
-    public TimeTrialMode(Board board) {
-        this.board = board;
+    public TimeTrialMode() {
+    	super();
         timeUp = false;
         timer = new Timer();
     }
@@ -45,7 +44,7 @@ public class TimeTrialMode implements GameMode {
      */
     @Override
     public boolean isGameOver() {
-        return timeUp || board.losingCondition() || board.winningCondition();
+        return timeUp || this.losingCondition() || this.winningCondition();
     }
 
     /**
@@ -54,7 +53,7 @@ public class TimeTrialMode implements GameMode {
      */
     @Override
     public String getGameOverMessage() {
-        if (board.winningCondition()) {
+        if (this.winningCondition()) {
             return "You win!";
         } else if (timeUp) {
             return "Time is up. You lose!";

@@ -209,10 +209,6 @@ public class Board {
     			}
     		}
     	}
-        //System.out.println(this.toString());
-        if (isChanged && gameMode instanceof MoveLimitMode) {
-            ((MoveLimitMode) gameMode).updateGateState();
-        }
     	return isChanged;
     }
     
@@ -264,9 +260,6 @@ public class Board {
     			}
     		}
     	} 
-        if (isChanged && gameMode instanceof MoveLimitMode) {
-            ((MoveLimitMode) gameMode).updateGateState();
-        }
     	return isChanged;
     }
 
@@ -317,9 +310,6 @@ public class Board {
     			}
     		}
     	}
-        if (isChanged && gameMode instanceof MoveLimitMode) {
-            ((MoveLimitMode) gameMode).updateGateState();
-        }
     	return isChanged;
     }
     
@@ -371,9 +361,6 @@ public class Board {
     			}
     		}
     	} 
-        if (isChanged && gameMode instanceof MoveLimitMode) {
-            ((MoveLimitMode) gameMode).updateGateState();
-        }
     	return isChanged;
     }
     
@@ -456,5 +443,13 @@ public class Board {
             }
         }
         return true;
+    }
+    
+    public boolean isGameOver() {
+        return this.losingCondition() || this.winningCondition();
+    }
+    
+    public String getGameOverMessage() {
+        return this.winningCondition() ? "You win!" : "You lose!";
     }
 }

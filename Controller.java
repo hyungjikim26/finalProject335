@@ -50,10 +50,10 @@ public class Controller {
 	public void moveBoardUp() {
 		boolean isChanged = board.moveUp();
 		if (isChanged) {
+			if (gameMode instanceof MoveLimitMode moveLimitMode) {
+				moveLimitMode.updateGateState();
+			}
 			board.addRandomTile();			
-		}
-		if (gameMode instanceof MoveLimitMode moveLimitMode) {
-			moveLimitMode.updateGateState();
 		}
 	}
 	
@@ -65,10 +65,10 @@ public class Controller {
 	public void moveBoardRight() {
 		boolean isChanged = board.moveRight();
 		if (isChanged) {
+			if (gameMode instanceof MoveLimitMode moveLimitMode) {
+				moveLimitMode.updateGateState();
+			}
 			board.addRandomTile();			
-		}
-		if (gameMode instanceof MoveLimitMode moveLimitMode) {
-			moveLimitMode.updateGateState();
 		}
 	}
 	
@@ -80,10 +80,10 @@ public class Controller {
 	public void moveBoardDown() {
 		boolean isChanged = board.moveDown();
 		if (isChanged) {
+			if (gameMode instanceof MoveLimitMode moveLimitMode) {
+				moveLimitMode.updateGateState();
+			}
 			board.addRandomTile();			
-		}
-		if (gameMode instanceof MoveLimitMode moveLimitMode) {
-			moveLimitMode.updateGateState();
 		}
 	}
 	
@@ -95,10 +95,10 @@ public class Controller {
 	public void moveBoardLeft() {
 		boolean isChanged = board.moveLeft();
 		if (isChanged) {
+			if (gameMode instanceof MoveLimitMode moveLimitMode) {
+				moveLimitMode.updateGateState();
+			}
 			board.addRandomTile();			
-		}
-		if (gameMode instanceof MoveLimitMode moveLimitMode) {
-			moveLimitMode.updateGateState();
 		}
 	}
 	

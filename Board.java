@@ -1,3 +1,11 @@
+/**
+ * File: Board.java
+ * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
+ *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
+ * Purpose:
+ * 
+ */
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -9,8 +17,6 @@ public class Board {
     private final double NEW_TILE_PROB = 0.9;
     private int score;
     private GameMode gameMode;
-    // CONSIDER: add a counter to keep track of no. of empty/valid tiles
-    private int emptyTiles;
 
     /**
      * Constructor for the Board class.
@@ -101,10 +107,7 @@ public class Board {
         }
     }
 
-    // CONSIDER: could utilize counter to check if the board is full
-    // that way, we don't have to iterate through the entire board
-    // which could be expensive for larger boards
-    // For 4x4 board, it should be fine
+
     /**
      * Checks if the board is full.
      * 
@@ -454,14 +457,4 @@ public class Board {
         }
         return true;
     }
-
-    // public GameState checkState() {
-    //     if (winningCondition()) {
-    //         return GameState.WIN;
-    //     } else if (losingCondition()) {
-    //         return GameState.LOSE;
-    //     } else {
-    //         return GameState.CONTINUE;
-    //     }
-    // }
 }

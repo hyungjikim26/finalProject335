@@ -2,6 +2,7 @@ import java.util.ArrayList;
 
 public class Controller {
 	
+	private GameMode gameMode;
 	private Board board;
 	private Leaderboard leaderboard;
 	
@@ -9,11 +10,13 @@ public class Controller {
 	 * Default constructor for controller class
 	 */
 	public Controller() {
-		board = new Board();
+		gameMode = null;
+		board = null;
 		leaderboard = new Leaderboard();
+		newGame(GameModeType.TRADITIONAL);
 	}
 	
-	/**
+	/** TODO: DELETE
 	 * Constructor for the Board class.
 	 * 
 	 * @pre numTiles >= 0 && numTiles <= size*size && size > 0
@@ -21,8 +24,22 @@ public class Controller {
 	 * @param size     the size of the board
 	 * @param numTiles the number of tiles to place on the board
 	 */
-	public Controller(int size, int numTiles) {
-		board = new Board(size, numTiles);
+	// Constructor was here
+	
+	
+	public void newGame(GameModeType mode) {
+		board = new Board();
+		switch (mode) {
+		case TRADITIONAL:
+			gameMode = new TraditionalMode(board);
+			break;
+		case TIME_LIMIT:
+			gameMode = new TimeTrialMode(board);
+			break;
+		case MOVE_LIMIT:
+			gameMode = new MoveLimitMode(board);
+			break;
+		}
 	}
 	
 	/**
@@ -73,18 +90,42 @@ public class Controller {
 		}
 	}
 	
-	/**
-	 * @return true if the player won (there is 2048 somewhere on board), false otherwise
-	 */
-	public boolean won() {
-		return board.winningCondition();
+	public boolean isGameOver() {
+		return gameMode.isGameOver();
 	}
 	
-	/**
-	 * @return true if the player lost can't make any move, false otherwise
-	 */
-	public boolean lost() {
-		return board.losingCondition();
+	public String getGameOverMessage() {
+		return gameMode.getGameOverMessage();
+	}
+	
+	public GameModeType getGameMode() {
+		if (gameMode instanceof TimeTrialMode timeTrialMode ) {
+			return GameModeType.TIME_LIMIT;
+		}
+		if (gameMode instanceof MoveLimitMode moveLimitMode) {
+			return GameModeType.MOVE_LIMIT;
+		}
+		return GameModeType.TRADITIONAL;
+	}
+	
+	public int getMovesLeft() {
+		if (gameMode instanceof MoveLimitMode moveLimitMode) {
+			return moveLimitMode.getMovesLeft();
+		}
+		return -1;
+	}
+	
+	public void startTimer(TimeListener listener) {
+		if (gameMode instanceof TimeTrialMode timeTrialMode ) {
+			timeTrialMode.start(listener);
+		}
+	}
+	
+	public boolean getTimeUp() {
+		if (gameMode instanceof TimeTrialMode timeTrialMode ) {
+			return timeTrialMode.getTimeUp();
+		}
+		return false;
 	}
 	
 	/**

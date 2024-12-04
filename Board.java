@@ -1,3 +1,11 @@
+/**
+ * File: Board.java
+ * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
+ *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
+ * Purpose:
+ * 
+ */
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -8,8 +16,7 @@ public class Board {
     private final Tile[][] grid;
     private final double NEW_TILE_PROB = 0.9;
     private int score;
-    // CONSIDER: add a counter to keep track of no. of empty/valid tiles
-    private int emptyTiles;
+    private GameMode gameMode;
 
     /**
      * Constructor for the Board class.
@@ -100,10 +107,7 @@ public class Board {
         }
     }
 
-    // CONSIDER: could utilize counter to check if the board is full
-    // that way, we don't have to iterate through the entire board
-    // which could be expensive for larger boards
-    // For 4x4 board, it should be fine
+
     /**
      * Checks if the board is full.
      * 
@@ -121,6 +125,10 @@ public class Board {
             }
         }
         return true;
+    }
+
+    public void setType(GameMode mode){
+        gameMode = mode;
     }
 
     /**
@@ -201,7 +209,10 @@ public class Board {
     			}
     		}
     	}
-        System.out.println(this.toString());
+        //System.out.println(this.toString());
+        if (isChanged && gameMode instanceof MoveLimitMode) {
+            ((MoveLimitMode) gameMode).updateGateState();
+        }
     	return isChanged;
     }
     
@@ -239,6 +250,7 @@ public class Board {
     					grid[row][tempColumn+1].merge(grid[row][tempColumn]);
     					isChanged = true;
     					score += grid[row][tempColumn+1].getValue();
+                        System.out.println(score);
     					boundColumn--;
     					break;
     				}
@@ -247,10 +259,14 @@ public class Board {
     				else {
     					break;
     				}
+
     				tempColumn++;
     			}
     		}
     	} 
+        if (isChanged && gameMode instanceof MoveLimitMode) {
+            ((MoveLimitMode) gameMode).updateGateState();
+        }
     	return isChanged;
     }
 
@@ -296,10 +312,14 @@ public class Board {
     				else {
     					break;
     				}
+
     				tempRow++;
     			}
     		}
     	}
+        if (isChanged && gameMode instanceof MoveLimitMode) {
+            ((MoveLimitMode) gameMode).updateGateState();
+        }
     	return isChanged;
     }
     
@@ -345,10 +365,15 @@ public class Board {
     				else {
     					break;
     				}
+
+
     				tempColumn--;
     			}
     		}
     	} 
+        if (isChanged && gameMode instanceof MoveLimitMode) {
+            ((MoveLimitMode) gameMode).updateGateState();
+        }
     	return isChanged;
     }
     
@@ -431,15 +456,5 @@ public class Board {
             }
         }
         return true;
-    }
-
-    public GameState checkState() {
-        if (winningCondition()) {
-            return GameState.WIN;
-        } else if (losingCondition()) {
-            return GameState.LOSE;
-        } else {
-            return GameState.CONTINUE;
-        }
     }
 }

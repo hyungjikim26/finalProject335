@@ -1,7 +1,15 @@
+/**
+ * File: Controller.java
+ * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
+ *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
+ * Purpose: Defines the controller class that handles the game logic.
+ */
+
 import java.util.ArrayList;
 
 public class Controller {
 	
+	private GameMode gameMode;
 	private Board board;
 	private Leaderboard leaderboard;
 	
@@ -9,11 +17,13 @@ public class Controller {
 	 * Default constructor for controller class
 	 */
 	public Controller() {
-		board = new Board();
+		gameMode = null;
+		board = null;
 		leaderboard = new Leaderboard();
+		newGame(GameModeType.TRADITIONAL);
 	}
 	
-	/**
+	/** TODO: DELETE
 	 * Constructor for the Board class.
 	 * 
 	 * @pre numTiles >= 0 && numTiles <= size*size && size > 0
@@ -21,8 +31,22 @@ public class Controller {
 	 * @param size     the size of the board
 	 * @param numTiles the number of tiles to place on the board
 	 */
-	public Controller(int size, int numTiles) {
-		board = new Board(size, numTiles);
+	// Constructor was here
+	
+	
+	public void newGame(GameModeType mode) {
+		board = new Board();
+		switch (mode) {
+		case TRADITIONAL:
+			gameMode = new TraditionalMode(board);
+			break;
+		case TIME_LIMIT:
+			gameMode = new TimeTrialMode(board);
+			break;
+		case MOVE_LIMIT:
+			gameMode = new MoveLimitMode(board);
+			break;
+		}
 	}
 	
 	/**
@@ -33,6 +57,9 @@ public class Controller {
 	public void moveBoardUp() {
 		boolean isChanged = board.moveUp();
 		if (isChanged) {
+			if (gameMode instanceof MoveLimitMode moveLimitMode) {
+				moveLimitMode.updateGateState();
+			}
 			board.addRandomTile();			
 		}
 	}
@@ -45,6 +72,9 @@ public class Controller {
 	public void moveBoardRight() {
 		boolean isChanged = board.moveRight();
 		if (isChanged) {
+			if (gameMode instanceof MoveLimitMode moveLimitMode) {
+				moveLimitMode.updateGateState();
+			}
 			board.addRandomTile();			
 		}
 	}
@@ -57,6 +87,9 @@ public class Controller {
 	public void moveBoardDown() {
 		boolean isChanged = board.moveDown();
 		if (isChanged) {
+			if (gameMode instanceof MoveLimitMode moveLimitMode) {
+				moveLimitMode.updateGateState();
+			}
 			board.addRandomTile();			
 		}
 	}
@@ -69,22 +102,49 @@ public class Controller {
 	public void moveBoardLeft() {
 		boolean isChanged = board.moveLeft();
 		if (isChanged) {
+			if (gameMode instanceof MoveLimitMode moveLimitMode) {
+				moveLimitMode.updateGateState();
+			}
 			board.addRandomTile();			
 		}
 	}
 	
-	/**
-	 * @return true if the player won (there is 2048 somewhere on board), false otherwise
-	 */
-	public boolean won() {
-		return board.winningCondition();
+	public boolean isGameOver() {
+		return gameMode.isGameOver();
 	}
 	
-	/**
-	 * @return true if the player lost can't make any move, false otherwise
-	 */
-	public boolean lost() {
-		return board.losingCondition();
+	public String getGameOverMessage() {
+		return gameMode.getGameOverMessage();
+	}
+	
+	public GameModeType getGameMode() {
+		if (gameMode instanceof TimeTrialMode timeTrialMode ) {
+			return GameModeType.TIME_LIMIT;
+		}
+		if (gameMode instanceof MoveLimitMode moveLimitMode) {
+			return GameModeType.MOVE_LIMIT;
+		}
+		return GameModeType.TRADITIONAL;
+	}
+	
+	public int getMovesLeft() {
+		if (gameMode instanceof MoveLimitMode moveLimitMode) {
+			return moveLimitMode.getMovesLeft();
+		}
+		return -1;
+	}
+	
+	public void startTimer(TimeListener listener) {
+		if (gameMode instanceof TimeTrialMode timeTrialMode ) {
+			timeTrialMode.start(listener);
+		}
+	}
+	
+	public boolean getTimeUp() {
+		if (gameMode instanceof TimeTrialMode timeTrialMode ) {
+			return timeTrialMode.getTimeUp();
+		}
+		return false;
 	}
 	
 	/**
@@ -93,6 +153,42 @@ public class Controller {
 	public int getScore() {
 		return board.getScore();
 	}
+
+	/**
+	 * @return current grid
+	 */
+	public Tile[][] getGrid() {
+		return board.getGrid();
+	}
+
+	/**
+	 * @param mode - the GameMode that was selected
+	 */
+	public void setMode(GameMode mode) {
+		board.setType(mode);
+	}
+
+	/**
+	 * @return the game in traditional mode
+	 */
+	public GameMode newTraditional() {
+		return new TraditionalMode(board);
+	}
+
+	/**
+	 * @return the game in time trial mode
+	 */
+	public GameMode newTime() {
+		return new TimeTrialMode(board);
+	}
+
+	/**
+	 * @return the game in move limit mode
+	 */
+	public GameMode newMove() {
+		return new MoveLimitMode(board);
+	}
+
 	/**
 	 * @param name - name of person playing
 	 * @param score - score of the board after finishing game
@@ -115,3 +211,4 @@ public class Controller {
 		return leaderboard.getAllScores();
 	}
 }
+

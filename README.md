@@ -3,8 +3,11 @@
 This is a final project for CSC 335 (Fall 2024) at the University of Arizona.
 
 <<<<<<< Updated upstream
+
 ## Members
+
 =======
+
 ## Overview of the Software
 
 This software is a Java implementation of the game 2048. The GUI is implemented using Java Swing.
@@ -30,14 +33,14 @@ This is the traditional version of the game where the user can play until they r
 This is a mode where the user has a set amount of time to reach 2048. Current time limit is 120 seconds.
 
 <!-- insert screenshot -->
-<img src="https://github.com/hyungjikim26/finalProject335/blob/main/images/game_screenshot_timeTrial_crop_red.png">
+<img src="https://github.com/hyungjikim26/finalProject335/blob/main/images/game_screenshot_timeTrial_crop_red.png" width=200>
 
 #### Move Limit Mode
 
 This is a mode where the user has a set amount of moves to reach 2048. Current move limit is 125 moves.
 
 <!-- insert screenshot -->
-<img src="https://github.com/hyungjikim26/finalProject335/blob/main/images/game_screenshot_moveLimit_crop_red.png">
+<img src="https://github.com/hyungjikim26/finalProject335/blob/main/images/game_screenshot_moveLimit_crop_red.png" width=200>
 
 ### Changeable Color Schemes
 
@@ -46,8 +49,8 @@ During the game, the user can change the color scheme of the game board. By defa
 <!-- insert screenshot -->
 <!-- place side by side -->
 <div style="display: flex; gap: 10px;">
-<img src="https://github.com/hyungjikim26/finalProject335/blob/main/images/game_screenshot_game_screenshot_red.png">
-<img src="https://github.com/hyungjikim26/finalProject335/blob/main/images/game_screenshot_game_screenshot_blue.png">
+<img src="https://github.com/hyungjikim26/finalProject335/blob/main/images/game_screenshot_red.png">
+<img src="https://github.com/hyungjikim26/finalProject335/blob/main/images/game_screenshot_blue.png">
 </div>
 
 ## Instructions
@@ -61,7 +64,8 @@ java BoardGUI.java
 ```
 
 ## People who worked on this project
->>>>>>> Stashed changes
+
+> > > > > > > Stashed changes
 
 Claire O'Brien (obrien9)\
 Hyungji Kim (hyungjikim)\

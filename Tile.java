@@ -11,12 +11,12 @@ public class Tile {
     private boolean isMerging = false;
 
 
-    public Tile(int value, ColorScheme colorScheme) {
+    public Tile(int value) {
         this.value = value;
     }
 
-    public Tile(int value) {
-        this(value, ColorScheme.BLUE);
+    public Tile() {
+        this(0);
     }
 
     // if other has the same value, update this.value

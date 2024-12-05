@@ -29,6 +29,9 @@ public class BoardGUI implements java.awt.event.KeyListener {
     private boolean isGameOver = false;
     private ColorScheme colorScheme = ColorScheme.RED;
     private JPanel currentScorePanel = null;
+    private boolean scoreEffectActive = false;
+    private JButton scoreEffectButton;
+    private JPanel tiles;
 
 
     public static void main(String[] args) {
@@ -153,6 +156,9 @@ public class BoardGUI implements java.awt.event.KeyListener {
 	 * @param pointsGained the number of points gained
 	 */
 	private void updateScoreEffect(int pointsGained) {
+        if (!scoreEffectActive) {
+            return;
+        }
 	    // remove previous effect
 	    if (currentScorePanel != null) {
 	        frame.getLayeredPane().remove(currentScorePanel);
@@ -228,11 +234,11 @@ public class BoardGUI implements java.awt.event.KeyListener {
         scoreLabel = new JLabel("Current Score: " + score);
         scoreLabel.setFont(font);
         // scoreLabel.setSize(750, 30);
-        modeLabel = new JLabel("Game Mode: " + getModeString(modeType));
+        modeLabel = new JLabel("Mode: " + getModeString(modeType));
         modeLabel.setFont(font);
 
         // JPanel top = new JPanel();
-        JPanel top = new JPanel(new GridLayout(1, 3));
+        JPanel top = new JPanel(new GridLayout(1, 6));
 
         top.add(scoreLabel);
         top.add(modeLabel);
@@ -246,14 +252,14 @@ public class BoardGUI implements java.awt.event.KeyListener {
 
         // add timer label for time limit mode
         if (controller.getGameMode() == GameModeType.TIME_LIMIT) {
-            timerLabel = new JLabel("Time Remaining: 120 s");
+            timerLabel = new JLabel("Time Remaining: 120s");
             timerLabel.setFont(font);
             
             controller.startTimer(new TimeListener() {
                 @Override
                 public void onTimeUpdate(long remainingTime) {
                     SwingUtilities.invokeLater(() -> {
-                        timerLabel.setText("Time Remaining: " + remainingTime / 1000 + " s");
+                        timerLabel.setText("Time Remaining: " + remainingTime / 1000 + "s");
                         isGameOver = controller.getTimeUp();
                         if (isGameOver){
                             handleGameOver();
@@ -265,7 +271,8 @@ public class BoardGUI implements java.awt.event.KeyListener {
             top.add(timerLabel);
         }
 
-        JPanel tiles = new JPanel();
+        // JPanel tiles = new JPanel();
+        tiles = new JPanel();
         tiles.setSize(750, 750);
         
         tiles.setBackground(colorScheme == ColorScheme.BLUE ? new Color(0xD0D9E8) : new Color(0xbbada0));
@@ -295,8 +302,13 @@ public class BoardGUI implements java.awt.event.KeyListener {
 
         JButton colorSchemeButton = new JButton("Change Color");
         colorSchemeButton.setFont(font);
-        colorSchemeButton.addActionListener(e -> switchColorScheme(tiles));
+        colorSchemeButton.addActionListener(e -> switchColorScheme());
         top.add(colorSchemeButton);
+
+        scoreEffectButton = new JButton("Score Effect: " + (scoreEffectActive ? "ON" : "OFF"));
+        scoreEffectButton.setFont(font);
+        scoreEffectButton.addActionListener(e -> toggleScoreEffect());
+        top.add(scoreEffectButton);
 
         updateGrid();
 
@@ -316,7 +328,16 @@ public class BoardGUI implements java.awt.event.KeyListener {
         frame.setVisible(true);
     }
 
-    private void switchColorScheme(JPanel tiles) {
+    private void toggleScoreEffect() {
+        scoreEffectActive = !scoreEffectActive;
+        scoreEffectButton.setText("Score Effect: " + (scoreEffectActive ? "ON" : "OFF"));
+
+        // tiles.revalidate();
+        // tiles.repaint();
+        tiles.requestFocusInWindow();
+    }
+
+    private void switchColorScheme() {
         // toggle between blue and red
         colorScheme = (colorScheme == ColorScheme.BLUE) 
             ? ColorScheme.RED 

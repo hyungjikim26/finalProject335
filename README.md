@@ -33,14 +33,14 @@ This is the traditional version of the game where the user can play until they r
 This is a mode where the user has a set amount of time to reach 2048. Current time limit is 120 seconds.
 
 <!-- insert screenshot -->
-<img src="https://github.com/hyungjikim26/finalProject335/blob/main/images/game_screenshot_timeTrial_crop_red.png" width=800>
+<!-- <img src="https://github.com/hyungjikim26/finalProject335/blob/main/images/game_screenshot_timeTrial_crop_red.png" width=800> -->
 
 #### Move Limit Mode
 
 This is a mode where the user has a set amount of moves to reach 2048. Current move limit is 125 moves.
 
 <!-- insert screenshot -->
-<img src="https://github.com/hyungjikim26/finalProject335/blob/main/images/game_screenshot_moveLimit_crop_red.png" width=800>
+<!-- <img src="https://github.com/hyungjikim26/finalProject335/blob/main/images/game_screenshot_moveLimit_crop_red.png" width=800> -->
 
 ### Changeable Color Schemes
 

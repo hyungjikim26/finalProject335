@@ -241,7 +241,6 @@ public class Board {
     					grid[row][tempColumn+1].merge(grid[row][tempColumn]);
     					isChanged = true;
     					score += grid[row][tempColumn+1].getValue();
-                        System.out.println(score);
     					boundColumn--;
     					break;
     				}

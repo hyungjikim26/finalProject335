@@ -1,3 +1,11 @@
+/**
+ * File: Board.java
+ * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
+ *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
+ * Purpose:
+ * 
+ */
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -8,9 +16,7 @@ public class Board {
     private final Tile[][] grid;
     private final double NEW_TILE_PROB = 0.9;
     private int score;
-    private GameMode gameMode;
-    // CONSIDER: add a counter to keep track of no. of empty/valid tiles
-    private int emptyTiles;
+    private ColorScheme colorScheme = ColorScheme.BLUE;
 
     /**
      * Constructor for the Board class.
@@ -76,7 +82,7 @@ public class Board {
         Tile[][] gridCopy = new Tile[size][size];
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
-                gridCopy[row][col] = new Tile(grid[row][col].getValue());
+                gridCopy[row][col] = new Tile(grid[row][col].getValue(), colorScheme);
             }
         }
         return gridCopy;
@@ -93,7 +99,7 @@ public class Board {
     private void initializeBoard(int numTiles) {
         for (int row = 0; row < size; row++) {
             for (int column = 0; column < size; column++) {
-                grid[row][column] = new Tile();
+                grid[row][column] = new Tile(0, colorScheme);
             }
         }
         for (int i = 0; i < numTiles; i++) {
@@ -101,10 +107,7 @@ public class Board {
         }
     }
 
-    // CONSIDER: could utilize counter to check if the board is full
-    // that way, we don't have to iterate through the entire board
-    // which could be expensive for larger boards
-    // For 4x4 board, it should be fine
+
     /**
      * Checks if the board is full.
      * 
@@ -122,10 +125,6 @@ public class Board {
             }
         }
         return true;
-    }
-
-    public void setType(GameMode mode){
-        gameMode = mode;
     }
 
     /**
@@ -157,7 +156,7 @@ public class Board {
         // place new tile in the empty spot with a NEW_TILE_PROBability of
         // tile with value 2, and 1-NEW_TILE_PROB of tile with value 4
         int val = rand.nextDouble() < NEW_TILE_PROB ? 2 : 4;
-        grid[row][col] = new Tile(val);
+        grid[row][col] = new Tile(val, colorScheme);
     }
 
     /**
@@ -206,10 +205,6 @@ public class Board {
     			}
     		}
     	}
-        //System.out.println(this.toString());
-        if (isChanged && gameMode instanceof MoveLimitMode) {
-            ((MoveLimitMode) gameMode).updateGateState();
-        }
     	return isChanged;
     }
     
@@ -247,7 +242,6 @@ public class Board {
     					grid[row][tempColumn+1].merge(grid[row][tempColumn]);
     					isChanged = true;
     					score += grid[row][tempColumn+1].getValue();
-                        System.out.println(score);
     					boundColumn--;
     					break;
     				}
@@ -261,9 +255,6 @@ public class Board {
     			}
     		}
     	} 
-        if (isChanged && gameMode instanceof MoveLimitMode) {
-            ((MoveLimitMode) gameMode).updateGateState();
-        }
     	return isChanged;
     }
 
@@ -314,9 +305,6 @@ public class Board {
     			}
     		}
     	}
-        if (isChanged && gameMode instanceof MoveLimitMode) {
-            ((MoveLimitMode) gameMode).updateGateState();
-        }
     	return isChanged;
     }
     
@@ -368,9 +356,6 @@ public class Board {
     			}
     		}
     	} 
-        if (isChanged && gameMode instanceof MoveLimitMode) {
-            ((MoveLimitMode) gameMode).updateGateState();
-        }
     	return isChanged;
     }
     
@@ -391,7 +376,7 @@ public class Board {
 
     // temporary method for tests only
     public void addTile(int row, int column, int value) {
-        grid[row][column] = new Tile(value);
+        grid[row][column] = new Tile(value, colorScheme);
     }
 
     // for tests
@@ -454,14 +439,21 @@ public class Board {
         }
         return true;
     }
+    
+    public boolean isGameOver() {
+        return this.losingCondition() || this.winningCondition();
+    }
+    
+    public String getGameOverMessage() {
+        return this.winningCondition() ? "You win!" : "You lose!";
+    }
 
-    // public GameState checkState() {
-    //     if (winningCondition()) {
-    //         return GameState.WIN;
-    //     } else if (losingCondition()) {
-    //         return GameState.LOSE;
-    //     } else {
-    //         return GameState.CONTINUE;
-    //     }
-    // }
+    public void switchColorScheme(ColorScheme newScheme) {
+        this.colorScheme = newScheme;
+        for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                grid[row][col].switchColorScheme(newScheme);
+            }
+        }
+    }
 }

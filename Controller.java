@@ -1,8 +1,14 @@
+/**
+ * File: Controller.java
+ * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
+ *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
+ * Purpose: Defines the controller class that handles the game logic.
+ */
+
 import java.util.ArrayList;
 
 public class Controller {
 	
-	private GameMode gameMode;
 	private Board board;
 	private Leaderboard leaderboard;
 	
@@ -10,7 +16,6 @@ public class Controller {
 	 * Default constructor for controller class
 	 */
 	public Controller() {
-		gameMode = null;
 		board = null;
 		leaderboard = new Leaderboard();
 		newGame(GameModeType.TRADITIONAL);
@@ -28,18 +33,23 @@ public class Controller {
 	
 	
 	public void newGame(GameModeType mode) {
-		board = new Board();
 		switch (mode) {
 		case TRADITIONAL:
-			gameMode = new TraditionalMode(board);
+			board = new Board();
 			break;
 		case TIME_LIMIT:
-			gameMode = new TimeTrialMode(board);
+			board = new TimeTrialMode();
 			break;
 		case MOVE_LIMIT:
-			gameMode = new MoveLimitMode(board);
+			board = new MoveLimitMode();
 			break;
 		}
+	}
+	
+	public Controller(GameModeType mode) {
+		board = null;
+		leaderboard = new Leaderboard();
+		newGame(mode);
 	}
 	
 	/**
@@ -50,9 +60,6 @@ public class Controller {
 	public void moveBoardUp() {
 		boolean isChanged = board.moveUp();
 		if (isChanged) {
-			if (gameMode instanceof MoveLimitMode moveLimitMode) {
-				moveLimitMode.updateGateState();
-			}
 			board.addRandomTile();			
 		}
 	}
@@ -65,9 +72,6 @@ public class Controller {
 	public void moveBoardRight() {
 		boolean isChanged = board.moveRight();
 		if (isChanged) {
-			if (gameMode instanceof MoveLimitMode moveLimitMode) {
-				moveLimitMode.updateGateState();
-			}
 			board.addRandomTile();			
 		}
 	}
@@ -80,9 +84,6 @@ public class Controller {
 	public void moveBoardDown() {
 		boolean isChanged = board.moveDown();
 		if (isChanged) {
-			if (gameMode instanceof MoveLimitMode moveLimitMode) {
-				moveLimitMode.updateGateState();
-			}
 			board.addRandomTile();			
 		}
 	}
@@ -95,46 +96,43 @@ public class Controller {
 	public void moveBoardLeft() {
 		boolean isChanged = board.moveLeft();
 		if (isChanged) {
-			if (gameMode instanceof MoveLimitMode moveLimitMode) {
-				moveLimitMode.updateGateState();
-			}
 			board.addRandomTile();			
 		}
 	}
 	
 	public boolean isGameOver() {
-		return gameMode.isGameOver();
+		return board.isGameOver();
 	}
 	
 	public String getGameOverMessage() {
-		return gameMode.getGameOverMessage();
+		return board.getGameOverMessage();
 	}
 	
 	public GameModeType getGameMode() {
-		if (gameMode instanceof TimeTrialMode timeTrialMode ) {
+		if (board instanceof TimeTrialMode timeTrialMode ) {
 			return GameModeType.TIME_LIMIT;
 		}
-		if (gameMode instanceof MoveLimitMode moveLimitMode) {
+		if (board instanceof MoveLimitMode moveLimitMode) {
 			return GameModeType.MOVE_LIMIT;
 		}
 		return GameModeType.TRADITIONAL;
 	}
 	
 	public int getMovesLeft() {
-		if (gameMode instanceof MoveLimitMode moveLimitMode) {
+		if (board instanceof MoveLimitMode moveLimitMode) {
 			return moveLimitMode.getMovesLeft();
 		}
 		return -1;
 	}
 	
 	public void startTimer(TimeListener listener) {
-		if (gameMode instanceof TimeTrialMode timeTrialMode ) {
+		if (board instanceof TimeTrialMode timeTrialMode ) {
 			timeTrialMode.start(listener);
 		}
 	}
 	
 	public boolean getTimeUp() {
-		if (gameMode instanceof TimeTrialMode timeTrialMode ) {
+		if (board instanceof TimeTrialMode timeTrialMode ) {
 			return timeTrialMode.getTimeUp();
 		}
 		return false;
@@ -153,24 +151,9 @@ public class Controller {
 	public Tile[][] getGrid() {
 		return board.getGrid();
 	}
-
-	/**
-	 * @param mode - the GameMode that was selected
-	 */
-	public void setMode(GameMode mode) {
-		board.setType(mode);
-	}
-
-	public GameMode newTraditional() {
-		return new TraditionalMode(board);
-	}
-
-	public GameMode newTime() {
-		return new TimeTrialMode(board);
-	}
-
-	public GameMode newMove() {
-		return new MoveLimitMode(board);
+	
+	public void addTile(int row, int column, int value) {
+		board.addTile(row, column, value);
 	}
 
 	/**
@@ -194,4 +177,9 @@ public class Controller {
 	public ArrayList<Entry> getAllScores() {
 		return leaderboard.getAllScores();
 	}
+
+	public void switchColorScheme(ColorScheme newScheme) {
+		board.switchColorScheme(newScheme);
+	}
 }
+

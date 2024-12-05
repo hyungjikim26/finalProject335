@@ -1,14 +1,26 @@
+/**
+ * File: TimeTrialMode.java
+ * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
+ *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
+ * Purpose: Defines the game mode where the player has limited time to play.
+ */
+
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class TimeTrialMode implements GameMode {
-    private static final long TIME_LIMIT = 5000;
+public class TimeTrialMode extends Board {
+    private static final long TIME_LIMIT = 120000;
     private final Timer timer;
-    private final Board board;
     private boolean timeUp;
 
-    public TimeTrialMode(Board board) {
-        this.board = board;
+    public TimeTrialMode() {
+    	super();
+        timeUp = false;
+        timer = new Timer();
+    }
+     
+    public TimeTrialMode(int size, int numTiles) {
+        super(size, numTiles);
         timeUp = false;
         timer = new Timer();
     }
@@ -32,27 +44,22 @@ public class TimeTrialMode implements GameMode {
         timer.scheduleAtFixedRate(task, 0, 1000);
     }
 
+    /**
+     * Determines if the game is over.
+     * @return true if the game is over, false otherwise
+     */
     @Override
     public boolean isGameOver() {
-        return timeUp || board.losingCondition() || board.winningCondition();
+        return timeUp || this.losingCondition() || this.winningCondition();
     }
 
-    // may or may not need this
-    // @Override
-    // public void updateGameState() {
-    //     long currentTime = System.currentTimeMillis();
-    //     elapsedTime = currentTime - startTime;    
-    // }
-
-
-    // @Override
-    // public void updateLeaderboard() {
-
-    // }
-
+    /**
+     * Returns the message to display when the game is over.
+     * @return the game over message
+     */
     @Override
     public String getGameOverMessage() {
-        if (board.winningCondition()) {
+        if (this.winningCondition()) {
             return "You win!";
         } else if (timeUp) {
             return "Time is up. You lose!";

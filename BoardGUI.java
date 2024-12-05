@@ -240,7 +240,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
             tilePanel.setBackground(tile.getColor());
 
             // change font color for dark tiles
-            if (tile.getValue() <= 8) {
+            if (tile.getValue() < 8) {
                 slot.setForeground(new Color(0x766E65));
             } else {
                 slot.setForeground(Color.WHITE);

@@ -26,6 +26,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
     private JLabel modeLabel;
     private boolean isGameOver = false;
     private ColorScheme colorScheme = ColorScheme.BLUE;
+    private GameModeType selected = GameModeType.TRADITIONAL;
 
 
     public static void main(String[] args) {
@@ -34,35 +35,62 @@ public class BoardGUI implements java.awt.event.KeyListener {
 
     public BoardGUI() {
         GameModeType selectedMode = chooseGameMode();
-        initializeGame(selectedMode);
+        //initializeGame(selectedMode);
+    }
+
+    private GameModeType getGameMode(GameModeType mode){
+        return mode;
     }
 
     public GameModeType chooseGameMode() {
-        Object[] options = { "Traditional", "Time Limit", "Move Limit" };
-        int selected = JOptionPane.showOptionDialog(null,
-                "Select a Game Mode",
-                "Game Mode Selection",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                null, options, options[0]);
+        frame = new JFrame("2048");
+        cardPanel = new JPanel();
+        layout = new CardLayout();
+        cardPanel.setLayout(layout);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(750, 780);
+        frame.setLocationRelativeTo(null);
+        frame.add(cardPanel);
+        frame.setVisible(true);
 
-        switch (selected) {
-            case 0:
-                return GameModeType.TRADITIONAL;
-            case 1:
-                return GameModeType.TIME_LIMIT;
-            case 2:
-                return GameModeType.MOVE_LIMIT;
-            default:
-                return GameModeType.TRADITIONAL;
-        }
+        JPanel chooseMode = new JPanel();
+        JLabel message = new JLabel("Select a Game Mode");
+        chooseMode.add(message);
+        JButton traditional = new JButton("Traditional");
+        JButton time = new JButton("Time");
+        JButton move = new JButton("Move Limit");
+        chooseMode.add(traditional);
+        chooseMode.add(time);
+        chooseMode.add(move);
+
+        cardPanel.add(chooseMode);
+
+        traditional.addActionListener(e ->{
+            selected = GameModeType.TRADITIONAL;
+            initializeGame(GameModeType.TRADITIONAL);
+            layout.next(cardPanel);
+        });
+
+        time.addActionListener(e ->{
+            selected = GameModeType.TIME_LIMIT;
+            initializeGame(GameModeType.TIME_LIMIT);
+            layout.next(cardPanel);
+        });
+
+        move.addActionListener(e ->{
+            selected = GameModeType.MOVE_LIMIT;
+            initializeGame(GameModeType.MOVE_LIMIT);
+            layout.next(cardPanel);
+        });
+        System.out.println(selected);
+        return selected;
     }
 
     public void initializeGame(GameModeType modeType) {
         leaderboard = new Leaderboard();
 
         controller.newGame(modeType);
-
+        //chooseGameMode();
         setup(modeType);
     }
 
@@ -140,13 +168,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
     }
 
     private void setup(GameModeType modeType) {
-        frame = new JFrame("2048");
-        cardPanel = new JPanel();
-        layout = new CardLayout();
-        cardPanel.setLayout(layout);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(750, 780);
-        frame.setLocationRelativeTo(null);
+
 
         Font font = new Font("Clear Sans", Font.BOLD, 12);
 
@@ -237,8 +259,8 @@ public class BoardGUI implements java.awt.event.KeyListener {
 
         cardPanel.add(split);
         cardPanel.setVisible(true);
-        frame.add(cardPanel);
-        frame.setVisible(true);
+        //frame.add(cardPanel);
+        //frame.setVisible(true);
     }
 
     private void switchColorScheme(JPanel tiles) {
@@ -317,15 +339,25 @@ public class BoardGUI implements java.awt.event.KeyListener {
     }
 
     private void displayLeaderboard() {
-        JPanel leaders = new JPanel();
-        
-        //JDialog dialog = new JDialog();
-        //dialog.setTitle("Leaderboard");
-        //dialog.setSize(300, 300);
-        //dialog.setLocationRelativeTo(null);
+        JPanel main = new JPanel(new BorderLayout());
+        JPanel leaders = new JPanel(new GridLayout());
+        JPanel buttonHolder = new JPanel();
+
+        leaders.setPreferredSize(new Dimension(750, 745));
+        buttonHolder.setPreferredSize((new Dimension(750,35)));
+
+        JButton newGame = new JButton("Start a New Game");
+        newGame.addActionListener(e ->{
+            frame.dispose();
+            new BoardGUI();
+        });
+        buttonHolder.add(newGame);
 
         JTextArea textArea = new JTextArea();
+        textArea.setFont(new Font("", Font.PLAIN, 20));
         textArea.setEditable(false);
+        JScrollPane scroll = new JScrollPane(textArea);
+        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         StringBuilder sb = new StringBuilder();
         ArrayList<Entry> scores;
@@ -358,9 +390,12 @@ public class BoardGUI implements java.awt.event.KeyListener {
         }
 
         textArea.setText(sb.toString());
-        leaders.add(textArea);
-        leaders.setVisible(true);
-        cardPanel.add(leaders);
+
+        leaders.add(scroll);
+
+        main.add(leaders, BorderLayout.CENTER);
+        main.add(buttonHolder, BorderLayout.PAGE_END);
+        cardPanel.add(main);
         layout.next(cardPanel);
     }
 
@@ -413,21 +448,4 @@ public class BoardGUI implements java.awt.event.KeyListener {
     }
 }
 
-public class RoundedPanel extends JPanel {
 
-    private int cornerRadius = 20;
-
-    public RoundedPanel(int cornerRadius) {
-        this.cornerRadius = cornerRadius;
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g.create();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(getBackground());
-        g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, cornerRadius, cornerRadius);
-        g2.dispose();
-    }
-}

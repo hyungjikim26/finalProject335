@@ -69,10 +69,10 @@ public class Tile {
 
     public void calculateColor() {   
         switch (colorScheme) {
-            case ColorScheme.BLUE:
+            case BLUE:
                 calculateColorBlue();
                 break;
-            case ColorScheme.RED:
+            case RED:
                 calculateColorRed();
                 break;
             default:

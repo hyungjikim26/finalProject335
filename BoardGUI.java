@@ -25,6 +25,8 @@ public class BoardGUI implements java.awt.event.KeyListener {
     private JLabel movesLeftLabel;
     private JLabel modeLabel;
     private boolean isGameOver = false;
+    private ColorScheme colorScheme = ColorScheme.BLUE;
+
 
     public static void main(String[] args) {
         new BoardGUI();
@@ -191,7 +193,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
         JPanel tiles = new JPanel();
         tiles.setSize(750, 750);
         
-        tiles.setBackground(new Color(0xbbada0));
+        tiles.setBackground(colorScheme == ColorScheme.BLUE ? new Color(0xD0D9E8) : new Color(0xbbada0));
 
         GridLayout grid = new GridLayout(4, 4);
         grid.setHgap(10);
@@ -216,17 +218,56 @@ public class BoardGUI implements java.awt.event.KeyListener {
             tiles.add(tilePanel);
         }
 
+        JButton colorSchemeButton = new JButton("Change Color");
+        colorSchemeButton.setFont(font);
+        colorSchemeButton.addActionListener(e -> switchColorScheme(tiles));
+        top.add(colorSchemeButton);
+
         updateGrid();
 
         tiles.addKeyListener(this);
+        frame.addKeyListener(this);
+
+        tiles.setFocusable(true);
+        frame.setFocusable(true);
+
+        tiles.requestFocusInWindow();
 
         JSplitPane split = new JSplitPane(SwingConstants.HORIZONTAL, top, tiles);
 
         cardPanel.add(split);
         cardPanel.setVisible(true);
         frame.add(cardPanel);
-        tiles.setFocusable(true);
         frame.setVisible(true);
+    }
+
+    private void switchColorScheme(JPanel tiles) {
+        // toggle between blue and red
+        colorScheme = (colorScheme == ColorScheme.BLUE) 
+            ? ColorScheme.RED 
+            : ColorScheme.BLUE;
+        
+        controller.switchColorScheme(colorScheme);
+        
+        tiles.setBackground(colorScheme == ColorScheme.BLUE ? new Color(0xD0D9E8) : new Color(0xbbada0));
+        // update all tiles
+        Tile[][] curGrid = controller.getGrid();
+        for (int j = 0; j <= 3; j++) {
+            for (int k = 0; k <= 3; k++) {
+                curGrid[j][k].switchColorScheme(colorScheme);
+            }
+        }
+        int slotNum = 0;
+        for (int j = 0; j <= 3; j++) {
+            for (int k = 0; k <= 3; k++) {
+                changeTile(curGrid[j][k], slotNum);
+                slotNum++;
+            }
+        }
+        
+        tiles.revalidate();
+        tiles.repaint();
+        tiles.requestFocusInWindow();
     }
 
     public void changeTile(Tile tile, int slotNum) {
@@ -234,14 +275,14 @@ public class BoardGUI implements java.awt.event.KeyListener {
         JPanel tilePanel = (JPanel) slot.getParent();
         if (tile.getValue() == 0) {
             slot.setText("");
-            tilePanel.setBackground(new Color(0xcdc1b4));           
+            tilePanel.setBackground(colorScheme == ColorScheme.BLUE ? new Color(0xE1E8F0) : new Color(0xcdc1b4));
         } else {
             slot.setText(Integer.toString(tile.getValue()));
             tilePanel.setBackground(tile.getColor());
 
             // change font color for dark tiles
             if (tile.getValue() < 8) {
-                slot.setForeground(new Color(0x766E65));
+                slot.setForeground(colorScheme == ColorScheme.BLUE ? new Color(0x656F86) : new Color(0x766E65));
             } else {
                 slot.setForeground(Color.WHITE);
             }

@@ -447,13 +447,4 @@ public class Board {
     public String getGameOverMessage() {
         return this.winningCondition() ? "You win!" : "You lose!";
     }
-
-    public void switchColorScheme(ColorScheme newScheme) {
-        this.colorScheme = newScheme;
-        for (int row = 0; row < size; row++) {
-            for (int col = 0; col < size; col++) {
-                grid[row][col].switchColorScheme(newScheme);
-            }
-        }
-    }
 }

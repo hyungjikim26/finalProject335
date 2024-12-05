@@ -177,9 +177,5 @@ public class Controller {
 	public ArrayList<Entry> getAllScores() {
 		return leaderboard.getAllScores();
 	}
-
-	public void switchColorScheme(ColorScheme newScheme) {
-		board.switchColorScheme(newScheme);
-	}
 }
 

@@ -190,6 +190,8 @@ public class BoardGUI implements java.awt.event.KeyListener {
 
         JPanel tiles = new JPanel();
         tiles.setSize(750, 750);
+        
+        tiles.setBackground(new Color(0xbbada0));
 
         GridLayout grid = new GridLayout(4, 4);
         grid.setHgap(10);
@@ -229,7 +231,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
         JPanel tilePanel = (JPanel) slot.getParent();
         if (tile.getValue() == 0) {
             slot.setText("");
-            tilePanel.setBackground(new Color(254, 251, 251));            
+            tilePanel.setBackground(new Color(0xcdc1b4));           
         } else {
             slot.setText(Integer.toString(tile.getValue()));
             tilePanel.setBackground(tile.getColor());

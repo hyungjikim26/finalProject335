@@ -232,7 +232,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
             tilePanel.setBackground(new Color(254, 251, 251));            
         } else {
             slot.setText(Integer.toString(tile.getValue()));
-            tilePanel.setBackground(tile.getColor());
+            tilePanel.setBackground(decideColor(tile.getValue()));
 
             // change font color for dark tiles
             if (tile.getValue() <= 8) {
@@ -241,7 +241,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
                 slot.setForeground(Color.WHITE);
             }
         }
-        slot.setBackground(tile.getColor());
+        slot.setBackground(decideColor(tile.getValue()));
         slot.setOpaque(true);
         // slot.setBorder(BorderFactory.createCompoundBorder(
         //     BorderFactory.createLineBorder(Color.WHITE),
@@ -316,6 +316,24 @@ public class BoardGUI implements java.awt.event.KeyListener {
         leaders.setVisible(true);
         cardPanel.add(leaders);
         layout.next(cardPanel);
+    }
+    
+    private Color decideColor(int value){
+        switch (value) {
+            case 0 		-> {return new Color(254, 250, 250);}
+            case 2 		-> {return new Color(250, 241, 234);}
+            case 4 		-> {return new Color(250, 238, 225);}
+            case 8 		-> {return new Color(255,230,180);}
+            case 16 	-> {return new Color(250, 210, 120);}
+            case 32 	-> {return new Color(240,130,73);}
+            case 64 	-> {return new Color(250,100,60);}
+            case 128 	-> {return new Color(255,250,160);}
+            case 256 	-> {return new Color(250,243,145);}
+            case 512 	-> {return new Color(245,238,120);}
+            case 1024 	-> {return new Color(253,238,90);}
+            case 2048 	-> {return new Color(255,238,50);}
+            default -> {return new Color(254, 250, 250);}
+        }
     }
 
     private void handleGameOver() {

@@ -16,7 +16,7 @@ public class Board {
     private final Tile[][] grid;
     private final double NEW_TILE_PROB = 0.9;
     private int score;
-    private ColorScheme colorScheme = ColorScheme.BLUE;
+    private ColorScheme colorScheme = ColorScheme.RED;
 
     /**
      * Constructor for the Board class.

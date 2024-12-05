@@ -25,7 +25,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
     private JLabel movesLeftLabel;
     private JLabel modeLabel;
     private boolean isGameOver = false;
-    private ColorScheme colorScheme = ColorScheme.BLUE;
+    private ColorScheme colorScheme = ColorScheme.RED;
 
 
     public static void main(String[] args) {

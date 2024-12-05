@@ -12,7 +12,6 @@ public class BoardGUI implements java.awt.event.KeyListener {
     private JPanel cardPanel;
     // private GameState currentState;
     private Leaderboard leaderboard;
-    private GameMode gameMode;
     private JLabel timerLabel;
     private JLabel movesLeftLabel;
     private JLabel modeLabel;
@@ -51,20 +50,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
     public void initializeGame(GameModeType modeType) {
         leaderboard = new Leaderboard();
 
-        switch (modeType) {
-            case TRADITIONAL:
-                gameMode = controller.newTraditional();
-                break;
-            case TIME_LIMIT:
-                gameMode = controller.newTime();
-                break;
-            case MOVE_LIMIT:
-                gameMode = controller.newMove();
-                break;
-            default:
-                gameMode = controller.newTraditional();
-        }
-        controller.setMode(gameMode);
+        controller.newGame(modeType);
 
         setup(modeType);
     }
@@ -116,7 +102,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
         }
         updateGrid();
 
-        if (gameMode.isGameOver()) {
+        if (controller.isGameOver()) {
             handleGameOver();
         }
     }
@@ -133,8 +119,8 @@ public class BoardGUI implements java.awt.event.KeyListener {
         scoreLabel.setText("Current Score: " + Integer.toString(controller.getScore()));
 
         // update mode-specific info
-        if (gameMode instanceof MoveLimitMode moveLimitMode) {
-            movesLeftLabel.setText("Moves Left: " + moveLimitMode.getMovesLeft());
+        if (controller.getGameMode() == GameModeType.MOVE_LIMIT) {
+            movesLeftLabel.setText("Moves Left: " + controller.getMovesLeft());
         }
     }
 
@@ -158,21 +144,21 @@ public class BoardGUI implements java.awt.event.KeyListener {
         top.add(modeLabel);
 
         // add moves left label for move limit mode
-        if (gameMode instanceof MoveLimitMode moveLimitMode) {
-            movesLeftLabel = new JLabel("Moves Left: " + moveLimitMode.getMovesLeft());
+        if (controller.getGameMode() == GameModeType.MOVE_LIMIT) {
+            movesLeftLabel = new JLabel("Moves Left: " + controller.getMovesLeft());
             top.add(movesLeftLabel);
         }
 
         // add timer label for time limit mode
-        if (gameMode instanceof TimeTrialMode timeTrialMode) {
+        if (controller.getGameMode() == GameModeType.TIME_LIMIT) {
             timerLabel = new JLabel("Time Remaining: 120 s");
             
-            timeTrialMode.start(new TimeListener() {
+            controller.startTimer(new TimeListener() {
                 @Override
                 public void onTimeUpdate(long remainingTime) {
                     SwingUtilities.invokeLater(() -> {
                         timerLabel.setText("Time Remaining: " + remainingTime / 1000 + " s");
-                        isGameOver = timeTrialMode.getTimeUp();
+                        isGameOver = controller.getTimeUp();
                         if (isGameOver){
                             handleGameOver();
                         }
@@ -233,7 +219,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
     }
 
     private String getGameOverMessage() {
-        return gameMode.getGameOverMessage();
+        return controller.getGameOverMessage();
     }
 
     private void displayLeaderboard() {

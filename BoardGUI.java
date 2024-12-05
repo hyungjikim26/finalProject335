@@ -198,6 +198,9 @@ public class BoardGUI implements java.awt.event.KeyListener {
         grid.setVgap(10);
         tiles.setLayout(grid);
 
+        // add padding to tiles
+        tiles.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
         for (int i = 0; i <= 15; i++) {
             JPanel tilePanel = new RoundedPanel(20);
             tilePanel.setOpaque(false);
@@ -238,7 +241,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
 
             // change font color for dark tiles
             if (tile.getValue() <= 8) {
-                slot.setForeground(Color.BLACK);
+                slot.setForeground(new Color(0x766E65));
             } else {
                 slot.setForeground(Color.WHITE);
             }

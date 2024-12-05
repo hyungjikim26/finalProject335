@@ -22,7 +22,7 @@ public class Tile {
     }
 
     public Tile(int value) {
-        this(value, ColorScheme.BLUE);
+        this(value, ColorScheme.RED);
     }
 
     // if other has the same value, update this.value

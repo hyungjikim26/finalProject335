@@ -4,7 +4,6 @@
  *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
  * Purpose: Defines the game mode where the player plays the traditional
  * version of the 2048 game without any time or move limits.
- * 
  */
 
 public class TraditionalMode implements GameMode {

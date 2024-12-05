@@ -1,3 +1,10 @@
+/**
+ * File: Controller.java
+ * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
+ *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
+ * Purpose: Defines the controller class that handles the game logic.
+ */
+
 import java.util.ArrayList;
 
 public class Controller {
@@ -9,11 +16,12 @@ public class Controller {
 	 * Default constructor for controller class
 	 */
 	public Controller() {
-		board = new Board();
+		board = null;
 		leaderboard = new Leaderboard();
+		newGame(GameModeType.TRADITIONAL);
 	}
 	
-	/**
+	/** TODO: DELETE
 	 * Constructor for the Board class.
 	 * 
 	 * @pre numTiles >= 0 && numTiles <= size*size && size > 0
@@ -21,8 +29,27 @@ public class Controller {
 	 * @param size     the size of the board
 	 * @param numTiles the number of tiles to place on the board
 	 */
-	public Controller(int size, int numTiles) {
-		board = new Board(size, numTiles);
+	// Constructor was here
+	
+	
+	public void newGame(GameModeType mode) {
+		switch (mode) {
+		case TRADITIONAL:
+			board = new Board();
+			break;
+		case TIME_LIMIT:
+			board = new TimeTrialMode();
+			break;
+		case MOVE_LIMIT:
+			board = new MoveLimitMode();
+			break;
+		}
+	}
+	
+	public Controller(GameModeType mode) {
+		board = null;
+		leaderboard = new Leaderboard();
+		newGame(mode);
 	}
 	
 	/**
@@ -73,18 +100,42 @@ public class Controller {
 		}
 	}
 	
-	/**
-	 * @return true if the player won (there is 2048 somewhere on board), false otherwise
-	 */
-	public boolean won() {
-		return board.winningCondition();
+	public boolean isGameOver() {
+		return board.isGameOver();
 	}
 	
-	/**
-	 * @return true if the player lost can't make any move, false otherwise
-	 */
-	public boolean lost() {
-		return board.losingCondition();
+	public String getGameOverMessage() {
+		return board.getGameOverMessage();
+	}
+	
+	public GameModeType getGameMode() {
+		if (board instanceof TimeTrialMode timeTrialMode ) {
+			return GameModeType.TIME_LIMIT;
+		}
+		if (board instanceof MoveLimitMode moveLimitMode) {
+			return GameModeType.MOVE_LIMIT;
+		}
+		return GameModeType.TRADITIONAL;
+	}
+	
+	public int getMovesLeft() {
+		if (board instanceof MoveLimitMode moveLimitMode) {
+			return moveLimitMode.getMovesLeft();
+		}
+		return -1;
+	}
+	
+	public void startTimer(TimeListener listener) {
+		if (board instanceof TimeTrialMode timeTrialMode ) {
+			timeTrialMode.start(listener);
+		}
+	}
+	
+	public boolean getTimeUp() {
+		if (board instanceof TimeTrialMode timeTrialMode ) {
+			return timeTrialMode.getTimeUp();
+		}
+		return false;
 	}
 	
 	/**
@@ -93,6 +144,18 @@ public class Controller {
 	public int getScore() {
 		return board.getScore();
 	}
+
+	/**
+	 * @return current grid
+	 */
+	public Tile[][] getGrid() {
+		return board.getGrid();
+	}
+	
+	public void addTile(int row, int column, int value) {
+		board.addTile(row, column, value);
+	}
+
 	/**
 	 * @param name - name of person playing
 	 * @param score - score of the board after finishing game
@@ -115,3 +178,4 @@ public class Controller {
 		return leaderboard.getAllScores();
 	}
 }
+

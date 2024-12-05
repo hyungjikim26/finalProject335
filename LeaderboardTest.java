@@ -1,8 +1,16 @@
+/**
+ * File: LeaderboardTest.java
+ * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
+ *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
+ * Purpose: Contains unit tests for the Leaderboard class.
+ */
+
 import java.io.File;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 
 class LeaderboardTest {
 	Leaderboard leaderboard;
@@ -58,3 +66,4 @@ class LeaderboardTest {
 		leaderboard = new Leaderboard();
 	}
 }
+

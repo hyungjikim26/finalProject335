@@ -1,15 +1,26 @@
+/**
+ * File: BoardGUI.java
+ * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
+ *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
+ * Purpose:
+ * 
+ */
+
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.border.Border;
 
 public class BoardGUI implements java.awt.event.KeyListener {
-    private Board board = new Board();
+    private Controller controller = new Controller();
     private int score = 0;
     private JLabel[] slots = new JLabel[16];
     private JLabel scoreLabel;
+    private CardLayout layout;
+    private JFrame frame;
+    private JPanel cardPanel;
     // private GameState currentState;
     private Leaderboard leaderboard;
-    private GameMode gameMode;
     private JLabel timerLabel;
     private JLabel movesLeftLabel;
     private JLabel modeLabel;
@@ -46,48 +57,34 @@ public class BoardGUI implements java.awt.event.KeyListener {
     }
 
     public void initializeGame(GameModeType modeType) {
-        board = new Board();
         leaderboard = new Leaderboard();
 
-        switch (modeType) {
-            case TRADITIONAL:
-                gameMode = new TraditionalMode(board);
-                break;
-            case TIME_LIMIT:
-                gameMode = new TimeTrialMode(board);
-                break;
-            case MOVE_LIMIT:
-                gameMode = new MoveLimitMode(board);
-                break;
-            default:
-                gameMode = new TraditionalMode(board);
-        }
+        controller.newGame(modeType);
 
         setup(modeType);
     }
 
     public void keyTyped(java.awt.event.KeyEvent e) {
         int keyChar = e.getKeyChar();
-        boolean boardChanged = false;
         switch (keyChar) {
             case 'w':
-                boardChanged = board.moveUp();
+                controller.moveBoardUp();
                 break;
             case 's':
-                boardChanged = board.moveDown();
+                controller.moveBoardDown();
                 break;
             case 'd':
-                boardChanged = board.moveRight();
+                controller.moveBoardRight();
                 break;
             case 'a':
-                boardChanged = board.moveLeft();
+                controller.moveBoardLeft();
                 break;
         }
-        if (boardChanged) {
-            board.addRandomTile();
-            // currentState = board.checkState();
-        }
         updateGrid();
+        
+        if (controller.isGameOver()) {
+            handleGameOver();
+        }
     }
 
     public void keyReleased(java.awt.event.KeyEvent e) {
@@ -102,39 +99,29 @@ public class BoardGUI implements java.awt.event.KeyListener {
         }
 
         int keyCode = e.getKeyCode();
-        boolean boardChanged = false;
         switch (keyCode) {
             case java.awt.event.KeyEvent.VK_UP:
-                boardChanged = board.moveUp();
+                controller.moveBoardUp();
                 break;
             case java.awt.event.KeyEvent.VK_DOWN:
-                boardChanged = board.moveDown();
+                controller.moveBoardDown();
                 break;
             case java.awt.event.KeyEvent.VK_RIGHT:
-                boardChanged = board.moveRight();
+                controller.moveBoardRight();
                 break;
             case java.awt.event.KeyEvent.VK_LEFT:
-                boardChanged = board.moveLeft();
+                controller.moveBoardLeft();
                 break;
-        }
-        if (boardChanged) {
-            board.addRandomTile();
-            // update moves left for move limit mode
-            if (gameMode instanceof MoveLimitMode) {
-                // gameMode.updateGateState();
-                ((MoveLimitMode) gameMode).updateGateState();
-            }
-            // currentState = board.checkState();
         }
         updateGrid();
 
-        if (gameMode.isGameOver()) {
+        if (controller.isGameOver()) {
             handleGameOver();
         }
     }
 
     private void updateGrid() {
-        Tile[][] curGrid = board.getGrid();
+        Tile[][] curGrid = controller.getGrid();
         int slotNum = 0;
         for (int j = 0; j <= 3; j++) {
             for (int k = 0; k <= 3; k++) {
@@ -142,23 +129,30 @@ public class BoardGUI implements java.awt.event.KeyListener {
                 slotNum++;
             }
         }
-        scoreLabel.setText("Current Score: " + Integer.toString(board.getScore()));
+        scoreLabel.setText("Current Score: " + Integer.toString(controller.getScore()));
 
         // update mode-specific info
-        if (gameMode instanceof MoveLimitMode moveLimitMode) {
-            movesLeftLabel.setText("Moves Left: " + moveLimitMode.getMovesLeft());
+        if (controller.getGameMode() == GameModeType.MOVE_LIMIT) {
+            movesLeftLabel.setText("Moves Left: " + controller.getMovesLeft());
         }
     }
 
     private void setup(GameModeType modeType) {
-        JFrame frame = new JFrame();
+        frame = new JFrame("2048");
+        cardPanel = new JPanel();
+        layout = new CardLayout();
+        cardPanel.setLayout(layout);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(750, 780);
         frame.setLocationRelativeTo(null);
 
+        Font font = new Font("Clear Sans", Font.BOLD, 12);
+
         scoreLabel = new JLabel("Current Score: " + score);
+        scoreLabel.setFont(font);
         // scoreLabel.setSize(750, 30);
         modeLabel = new JLabel("Game Mode: " + getModeString(modeType));
+        modeLabel.setFont(font);
 
         // JPanel top = new JPanel();
         JPanel top = new JPanel(new GridLayout(1, 3));
@@ -167,21 +161,23 @@ public class BoardGUI implements java.awt.event.KeyListener {
         top.add(modeLabel);
 
         // add moves left label for move limit mode
-        if (gameMode instanceof MoveLimitMode moveLimitMode) {
-            movesLeftLabel = new JLabel("Moves Left: " + moveLimitMode.getMovesLeft());
+        if (controller.getGameMode() == GameModeType.MOVE_LIMIT) {
+            movesLeftLabel = new JLabel("Moves Left: " + controller.getMovesLeft());
+            movesLeftLabel.setFont(font);
             top.add(movesLeftLabel);
         }
 
         // add timer label for time limit mode
-        if (gameMode instanceof TimeTrialMode timeTrialMode) {
+        if (controller.getGameMode() == GameModeType.TIME_LIMIT) {
             timerLabel = new JLabel("Time Remaining: 120 s");
+            timerLabel.setFont(font);
             
-            timeTrialMode.start(new TimeListener() {
+            controller.startTimer(new TimeListener() {
                 @Override
                 public void onTimeUpdate(long remainingTime) {
                     SwingUtilities.invokeLater(() -> {
                         timerLabel.setText("Time Remaining: " + remainingTime / 1000 + " s");
-                        isGameOver = timeTrialMode.getTimeUp();
+                        isGameOver = controller.getTimeUp();
                         if (isGameOver){
                             handleGameOver();
                         }
@@ -196,33 +192,65 @@ public class BoardGUI implements java.awt.event.KeyListener {
         tiles.setSize(750, 750);
 
         GridLayout grid = new GridLayout(4, 4);
+        grid.setHgap(10);
+        grid.setVgap(10);
         tiles.setLayout(grid);
 
         for (int i = 0; i <= 15; i++) {
-            slots[i] = new JLabel("", SwingConstants.CENTER);
-            slots[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            tiles.add(slots[i]);
+            JPanel tilePanel = new RoundedPanel(20);
+            tilePanel.setOpaque(false);
+
+            JLabel tileLabel = new JLabel("", SwingConstants.CENTER);
+            tileLabel.setFont(new Font("Clear Sans", Font.BOLD, 60));
+            tileLabel.setOpaque(true);
+
+            tilePanel.setLayout(new GridBagLayout());
+            tilePanel.add(tileLabel);
+
+            slots[i] = tileLabel;
+            tiles.add(tilePanel);
         }
 
         updateGrid();
 
         tiles.addKeyListener(this);
 
-        frame.add(top, "North");
-        frame.add(tiles);
-        frame.setVisible(true);
+        JSplitPane split = new JSplitPane(SwingConstants.HORIZONTAL, top, tiles);
+
+        cardPanel.add(split);
+        cardPanel.setVisible(true);
+        frame.add(cardPanel);
         tiles.setFocusable(true);
+        frame.setVisible(true);
     }
 
     public void changeTile(Tile tile, int slotNum) {
+        JLabel slot = slots[slotNum];
+        JPanel tilePanel = (JPanel) slot.getParent();
         if (tile.getValue() == 0) {
-            slots[slotNum].setText("");
+            slot.setText("");
+            tilePanel.setBackground(new Color(254, 251, 251));            
         } else {
-            slots[slotNum].setText(Integer.toString(tile.getValue()));
+            slot.setText(Integer.toString(tile.getValue()));
+            tilePanel.setBackground(tile.getColor());
+
+            // change font color for dark tiles
+            if (tile.getValue() <= 8) {
+                slot.setForeground(Color.BLACK);
+            } else {
+                slot.setForeground(Color.WHITE);
+            }
         }
-        slots[slotNum].setFont(new Font("", Font.PLAIN, 60));
-        slots[slotNum].setBackground(tile.getColor());
-        slots[slotNum].setOpaque(true);
+        slot.setBackground(tile.getColor());
+        slot.setOpaque(true);
+        // slot.setBorder(BorderFactory.createCompoundBorder(
+        //     BorderFactory.createLineBorder(Color.WHITE),
+        //     BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        // ));
+
+        // add round border
+        // slot.setBorder(new RoundBorder(20));
+
     }
 
     private String getModeString(GameModeType modeType) {
@@ -239,14 +267,16 @@ public class BoardGUI implements java.awt.event.KeyListener {
     }
 
     private String getGameOverMessage() {
-        return gameMode.getGameOverMessage();
+        return controller.getGameOverMessage();
     }
 
     private void displayLeaderboard() {
-        JDialog dialog = new JDialog();
-        dialog.setTitle("Leaderboard");
-        dialog.setSize(300, 300);
-        dialog.setLocationRelativeTo(null);
+        JPanel leaders = new JPanel();
+        
+        //JDialog dialog = new JDialog();
+        //dialog.setTitle("Leaderboard");
+        //dialog.setSize(300, 300);
+        //dialog.setLocationRelativeTo(null);
 
         JTextArea textArea = new JTextArea();
         textArea.setEditable(false);
@@ -282,14 +312,16 @@ public class BoardGUI implements java.awt.event.KeyListener {
         }
 
         textArea.setText(sb.toString());
-        dialog.add(textArea);
-        dialog.setVisible(true);
+        leaders.add(textArea);
+        leaders.setVisible(true);
+        cardPanel.add(leaders);
+        layout.next(cardPanel);
     }
 
     private void handleGameOver() {
         isGameOver = true;
 
-        int finalScore = board.getScore();
+        int finalScore = controller.getScore();
 
         String gameOverMessage = getGameOverMessage();
         String playerName = JOptionPane.showInputDialog(
@@ -309,5 +341,47 @@ public class BoardGUI implements java.awt.event.KeyListener {
 
         // remove focus from the game board
 
+    }
+
+    // additional class for round border
+    class RoundBorder implements Border {
+        private int radius;
+
+        RoundBorder(int radius) {
+            this.radius = radius;
+        }
+
+        public Insets getBorderInsets(Component c) {
+            return new Insets(5, 5, 5, 5);
+        }
+
+        public boolean isBorderOpaque() {
+            return true;
+        }
+
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            // transparent border
+            g.setColor(Color.WHITE);
+            g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
+        }
+    }
+}
+
+public class RoundedPanel extends JPanel {
+
+    private int cornerRadius = 20;
+
+    public RoundedPanel(int cornerRadius) {
+        this.cornerRadius = cornerRadius;
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g.create();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setColor(getBackground());
+        g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, cornerRadius, cornerRadius);
+        g2.dispose();
     }
 }

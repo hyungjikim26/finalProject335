@@ -49,8 +49,8 @@ During the game, the user can change the color scheme of the game board. By defa
 <!-- insert screenshot -->
 <!-- place side by side -->
 <div style="display: flex; gap: 50px;">
-    <img src="https://github.com/hyungjikim26/finalProject335/blob/main/images/game_screenshot_red.png">
-    <img src="https://github.com/hyungjikim26/finalProject335/blob/main/images/game_screenshot_blue.png">
+    <img src="https://github.com/hyungjikim26/finalProject335/blob/main/images/game_screenshot_red.png" width=200>
+    <img src="https://github.com/hyungjikim26/finalProject335/blob/main/images/game_screenshot_blue.png" width=200>
 </div>
 
 ## Instructions

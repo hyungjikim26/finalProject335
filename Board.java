@@ -16,6 +16,7 @@ public class Board {
     private final Tile[][] grid;
     private final double NEW_TILE_PROB = 0.9;
     private int score;
+    private ColorScheme colorScheme = ColorScheme.RED;
 
     /**
      * Constructor for the Board class.
@@ -81,7 +82,7 @@ public class Board {
         Tile[][] gridCopy = new Tile[size][size];
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
-                gridCopy[row][col] = new Tile(grid[row][col].getValue());
+                gridCopy[row][col] = new Tile(grid[row][col].getValue(), colorScheme);
             }
         }
         return gridCopy;
@@ -98,7 +99,7 @@ public class Board {
     private void initializeBoard(int numTiles) {
         for (int row = 0; row < size; row++) {
             for (int column = 0; column < size; column++) {
-                grid[row][column] = new Tile();
+                grid[row][column] = new Tile(0, colorScheme);
             }
         }
         for (int i = 0; i < numTiles; i++) {
@@ -155,7 +156,7 @@ public class Board {
         // place new tile in the empty spot with a NEW_TILE_PROBability of
         // tile with value 2, and 1-NEW_TILE_PROB of tile with value 4
         int val = rand.nextDouble() < NEW_TILE_PROB ? 2 : 4;
-        grid[row][col] = new Tile(val);
+        grid[row][col] = new Tile(val, colorScheme);
     }
 
     /**
@@ -375,7 +376,7 @@ public class Board {
 
     // temporary method for tests only
     public void addTile(int row, int column, int value) {
-        grid[row][column] = new Tile(value);
+        grid[row][column] = new Tile(value, colorScheme);
     }
 
     // for tests
@@ -445,5 +446,14 @@ public class Board {
     
     public String getGameOverMessage() {
         return this.winningCondition() ? "You win!" : "You lose!";
+    }
+
+    public void switchColorScheme(ColorScheme newScheme) {
+        this.colorScheme = newScheme;
+        for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                grid[row][col].switchColorScheme(newScheme);
+            }
+        }
     }
 }

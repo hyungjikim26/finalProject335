@@ -24,19 +24,16 @@ Once the game is over, the user can enter their name and see their score on the 
 
 At the start of the game, the user can choose between three different game modes: Traditional Mode, Timie Trial Mode, and Mode Limit Mode.
 
-#### Traditional Mode
-
+**Traditional Mode**\
 This is the traditional version of the game where the user can play until they reach 2048 or until they can no longer make any moves.
 
-#### Time Trial Mode
-
+**Time Trial Mode**\
 This is a mode where the user has a set amount of time to reach 2048. Current time limit is 120 seconds.
 
 <!-- insert screenshot -->
 <!-- <img src="https://github.com/hyungjikim26/finalProject335/blob/main/images/game_screenshot_timeTrial_crop_red.png" width=800> -->
 
-#### Move Limit Mode
-
+**Move Limit Mode**\
 This is a mode where the user has a set amount of moves to reach 2048. Current move limit is 125 moves.
 
 <!-- insert screenshot -->
@@ -44,7 +41,7 @@ This is a mode where the user has a set amount of moves to reach 2048. Current m
 
 ### Changeable Color Schemes
 
-During the game, the user can change the color scheme of the game board. By default, the color scheme is set to the blue color scheme. The user can click on the **Change Color** button to change the color scheme to that of the official 2048 game.
+During the game, the user can change the color scheme of the game board. By default, the color scheme is set to the color scheme of the original 2048 game (red/yellow). The user can click on the **Change Color** button to change the color scheme to blue. Colors can be changed back and forth between red and blue.
 
 <!-- insert screenshot -->
 <!-- place side by side -->

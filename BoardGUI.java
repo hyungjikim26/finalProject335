@@ -317,30 +317,15 @@ public class BoardGUI implements java.awt.event.KeyListener {
     }
 
     private void displayLeaderboard() {
-        JPanel main = new JPanel(new BorderLayout());
-        JPanel leaders = new JPanel(new GridLayout());
-        JPanel buttonHolder = new JPanel();
-
-        leaders.setPreferredSize(new Dimension(750, 745));
-        buttonHolder.setPreferredSize((new Dimension(750,35)));
+        JPanel leaders = new JPanel();
         
         //JDialog dialog = new JDialog();
         //dialog.setTitle("Leaderboard");
         //dialog.setSize(300, 300);
         //dialog.setLocationRelativeTo(null);
 
-        JButton newGame = new JButton("Start a New Game");
-        newGame.addActionListener(e ->{
-            frame.dispose();
-            new BoardGUI();
-        });
-        buttonHolder.add(newGame);
-
         JTextArea textArea = new JTextArea();
-        textArea.setFont(new Font("", Font.PLAIN, 20));
         textArea.setEditable(false);
-        JScrollPane scroll = new JScrollPane(textArea);
-		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         StringBuilder sb = new StringBuilder();
         ArrayList<Entry> scores;
@@ -366,7 +351,6 @@ public class BoardGUI implements java.awt.event.KeyListener {
 
         for (int i = 0; i < scores.size(); i++) {
             Entry entry = scores.get(i);
-            //sb.append("        ");
             sb.append(i + 1);
             sb.append(". ");
             sb.append(entry);
@@ -374,16 +358,9 @@ public class BoardGUI implements java.awt.event.KeyListener {
         }
 
         textArea.setText(sb.toString());
-        leaders.add(scroll);
-
-        //JSplitPane split = new JSplitPane(SwingConstants.HORIZONTAL, textArea, newGame);
-
-        //leaders.add(textArea);
-        //leaders.setVisible(true);
-        //leaders.add(split);
-        main.add(leaders, BorderLayout.CENTER);
-        main.add(buttonHolder, BorderLayout.PAGE_END);
-        cardPanel.add(main);
+        leaders.add(textArea);
+        leaders.setVisible(true);
+        cardPanel.add(leaders);
         layout.next(cardPanel);
     }
 

@@ -59,17 +59,33 @@ public class BoardGUI implements java.awt.event.KeyListener {
         frame.add(cardPanel);
         frame.setVisible(true);
 
-        JPanel chooseMode = new JPanel();
-        JLabel message = new JLabel("Select a Game Mode");
-        chooseMode.add(message);
+        JPanel main = new JPanel(new BorderLayout());
+
+        JPanel chooseMode = new JPanel(new BorderLayout());
+        Font labelFont = new Font("Helvetica", Font.BOLD, 180);
+        JLabel title = new JLabel("2048",SwingConstants.CENTER);
+        title.setForeground(new Color(0xF7603B));
+        title.setFont(labelFont);
+        JLabel message = new JLabel("Select a Game Mode", SwingConstants.CENTER);
+        Font messageFont = new Font("Helvetica", Font.BOLD, 25);
+        message.setFont(messageFont);
+        
+
+        JPanel buttons = new JPanel(new FlowLayout());
         JButton traditional = new JButton("Traditional");
         JButton time = new JButton("Time");
         JButton move = new JButton("Move Limit");
-        chooseMode.add(traditional);
-        chooseMode.add(time);
-        chooseMode.add(move);
+        chooseMode.add(title, BorderLayout.CENTER);
+        chooseMode.add(message, BorderLayout.SOUTH);
+        chooseMode.setBorder(BorderFactory.createEmptyBorder(140,0,10,0));
 
-        cardPanel.add(chooseMode);
+        buttons.add(traditional, BorderLayout.WEST);
+        buttons.add(time,BorderLayout.CENTER);
+        buttons.add(move,BorderLayout.EAST);
+
+        main.add(chooseMode, BorderLayout.NORTH);
+        main.add(buttons, BorderLayout.CENTER);
+        cardPanel.add(main);
 
         traditional.addActionListener(e ->{
             selected = GameModeType.TRADITIONAL;
@@ -96,7 +112,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
         leaderboard = new Leaderboard();
 
         controller.newGame(modeType);
-        
+
         setup(modeType);
     }
 

@@ -16,7 +16,6 @@ public class Controller {
 	 * Default constructor for controller class
 	 */
 	public Controller() {
-		board = null;
 		leaderboard = new Leaderboard();
 		newGame(GameModeType.TRADITIONAL);
 	}

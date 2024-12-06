@@ -51,8 +51,6 @@ During the game, the score earned from each move will be displayed on the center
 
 The code can be run by going into the directory where the code is located and running the following command:
 
-!!! we also need to show it compiles properly !!!
-
 ```
 java BoardGUI.java
 ```

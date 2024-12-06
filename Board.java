@@ -16,7 +16,6 @@ public class Board {
     private final Tile[][] grid;
     private final double NEW_TILE_PROB = 0.9;
     private int score;
-    private ColorScheme colorScheme = ColorScheme.RED;
 
     /**
      * Constructor for the Board class.
@@ -82,7 +81,7 @@ public class Board {
         Tile[][] gridCopy = new Tile[size][size];
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
-                gridCopy[row][col] = new Tile(grid[row][col].getValue(), colorScheme);
+                gridCopy[row][col] = new Tile(grid[row][col].getValue());
             }
         }
         return gridCopy;
@@ -99,7 +98,7 @@ public class Board {
     private void initializeBoard(int numTiles) {
         for (int row = 0; row < size; row++) {
             for (int column = 0; column < size; column++) {
-                grid[row][column] = new Tile(0, colorScheme);
+                grid[row][column] = new Tile();
             }
         }
         for (int i = 0; i < numTiles; i++) {
@@ -156,7 +155,7 @@ public class Board {
         // place new tile in the empty spot with a NEW_TILE_PROBability of
         // tile with value 2, and 1-NEW_TILE_PROB of tile with value 4
         int val = rand.nextDouble() < NEW_TILE_PROB ? 2 : 4;
-        grid[row][col] = new Tile(val, colorScheme);
+        grid[row][col] = new Tile(val);
     }
 
     /**
@@ -376,28 +375,28 @@ public class Board {
 
     // temporary method for tests only
     public void addTile(int row, int column, int value) {
-        grid[row][column] = new Tile(value, colorScheme);
+        grid[row][column] = new Tile(value);
     }
 
     // for tests
-    /**
-     * @return text version of the Board object
-     */
-    public String toString() {
-        String result = "";
-        String tile;
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (grid[i][j].isEmpty())
-                    tile = "*";
-                else
-                    tile = Integer.toString(grid[i][j].getValue());
-                result += String.format("%-8s", tile);
-            }
-            result += "\n";
-        }
-        return result;
-    }
+    // /**
+    //  * @return text version of the Board object
+    //  */
+    // public String toString() {
+    //     String result = "";
+    //     String tile;
+    //     for (int i = 0; i < size; i++) {
+    //         for (int j = 0; j < size; j++) {
+    //             if (grid[i][j].isEmpty())
+    //                 tile = "*";
+    //             else
+    //                 tile = Integer.toString(grid[i][j].getValue());
+    //             result += String.format("%-8s", tile);
+    //         }
+    //         result += "\n";
+    //     }
+    //     return result;
+    // }
 
     /**
      * Checks the winning condition
@@ -446,14 +445,5 @@ public class Board {
     
     public String getGameOverMessage() {
         return this.winningCondition() ? "You win!" : "You lose!";
-    }
-
-    public void switchColorScheme(ColorScheme newScheme) {
-        this.colorScheme = newScheme;
-        for (int row = 0; row < size; row++) {
-            for (int col = 0; col < size; col++) {
-                grid[row][col].switchColorScheme(newScheme);
-            }
-        }
     }
 }

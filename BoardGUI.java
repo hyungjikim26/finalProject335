@@ -26,12 +26,12 @@ public class BoardGUI implements java.awt.event.KeyListener {
     private JLabel timerLabel;
     private JLabel movesLeftLabel;
     private JLabel modeLabel;
-    private boolean isGameOver = false;
     private ColorScheme colorScheme = ColorScheme.RED;
     private JPanel currentScorePanel = null;
     private boolean scoreEffectActive = false;
     private JButton scoreEffectButton;
     private JPanel tiles;
+    private GameModeType selected;
 
 
     public static void main(String[] args) {
@@ -40,28 +40,70 @@ public class BoardGUI implements java.awt.event.KeyListener {
 
     public BoardGUI() {
         GameModeType selectedMode = chooseGameMode();
-        initializeGame(selectedMode);
+        //initializeGame(selectedMode);
+    }
+
+    private GameModeType getGameMode(GameModeType mode){
+        return mode;
     }
 
     public GameModeType chooseGameMode() {
-        Object[] options = { "Traditional", "Time Limit", "Move Limit" };
-        int selected = JOptionPane.showOptionDialog(null,
-                "Select a Game Mode",
-                "Game Mode Selection",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                null, options, options[0]);
+        frame = new JFrame("2048");
+        cardPanel = new JPanel();
+        layout = new CardLayout();
+        cardPanel.setLayout(layout);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(750, 780);
+        frame.setLocationRelativeTo(null);
+        frame.add(cardPanel);
 
-        switch (selected) {
-            case 0:
-                return GameModeType.TRADITIONAL;
-            case 1:
-                return GameModeType.TIME_LIMIT;
-            case 2:
-                return GameModeType.MOVE_LIMIT;
-            default:
-                return GameModeType.TRADITIONAL;
-        }
+        JPanel main = new JPanel(new BorderLayout());
+
+        JPanel chooseMode = new JPanel(new BorderLayout());
+        Font labelFont = new Font("Helvetica", Font.BOLD, 180);
+        JLabel title = new JLabel("2048",SwingConstants.CENTER);
+        title.setForeground(new Color(0xF7603B));
+        title.setFont(labelFont);
+        JLabel message = new JLabel("Select a Game Mode", SwingConstants.CENTER);
+        Font messageFont = new Font("Helvetica", Font.BOLD, 25);
+        message.setFont(messageFont);
+        
+
+        JPanel buttons = new JPanel(new FlowLayout());
+        JButton traditional = new JButton("Traditional");
+        JButton time = new JButton("Time");
+        JButton move = new JButton("Move Limit");
+        chooseMode.add(title, BorderLayout.CENTER);
+        chooseMode.add(message, BorderLayout.SOUTH);
+        chooseMode.setBorder(BorderFactory.createEmptyBorder(140,0,10,0));
+
+        buttons.add(traditional, BorderLayout.WEST);
+        buttons.add(time,BorderLayout.CENTER);
+        buttons.add(move,BorderLayout.EAST);
+
+        main.add(chooseMode, BorderLayout.NORTH);
+        main.add(buttons, BorderLayout.CENTER);
+        cardPanel.add(main);
+
+        traditional.addActionListener(e ->{
+            selected = GameModeType.TRADITIONAL;
+            initializeGame(GameModeType.TRADITIONAL);
+            layout.next(cardPanel);
+        });
+
+        time.addActionListener(e ->{
+            selected = GameModeType.TIME_LIMIT;
+            initializeGame(GameModeType.TIME_LIMIT);
+            layout.next(cardPanel);
+        });
+
+        move.addActionListener(e ->{
+            selected = GameModeType.MOVE_LIMIT;
+            initializeGame(GameModeType.MOVE_LIMIT);
+            layout.next(cardPanel);
+        });
+        frame.setVisible(true);
+        return selected;
     }
 
     public void initializeGame(GameModeType modeType) {
@@ -102,7 +144,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
     @Override
     public void keyPressed(java.awt.event.KeyEvent e) {
         // prevent further moves when game is over
-        if (isGameOver) {
+        if (controller.isGameOver()) {
             return;
         }
 
@@ -185,7 +227,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
 	        long elapsedTime = 0;
 
 	        @Override
-	        public void onTimeUpdate(long timeDelta) {
+	        public boolean onTimeUpdate(long timeDelta) {
 	            elapsedTime += timeDelta; 
 	            if (elapsedTime >= 100) { 
 	                transparency -= 40; 
@@ -193,6 +235,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
 	                scoreEffect.setForeground(new Color(119, 110, 101, transparency)); 
 	                elapsedTime = 0; 
 	            }
+	            return false;
 	        }
 	    };
 
@@ -221,13 +264,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
 	}
 
     private void setup(GameModeType modeType) {
-        frame = new JFrame("2048");
-        cardPanel = new JPanel();
-        layout = new CardLayout();
-        cardPanel.setLayout(layout);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(750, 780);
-        frame.setLocationRelativeTo(null);
+
 
         Font font = new Font("Clear Sans", Font.BOLD, 12);
 
@@ -257,14 +294,17 @@ public class BoardGUI implements java.awt.event.KeyListener {
             
             controller.startTimer(new TimeListener() {
                 @Override
-                public void onTimeUpdate(long remainingTime) {
+                public boolean onTimeUpdate(long remainingTime) {
                     SwingUtilities.invokeLater(() -> {
+                    	if (controller.won() || controller.lost()) {
+                    		return;
+                    	}
                         timerLabel.setText("Time Remaining: " + remainingTime / 1000 + "s");
-                        isGameOver = controller.getTimeUp();
-                        if (isGameOver){
-                            handleGameOver();
+                        if (controller.isGameOver()){
+                        	handleGameOver();
                         }
                     });
+                    return controller.won() || controller.lost();
                 }
             });
 
@@ -324,8 +364,8 @@ public class BoardGUI implements java.awt.event.KeyListener {
 
         cardPanel.add(split);
         cardPanel.setVisible(true);
-        frame.add(cardPanel);
-        frame.setVisible(true);
+        //frame.add(cardPanel);
+        //frame.setVisible(true);
     }
 
     private void toggleScoreEffect() {
@@ -342,17 +382,10 @@ public class BoardGUI implements java.awt.event.KeyListener {
         colorScheme = (colorScheme == ColorScheme.BLUE) 
             ? ColorScheme.RED 
             : ColorScheme.BLUE;
-        
-        controller.switchColorScheme(colorScheme);
-        
+                
         tiles.setBackground(colorScheme == ColorScheme.BLUE ? new Color(0xD0D9E8) : new Color(0xbbada0));
         // update all tiles
         Tile[][] curGrid = controller.getGrid();
-        for (int j = 0; j <= 3; j++) {
-            for (int k = 0; k <= 3; k++) {
-                curGrid[j][k].switchColorScheme(colorScheme);
-            }
-        }
         int slotNum = 0;
         for (int j = 0; j <= 3; j++) {
             for (int k = 0; k <= 3; k++) {
@@ -365,6 +398,79 @@ public class BoardGUI implements java.awt.event.KeyListener {
         tiles.repaint();
         tiles.requestFocusInWindow();
     }
+    private Color decideColor(int value) {   
+        switch (colorScheme) {
+            case BLUE:
+                return calculateColorBlue(value);
+            case RED:
+                return calculateColorRed(value);
+            default:
+                return calculateColorBlue(value);
+        }
+    }
+
+    private Color calculateColorRed(int value){
+        switch (value) {
+            case 0:
+                return new Color(254, 250, 250);
+            case 2:
+                return new Color(0xEEE4DB);
+            case 4:
+                return new Color(0xEFDFCB);
+            case 8:
+                return new Color(0xF3B279);
+            case 16:
+                return new Color(0xF69564);
+            case 32:
+                return new Color(0xF67C5F);
+            case 64:
+                return new Color(0xF7603B);
+            case 128:
+                return new Color(0xECD072);
+            case 256:
+                return new Color(0xEDCC62);
+            case 512:
+                return new Color(0xEEC950);
+            case 1024:
+                return new Color(0xEEC43F);
+            case 2048:
+                return new Color(0xEDC12E);
+            default:
+                return new Color(0xEDC12E);
+        }
+    }
+
+ 
+    private Color calculateColorBlue(int value) {
+        switch (value) {
+            case 0:
+                return new Color(250, 250, 254);
+            case 2:
+                return new Color(0xfafaff);
+            case 4:
+                return new Color(0xf0f4fc);
+            case 8:
+                return new Color(0xA2C2E3);
+            case 16:
+                return new Color(0x8DAFE0);
+            case 32:
+                return new Color(0x7F98D7);
+            case 64:
+                return new Color(0x5C84D0);
+            case 128:
+                return new Color(0x4B74B9);
+            case 256:
+                return new Color(0x3E64A3);
+            case 512:
+                return new Color(0x335B8C);
+            case 1024:
+                return new Color(0x2C5181);
+            case 2048:
+                return new Color(0x204773);
+            default:
+                return new Color(0x204773);
+        }
+    }
 
     public void changeTile(Tile tile, int slotNum) {
         JLabel slot = slots[slotNum];
@@ -374,7 +480,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
             tilePanel.setBackground(colorScheme == ColorScheme.BLUE ? new Color(0xE1E8F0) : new Color(0xcdc1b4));
         } else {
             slot.setText(Integer.toString(tile.getValue()));
-            tilePanel.setBackground(tile.getColor());
+            tilePanel.setBackground(decideColor(tile.getValue()));
 
             // change font color for dark tiles
             if (tile.getValue() < 8) {
@@ -383,7 +489,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
                 slot.setForeground(Color.WHITE);
             }
         }
-        slot.setBackground(tile.getColor());
+        slot.setBackground(decideColor(tile.getValue()));
         slot.setOpaque(true);
         // slot.setBorder(BorderFactory.createCompoundBorder(
         //     BorderFactory.createLineBorder(Color.WHITE),
@@ -413,15 +519,25 @@ public class BoardGUI implements java.awt.event.KeyListener {
     }
 
     private void displayLeaderboard() {
-        JPanel leaders = new JPanel();
-        
-        //JDialog dialog = new JDialog();
-        //dialog.setTitle("Leaderboard");
-        //dialog.setSize(300, 300);
-        //dialog.setLocationRelativeTo(null);
+        JPanel main = new JPanel(new BorderLayout());
+        JPanel leaders = new JPanel(new GridLayout());
+        JPanel buttonHolder = new JPanel();
+
+        leaders.setPreferredSize(new Dimension(750, 745));
+        buttonHolder.setPreferredSize((new Dimension(750,35)));
+
+        JButton newGame = new JButton("Start a New Game");
+        newGame.addActionListener(e ->{
+            frame.dispose();
+            new BoardGUI();
+        });
+        buttonHolder.add(newGame);
 
         JTextArea textArea = new JTextArea();
+        textArea.setFont(new Font("", Font.PLAIN, 20));
         textArea.setEditable(false);
+        JScrollPane scroll = new JScrollPane(textArea);
+        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         StringBuilder sb = new StringBuilder();
         ArrayList<Entry> scores;
@@ -454,15 +570,16 @@ public class BoardGUI implements java.awt.event.KeyListener {
         }
 
         textArea.setText(sb.toString());
-        leaders.add(textArea);
-        leaders.setVisible(true);
-        cardPanel.add(leaders);
+
+        leaders.add(scroll);
+
+        main.add(leaders, BorderLayout.CENTER);
+        main.add(buttonHolder, BorderLayout.PAGE_END);
+        cardPanel.add(main);
         layout.next(cardPanel);
     }
 
     private void handleGameOver() {
-        isGameOver = true;
-
         int finalScore = controller.getScore();
 
         String gameOverMessage = getGameOverMessage();

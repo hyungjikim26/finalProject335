@@ -26,7 +26,6 @@ public class BoardGUI implements java.awt.event.KeyListener {
     private JLabel timerLabel;
     private JLabel movesLeftLabel;
     private JLabel modeLabel;
-    private boolean isGameOver = false;
     private ColorScheme colorScheme = ColorScheme.RED;
     private JPanel currentScorePanel = null;
     private boolean scoreEffectActive = false;
@@ -146,7 +145,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
     @Override
     public void keyPressed(java.awt.event.KeyEvent e) {
         // prevent further moves when game is over
-        if (isGameOver) {
+        if (controller.isGameOver()) {
             return;
         }
 
@@ -229,7 +228,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
 	        long elapsedTime = 0;
 
 	        @Override
-	        public void onTimeUpdate(long timeDelta) {
+	        public boolean onTimeUpdate(long timeDelta) {
 	            elapsedTime += timeDelta; 
 	            if (elapsedTime >= 100) { 
 	                transparency -= 40; 
@@ -237,6 +236,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
 	                scoreEffect.setForeground(new Color(119, 110, 101, transparency)); 
 	                elapsedTime = 0; 
 	            }
+	            return false;
 	        }
 	    };
 
@@ -295,14 +295,18 @@ public class BoardGUI implements java.awt.event.KeyListener {
             
             controller.startTimer(new TimeListener() {
                 @Override
-                public void onTimeUpdate(long remainingTime) {
+                public boolean onTimeUpdate(long remainingTime) {
                     SwingUtilities.invokeLater(() -> {
+                    	if (controller.won() || controller.lost()) {
+                    		return;
+                    	}
                         timerLabel.setText("Time Remaining: " + remainingTime / 1000 + "s");
-                        isGameOver = controller.getTimeUp();
-                        if (isGameOver){
-                            handleGameOver();
+                        System.out.println(controller.isGameOver());
+                        if (controller.isGameOver()){
+                        	handleGameOver();
                         }
                     });
+                    return controller.won() || controller.lost();
                 }
             });
 
@@ -578,8 +582,6 @@ public class BoardGUI implements java.awt.event.KeyListener {
     }
 
     private void handleGameOver() {
-        isGameOver = true;
-
         int finalScore = controller.getScore();
 
         String gameOverMessage = getGameOverMessage();

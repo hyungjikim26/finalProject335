@@ -104,6 +104,13 @@ public class Controller {
 		return board.isGameOver();
 	}
 	
+	public boolean won() {
+		return board.winningCondition();
+	}
+	public boolean lost() {
+		return board.losingCondition();
+	}
+	
 	public String getGameOverMessage() {
 		return board.getGameOverMessage();
 	}

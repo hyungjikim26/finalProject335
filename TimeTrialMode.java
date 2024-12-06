@@ -32,11 +32,16 @@ public class TimeTrialMode extends Board {
             @Override
             public void run(){
                 remaining -= 1000;
-                listener.onTimeUpdate(remaining);
+                boolean shouldStop = listener.onTimeUpdate(remaining);
 
+                if (shouldStop) {
+                    timer.cancel();
+                    timer.purge();
+                }
                 if (remaining <= 0){
                     timeUp = true;
                     timer.cancel();
+                    timer.purge();
                 }
             }
         };
@@ -50,7 +55,7 @@ public class TimeTrialMode extends Board {
      */
     @Override
     public boolean isGameOver() {
-        return timeUp || this.losingCondition() || this.winningCondition();
+        return timeUp || super.isGameOver();
     }
 
     /**

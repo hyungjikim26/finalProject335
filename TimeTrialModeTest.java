@@ -43,7 +43,7 @@ class TimeTrialModeTest {
 	    
 	    board.start(new TimeListener() {
 	        @Override
-	        public void onTimeUpdate(long remainingTime) {}
+	        public boolean onTimeUpdate(long remainingTime) { return false;}
 	    });
 
 	        Thread.sleep(121000); 

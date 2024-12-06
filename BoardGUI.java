@@ -57,7 +57,6 @@ public class BoardGUI implements java.awt.event.KeyListener {
         frame.setSize(750, 780);
         frame.setLocationRelativeTo(null);
         frame.add(cardPanel);
-        frame.setVisible(true);
 
         JPanel main = new JPanel(new BorderLayout());
 
@@ -105,6 +104,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
             layout.next(cardPanel);
         });
         System.out.println(selected);
+        frame.setVisible(true);
         return selected;
     }
 

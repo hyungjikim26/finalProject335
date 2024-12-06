@@ -4,7 +4,7 @@ This is a final project for CSC 335 (Fall 2024) at the University of Arizona.
 
 ## Overview of the Software
 
-This software is a Java implementation of the game 2048. The GUI is implemented using Java Swing.
+This software is a Java implementation of the game 2048. The GUI is implemented using Java Swing. The software uses a Model-View-Control design. The Board class acts as the model, with the Controller class as the controller and the BoardGUI class as the view.
 
 ## WOW Factors
 

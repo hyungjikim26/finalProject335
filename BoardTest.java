@@ -327,4 +327,20 @@ class BoardTest {
 		boardE = new Board(4, 0);
 		assertEquals(0, boardE.getScore());
 	}
+
+	@Test
+	void testGetGameOverMessage() {
+		Board board = new Board(2, 0);
+		assertFalse(board.winningCondition());
+		board.addTile(0, 0, 2048);
+		assertEquals(board.getGameOverMessage(), "You win!");
+
+		int[][] values = {{2, 4, 2, 4}, 
+						  {4, 2, 4, 2}, 
+						  {2, 4, 2, 4}, 
+						  {4, 2, 4, 2}};
+		board = createBoard(values);
+		assertEquals(board.getGameOverMessage(), "You lose!");
+	}
+
 }

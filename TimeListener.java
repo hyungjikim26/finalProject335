@@ -7,5 +7,5 @@
  */
 
 public interface TimeListener {
-    boolean onTimeUpdate(long elapsedTime);
+    void onTimeUpdate(long elapsedTime);
 }

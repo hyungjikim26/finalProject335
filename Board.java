@@ -379,24 +379,24 @@ public class Board {
     }
 
     // for tests
-    /**
-     * @return text version of the Board object
-     */
-    public String toString() {
-        String result = "";
-        String tile;
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (grid[i][j].isEmpty())
-                    tile = "*";
-                else
-                    tile = Integer.toString(grid[i][j].getValue());
-                result += String.format("%-8s", tile);
-            }
-            result += "\n";
-        }
-        return result;
-    }
+    // /**
+    //  * @return text version of the Board object
+    //  */
+    // public String toString() {
+    //     String result = "";
+    //     String tile;
+    //     for (int i = 0; i < size; i++) {
+    //         for (int j = 0; j < size; j++) {
+    //             if (grid[i][j].isEmpty())
+    //                 tile = "*";
+    //             else
+    //                 tile = Integer.toString(grid[i][j].getValue());
+    //             result += String.format("%-8s", tile);
+    //         }
+    //         result += "\n";
+    //     }
+    //     return result;
+    // }
 
     /**
      * Checks the winning condition

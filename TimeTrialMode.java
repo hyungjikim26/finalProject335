@@ -32,9 +32,9 @@ public class TimeTrialMode extends Board {
             @Override
             public void run(){
                 remaining -= 1000;
-                boolean shouldStop = listener.onTimeUpdate(remaining);
+                listener.onTimeUpdate(remaining);
 
-                if (shouldStop) {
+                if (isGameOver()) {
                     timer.cancel();
                     timer.purge();
                 }
@@ -48,7 +48,7 @@ public class TimeTrialMode extends Board {
 
         timer.scheduleAtFixedRate(task, 0, 1000);
     }
-
+    
     /**
      * Determines if the game is over.
      * @return true if the game is over, false otherwise

@@ -175,4 +175,31 @@ class MoveLimitModeTest {
 		}
 		assertEquals(14, emptySpots);
     }	
+    
+    @Test
+    void testMoveUp() {
+        MoveLimitMode board = new MoveLimitMode(4, 0);
+        board.addTile(0, 0, 2);
+        board.addTile(1, 0, 2);
+
+        int movesLeftBefore = board.getMovesLeft();
+        boolean isChanged = board.moveUp();
+
+        assertTrue(isChanged);
+        assertEquals(movesLeftBefore - 1, board.getMovesLeft());
+    }
+
+    @Test
+    void testMoveRight() {
+        MoveLimitMode board = new MoveLimitMode(4, 0);
+        board.addTile(0, 2, 2);
+        board.addTile(0, 3, 2);
+
+        int movesLeftBefore = board.getMovesLeft();
+        boolean isChanged = board.moveRight();
+
+        assertTrue(isChanged);
+        assertEquals(movesLeftBefore - 1, board.getMovesLeft());
+    }
+
 }

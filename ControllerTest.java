@@ -215,6 +215,7 @@ class ControllerTest {
 		assertEquals(-1, controllerA.getMovesLeft());
 		assertFalse(controllerA.getTimeUp());
 		assertTrue(controllerA.isGameOver());
+		assertEquals("You win!", controllerA.getGameOverMessage());
 		
 		Controller controllerB = new Controller(GameModeType.MOVE_LIMIT);
 		int[][] matrixB = 	{{2, 4, 8, 16},
@@ -227,6 +228,7 @@ class ControllerTest {
 		assertEquals(125, controllerB.getMovesLeft());
 		assertFalse(controllerB.getTimeUp());
 		assertTrue(controllerB.isGameOver());
+		assertEquals("You lose!", controllerB.getGameOverMessage());
 		
 		Controller controllerC = new Controller(GameModeType.MOVE_LIMIT);
 		int[][] matrixC = 	{{0, 0, 0, 0},
@@ -242,6 +244,7 @@ class ControllerTest {
 		assertEquals(0, controllerC.getMovesLeft());
 		assertFalse(controllerC.getTimeUp());
 		assertTrue(controllerC.isGameOver());
+		assertEquals("No moves left. You lose!", controllerC.getGameOverMessage());
 		
 		Controller controllerD = new Controller(GameModeType.TIME_LIMIT);
 		assertFalse(controllerD.won());
@@ -249,6 +252,7 @@ class ControllerTest {
 		assertFalse(controllerD.getTimeUp());
 		assertEquals(-1, controllerD.getMovesLeft());
 		assertFalse(controllerD.isGameOver());
+		assertEquals("You lose!", controllerD.getGameOverMessage());
 	}
 	
 	@Test

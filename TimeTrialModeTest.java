@@ -61,7 +61,6 @@ class TimeTrialModeTest {
 
         for (int i = 0; i < timeTrialMode.getSize(); i++) {
 			for (int j = 0; j < timeTrialMode.getSize(); j++) {
-				System.out.println(grid[i][j].getValue());
 				if (grid[i][j].isEmpty()) {
 					emptySpots++;
 				}

@@ -167,7 +167,6 @@ class MoveLimitModeTest {
 
         for (int i = 0; i < moveLimitMode.getSize(); i++) {
 			for (int j = 0; j < moveLimitMode.getSize(); j++) {
-				System.out.println(grid[i][j].getValue());
 				if (grid[i][j].isEmpty()) {
 					emptySpots++;
 				}

@@ -210,8 +210,6 @@ class ControllerTest {
 				 			 	 {0, 2048, 512, 0},
 				 			 	 {64, 0, 0, 32}};
 		createBoard(controllerA, matrixA);
-		assertTrue(controllerA.won());
-		assertFalse(controllerA.lost());
 		assertEquals(-1, controllerA.getMovesLeft());
 		assertFalse(controllerA.getTimeUp());
 		assertTrue(controllerA.isGameOver());
@@ -223,8 +221,6 @@ class ControllerTest {
 				 			 {8, 16, 2, 4},
 				 			 {4, 8, 16, 2}};
 		createBoard(controllerB, matrixB);
-		assertFalse(controllerB.won());
-		assertTrue(controllerB.lost());
 		assertEquals(125, controllerB.getMovesLeft());
 		assertFalse(controllerB.getTimeUp());
 		assertTrue(controllerB.isGameOver());
@@ -239,16 +235,12 @@ class ControllerTest {
 			controllerC.moveBoardDown();
 			createBoard(controllerC, matrixC);
 		}
-		assertFalse(controllerC.won());
-		assertFalse(controllerC.lost());
 		assertEquals(0, controllerC.getMovesLeft());
 		assertFalse(controllerC.getTimeUp());
 		assertTrue(controllerC.isGameOver());
 		assertEquals("No moves left. You lose!", controllerC.getGameOverMessage());
 		
 		Controller controllerD = new Controller(GameModeType.TIME_LIMIT);
-		assertFalse(controllerD.won());
-		assertFalse(controllerD.lost());
 		assertFalse(controllerD.getTimeUp());
 		assertEquals(-1, controllerD.getMovesLeft());
 		assertFalse(controllerD.isGameOver());
@@ -298,6 +290,4 @@ class ControllerTest {
 			assertEquals(allScoresF.size(), topScoresF.size());
 		}
 	}
-
-
 }

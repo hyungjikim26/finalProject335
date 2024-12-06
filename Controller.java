@@ -16,22 +16,15 @@ public class Controller {
 	 * Default constructor for controller class
 	 */
 	public Controller() {
-		board = null;
 		leaderboard = new Leaderboard();
 		newGame(GameModeType.TRADITIONAL);
 	}
 	
-	/** TODO: DELETE
-	 * Constructor for the Board class.
+	/**
+	 * Creates a new board of of specified game mode
 	 * 
-	 * @pre numTiles >= 0 && numTiles <= size*size && size > 0
-	 * @post a new Controller object is created with Board object being an instance
-	 * @param size     the size of the board
-	 * @param numTiles the number of tiles to place on the board
+	 * @param mode - game mode of current game
 	 */
-	// Constructor was here
-	
-	
 	public void newGame(GameModeType mode) {
 		switch (mode) {
 		case TRADITIONAL:
@@ -46,6 +39,11 @@ public class Controller {
 		}
 	}
 	
+	/**
+	 * Creates a new controller with board of specified game mode
+	 * 
+	 * @param mode - game mode of current game
+	 */
 	public Controller(GameModeType mode) {
 		board = null;
 		leaderboard = new Leaderboard();
@@ -100,21 +98,25 @@ public class Controller {
 		}
 	}
 	
+	/**
+	 * @return true if game is finished (won or lost), false if not (still playing)
+	 */
 	public boolean isGameOver() {
 		return board.isGameOver();
 	}
 	
-	public boolean won() {
-		return board.winningCondition();
-	}
-	public boolean lost() {
-		return board.losingCondition();
-	}
-	
+	/**
+	 * @pre board.isGameOver() == true
+	 * @post the returned message shows appropriate win or loss message
+	 * @return message which is displayed when the game is over
+	 */
 	public String getGameOverMessage() {
 		return board.getGameOverMessage();
 	}
 	
+	/**
+	 * @return mode of the current game 
+	 */
 	public GameModeType getGameMode() {
 		if (board instanceof TimeTrialMode timeTrialMode ) {
 			return GameModeType.TIME_LIMIT;
@@ -125,6 +127,10 @@ public class Controller {
 		return GameModeType.TRADITIONAL;
 	}
 	
+	/**
+	 * @return if game mode is MOVE_LIMIT, return amount of moves left
+	 *         otherwise return -1
+	 */
 	public int getMovesLeft() {
 		if (board instanceof MoveLimitMode moveLimitMode) {
 			return moveLimitMode.getMovesLeft();
@@ -132,12 +138,22 @@ public class Controller {
 		return -1;
 	}
 	
+	/**
+	 * If game mode is TIME_LIMIT, it starts a timer in class TimeTrialMode.
+	 * Otherwise nothing happens.
+	 * 
+	 * @param listener - used to keep track of time in UI
+	 */
 	public void startTimer(TimeListener listener) {
 		if (board instanceof TimeTrialMode timeTrialMode ) {
 			timeTrialMode.start(listener);
 		}
 	}
 	
+	/**
+	 * @return if game mode is TIME_LOMIT, return true if timer is up, false if not.
+	 *         if game mode is not TIME_LIMIT, return false
+	 */
 	public boolean getTimeUp() {
 		if (board instanceof TimeTrialMode timeTrialMode ) {
 			return timeTrialMode.getTimeUp();
@@ -159,6 +175,13 @@ public class Controller {
 		return board.getGrid();
 	}
 	
+	/**
+	 * Adds a tile of specific value to a specific location of board instance
+	 * 
+	 * @param row    - row location to which to add a tile
+	 * @param column - column location to which to add a tile
+	 * @param value  - value of the Tile which we want to add
+	 */
 	public void addTile(int row, int column, int value) {
 		board.addTile(row, column, value);
 	}

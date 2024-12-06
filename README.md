@@ -29,6 +29,8 @@ This is a mode where the user has a set amount of moves to reach 2048. Current m
 
 ## Extra Features
 
+These are the extra features that we implemented for fun (!)
+
 ### Changeable Color Schemes
 
 During the game, the user can change the color scheme of the game board. By default, the color scheme is set to the color scheme of the original 2048 game (red/yellow). The user can click on the **Change Color** button to change the color scheme to blue. Colors can be changed back and forth between red and blue.
@@ -43,7 +45,7 @@ During the game, the user can change the color scheme of the game board. By defa
 
 During the game, the score earned from each move will be displayed on the center of the game board. The score effect can be toggled on and off by clicking the **Score Effect** button.
 
-### Main Menu
+<!-- ### Main Menu -->
 
 ## Instructions
 

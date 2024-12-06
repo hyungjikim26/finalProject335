@@ -52,6 +52,25 @@ class TimeTrialModeTest {
 	    assertEquals(board.getGameOverMessage(), "Time is up. You lose!");
 	}
 
+	@Test
+    void testDefaultConstructor() {
+        // default will be 4x4 with two initial tiles
+        TimeTrialMode timeTrialMode = new TimeTrialMode();
+        Tile[][] grid = timeTrialMode.getGrid();
+        int emptySpots = 0;
+
+        for (int i = 0; i < timeTrialMode.getSize(); i++) {
+			for (int j = 0; j < timeTrialMode.getSize(); j++) {
+				System.out.println(grid[i][j].getValue());
+				if (grid[i][j].isEmpty()) {
+					emptySpots++;
+				}
+			}
+		}
+		assertEquals(14, emptySpots);
+		assertFalse(timeTrialMode.getTimeUp());
+    }	
+
 
 
 }

@@ -156,6 +156,23 @@ class MoveLimitModeTest {
         assertFalse(moveLimitMode.moveLeft());
         int movesLeftFinal = moveLimitMode.getMovesLeft();
         assertEquals(0, movesLeftNext - movesLeftFinal);
-        
     }
+
+    @Test
+    void testDefaultConstructor() {
+        // default will be 4x4 with two initial tiles
+        MoveLimitMode moveLimitMode = new MoveLimitMode();
+        Tile[][] grid = moveLimitMode.getGrid();
+        int emptySpots = 0;
+
+        for (int i = 0; i < moveLimitMode.getSize(); i++) {
+			for (int j = 0; j < moveLimitMode.getSize(); j++) {
+				System.out.println(grid[i][j].getValue());
+				if (grid[i][j].isEmpty()) {
+					emptySpots++;
+				}
+			}
+		}
+		assertEquals(14, emptySpots);
+    }	
 }

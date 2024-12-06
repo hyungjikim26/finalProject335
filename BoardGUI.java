@@ -102,7 +102,6 @@ public class BoardGUI implements java.awt.event.KeyListener {
             initializeGame(GameModeType.MOVE_LIMIT);
             layout.next(cardPanel);
         });
-        System.out.println(selected);
         frame.setVisible(true);
         return selected;
     }
@@ -301,7 +300,6 @@ public class BoardGUI implements java.awt.event.KeyListener {
                     		return;
                     	}
                         timerLabel.setText("Time Remaining: " + remainingTime / 1000 + "s");
-                        System.out.println(controller.isGameOver());
                         if (controller.isGameOver()){
                         	handleGameOver();
                         }

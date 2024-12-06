@@ -50,7 +50,12 @@ During the game, the score earned from each move will be displayed on the center
 ## Instructions
 
 The code can be run by going into the directory where the code is located and running the following command:
+javac *.java
 
+Once the code has been compiled, enter the following command:
+java BoardGUI.java
+
+From there, the GUI will appear and the user will be prompted to click a button to select a Game Mode. Once that has been done, the user will be able to play the game using either the arrow keys or the wasd keys. Once the user either wins or loses the game, they will be prompted to enter their name to be added to the leaderboard and to select whether to display all scores or only the top 10 on the leaderboard. After doing so, the leaderboard will be displayed along with a button that allows the user to start a new game.
 ```
 java BoardGUI.java
 ```

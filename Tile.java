@@ -8,8 +8,6 @@
 
 public class Tile {
     private int value ;
-    private boolean isMerging = false;
-
 
     public Tile(int value) {
         this.value = value;
@@ -24,7 +22,6 @@ public class Tile {
         if (other.getValue() == value){
             value *= 2;
             other.destroy();
-            isMerging = true;
         }
     }
 
@@ -42,13 +39,5 @@ public class Tile {
     
     public boolean isEmpty() {
     	return value == 0;
-    }
-
-    public boolean isMerging() {
-        return isMerging;
-    }
-
-    public void setMerging(boolean merging) {
-        isMerging = merging;
     }
 }

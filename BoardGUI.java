@@ -342,17 +342,10 @@ public class BoardGUI implements java.awt.event.KeyListener {
         colorScheme = (colorScheme == ColorScheme.BLUE) 
             ? ColorScheme.RED 
             : ColorScheme.BLUE;
-        
-        controller.switchColorScheme(colorScheme);
-        
+                
         tiles.setBackground(colorScheme == ColorScheme.BLUE ? new Color(0xD0D9E8) : new Color(0xbbada0));
         // update all tiles
         Tile[][] curGrid = controller.getGrid();
-        for (int j = 0; j <= 3; j++) {
-            for (int k = 0; k <= 3; k++) {
-                curGrid[j][k].switchColorScheme(colorScheme);
-            }
-        }
         int slotNum = 0;
         for (int j = 0; j <= 3; j++) {
             for (int k = 0; k <= 3; k++) {
@@ -365,6 +358,79 @@ public class BoardGUI implements java.awt.event.KeyListener {
         tiles.repaint();
         tiles.requestFocusInWindow();
     }
+    private Color decideColor(int value) {   
+        switch (colorScheme) {
+            case BLUE:
+                return calculateColorBlue(value);
+            case RED:
+                return calculateColorRed(value);
+            default:
+                return calculateColorBlue(value);
+        }
+    }
+
+    private Color calculateColorRed(int value){
+        switch (value) {
+            case 0:
+                return new Color(254, 250, 250);
+            case 2:
+                return new Color(0xEEE4DB);
+            case 4:
+                return new Color(0xEFDFCB);
+            case 8:
+                return new Color(0xF3B279);
+            case 16:
+                return new Color(0xF69564);
+            case 32:
+                return new Color(0xF67C5F);
+            case 64:
+                return new Color(0xF7603B);
+            case 128:
+                return new Color(0xECD072);
+            case 256:
+                return new Color(0xEDCC62);
+            case 512:
+                return new Color(0xEEC950);
+            case 1024:
+                return new Color(0xEEC43F);
+            case 2048:
+                return new Color(0xEDC12E);
+            default:
+                return new Color(0xEDC12E);
+        }
+    }
+
+ 
+    private Color calculateColorBlue(int value) {
+        switch (value) {
+            case 0:
+                return new Color(250, 250, 254);
+            case 2:
+                return new Color(0xfafaff);
+            case 4:
+                return new Color(0xf0f4fc);
+            case 8:
+                return new Color(0xA2C2E3);
+            case 16:
+                return new Color(0x8DAFE0);
+            case 32:
+                return new Color(0x7F98D7);
+            case 64:
+                return new Color(0x5C84D0);
+            case 128:
+                return new Color(0x4B74B9);
+            case 256:
+                return new Color(0x3E64A3);
+            case 512:
+                return new Color(0x335B8C);
+            case 1024:
+                return new Color(0x2C5181);
+            case 2048:
+                return new Color(0x204773);
+            default:
+                return new Color(0x204773);
+        }
+    }
 
     public void changeTile(Tile tile, int slotNum) {
         JLabel slot = slots[slotNum];
@@ -374,7 +440,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
             tilePanel.setBackground(colorScheme == ColorScheme.BLUE ? new Color(0xE1E8F0) : new Color(0xcdc1b4));
         } else {
             slot.setText(Integer.toString(tile.getValue()));
-            tilePanel.setBackground(tile.getColor());
+            tilePanel.setBackground(decideColor(tile.getValue()));
 
             // change font color for dark tiles
             if (tile.getValue() < 8) {
@@ -383,7 +449,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
                 slot.setForeground(Color.WHITE);
             }
         }
-        slot.setBackground(tile.getColor());
+        slot.setBackground(decideColor(tile.getValue()));
         slot.setOpaque(true);
         // slot.setBorder(BorderFactory.createCompoundBorder(
         //     BorderFactory.createLineBorder(Color.WHITE),

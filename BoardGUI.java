@@ -2,7 +2,8 @@
  * File: BoardGUI.java
  * Authors: Claire O'Brien (obrien9), Hyungji Kim (hyungjikim),
  *          Juwon Lee (juwonlee), Tatiana Rastoskueva (trastoskueva)
- * Purpose:
+ * Purpose: TThe BoardGUI class manages the graphical interface of the game board,
+ *          displaying tiles and handling user interactions.
  * 
  */
 

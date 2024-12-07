@@ -116,6 +116,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
      * based on the selected GameModeType, and call setUp()
      * to create the main part of the GUI
      * @return void
+     * @param modeType the GameModeType that was selected
      */
     public void initializeGame(GameModeType modeType) {
         controller.newGame(modeType);
@@ -288,6 +289,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
      * current score, the time/moves remaining, and the buttons to 
      * toggle the color scheme and score display effect.
      * @return void
+     * @param modeType the GameModeType that was selected
      */
     private void setup(GameModeType modeType) {
         Font font = new Font("Clear Sans", Font.BOLD, 12);
@@ -421,6 +423,12 @@ public class BoardGUI implements java.awt.event.KeyListener {
         tiles.repaint();
         tiles.requestFocusInWindow();
     }
+    /**
+     * Switch between the red or blue color schemes.
+     * @return the Color of the tile based on the color scheme
+     * and the tile's value
+     * @param value the value of a tile
+     */
     private Color decideColor(int value) {   
         switch (colorScheme) {
             case BLUE:
@@ -432,6 +440,11 @@ public class BoardGUI implements java.awt.event.KeyListener {
         }
     }
 
+    /**
+     * Switch between the red or blue color schemes.
+     * @return the Color of a tile given its value
+     * @param value, the value of a tile
+     */
     private Color calculateColorRed(int value){
         switch (value) {
             case 0:
@@ -463,7 +476,11 @@ public class BoardGUI implements java.awt.event.KeyListener {
         }
     }
 
- 
+    /**
+     * Switch between the red or blue color schemes.
+     * @return the Color of a tile given its value
+     * @param value, the value of a tile
+     */
     private Color calculateColorBlue(int value) {
         switch (value) {
             case 0:
@@ -496,8 +513,10 @@ public class BoardGUI implements java.awt.event.KeyListener {
     }
 
     /**
-     * Set the color and numbers of each of the tiles.
+     * Set the color and numbers of a given tile.
      * @return void
+     * @param tile, the Tile object to be changed.
+     * @param slotNum, the tile's position on the grid (0-15) 
      */
     public void changeTile(Tile tile, int slotNum) {
         JLabel slot = slots[slotNum];
@@ -523,6 +542,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
 
     /**
      * @return the String representation of the GameModeType.
+     * @param modeType, the GameModeType that was selected
      */
     private String getModeString(GameModeType modeType) {
         switch (modeType) {

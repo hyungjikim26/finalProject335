@@ -15,14 +15,12 @@ import javax.swing.border.Border;
 
 public class BoardGUI implements java.awt.event.KeyListener {
     private Controller controller = new Controller();
-    private int score = 0;
     private JLabel[] slots = new JLabel[16];
     private JLabel scoreLabel;
     private CardLayout layout;
+    //the main frame for the GUI
     private JFrame frame;
     private JPanel cardPanel;
-    // private GameState currentState;
-    private Leaderboard leaderboard;
     private JLabel timerLabel;
     private JLabel movesLeftLabel;
     private JLabel modeLabel;
@@ -31,89 +29,106 @@ public class BoardGUI implements java.awt.event.KeyListener {
     private boolean scoreEffectActive = false;
     private JButton scoreEffectButton;
     private JPanel tiles;
-    private GameModeType selected;
 
 
     public static void main(String[] args) {
         new BoardGUI();
     }
-
+    
+    /**
+     * Default constructor for the BoardGUI class.
+     */
     public BoardGUI() {
-        GameModeType selectedMode = chooseGameMode();
-        //initializeGame(selectedMode);
+        chooseGameMode();
     }
-
-    private GameModeType getGameMode(GameModeType mode){
-        return mode;
-    }
-
-    public GameModeType chooseGameMode() {
+    
+    /**
+     * Create the main screen that allows the user to choose a game mode.
+     * @return the GameModeType that was selected
+     */
+    public void chooseGameMode() {
+        //format the frame
         frame = new JFrame("2048");
         cardPanel = new JPanel();
         layout = new CardLayout();
         cardPanel.setLayout(layout);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(750, 780);
+        //center the window on the computer screen
         frame.setLocationRelativeTo(null);
         frame.add(cardPanel);
 
+        //the base panel that will contain other panels
         JPanel main = new JPanel(new BorderLayout());
 
+        //the panel that will contain the game title and the select mode message
         JPanel chooseMode = new JPanel(new BorderLayout());
         Font labelFont = new Font("Helvetica", Font.BOLD, 180);
         JLabel title = new JLabel("2048",SwingConstants.CENTER);
+        //make the title "2048" red
         title.setForeground(new Color(0xF7603B));
         title.setFont(labelFont);
         JLabel message = new JLabel("Select a Game Mode", SwingConstants.CENTER);
         Font messageFont = new Font("Helvetica", Font.BOLD, 25);
         message.setFont(messageFont);
-        
+        chooseMode.add(title, BorderLayout.CENTER);
+        chooseMode.add(message, BorderLayout.SOUTH);
 
+        //add padding at the top of the panel
+        chooseMode.setBorder(BorderFactory.createEmptyBorder(140,0,10,0));
+
+        //the panel that will contain the buttons to select a game mode.
         JPanel buttons = new JPanel(new FlowLayout());
         JButton traditional = new JButton("Traditional");
         JButton time = new JButton("Time");
         JButton move = new JButton("Move Limit");
-        chooseMode.add(title, BorderLayout.CENTER);
-        chooseMode.add(message, BorderLayout.SOUTH);
-        chooseMode.setBorder(BorderFactory.createEmptyBorder(140,0,10,0));
 
         buttons.add(traditional, BorderLayout.WEST);
         buttons.add(time,BorderLayout.CENTER);
         buttons.add(move,BorderLayout.EAST);
 
+        //add both panels to the main panel
         main.add(chooseMode, BorderLayout.NORTH);
         main.add(buttons, BorderLayout.CENTER);
         cardPanel.add(main);
 
+        //ActionListeners for the buttons to initialize the game based on the selected 
+        //GameModeType and switch to the next screen.
         traditional.addActionListener(e ->{
-            selected = GameModeType.TRADITIONAL;
             initializeGame(GameModeType.TRADITIONAL);
             layout.next(cardPanel);
         });
 
         time.addActionListener(e ->{
-            selected = GameModeType.TIME_LIMIT;
             initializeGame(GameModeType.TIME_LIMIT);
             layout.next(cardPanel);
         });
 
         move.addActionListener(e ->{
-            selected = GameModeType.MOVE_LIMIT;
             initializeGame(GameModeType.MOVE_LIMIT);
             layout.next(cardPanel);
         });
         frame.setVisible(true);
-        return selected;
     }
 
+    /**
+     * Create a new Leaderboard object and a new Controller
+     * based on the selected GameModeType, and call setUp()
+     * to create the main part of the GUI
+     * @return void
+     * @param modeType the GameModeType that was selected
+     */
     public void initializeGame(GameModeType modeType) {
-        leaderboard = new Leaderboard();
-
         controller.newGame(modeType);
 
         setup(modeType);
     }
-
+    /**
+     * Create a KeyEvent for the wasd keys to
+     * control the movement of the tiles in the game.
+     * @return void
+     */
+    @Override
     public void keyTyped(java.awt.event.KeyEvent e) {
         int keyChar = e.getKeyChar();
         switch (keyChar) {
@@ -136,11 +151,19 @@ public class BoardGUI implements java.awt.event.KeyListener {
             handleGameOver();
         }
     }
-
+    /**
+     * Unused method from the implemented KeyListener class.
+     * @return void
+     */
+    @Override
     public void keyReleased(java.awt.event.KeyEvent e) {
-
     }
 
+    /**
+     * Create a KeyEvent for the arrow keys to
+     * control the movement of the tiles in the game.
+     * @return void
+     */
     @Override
     public void keyPressed(java.awt.event.KeyEvent e) {
         // prevent further moves when game is over
@@ -170,6 +193,11 @@ public class BoardGUI implements java.awt.event.KeyListener {
         }
     }
 
+    /**
+     * Update the GUI to reflect the current information
+     * in the Board, including tile positon, score, and time/moves left.
+     * @return void
+     */
     private void updateGrid() {
         Tile[][] curGrid = controller.getGrid();
         int slotNum = 0;
@@ -185,15 +213,9 @@ public class BoardGUI implements java.awt.event.KeyListener {
         if (controller.getGameMode() == GameModeType.MOVE_LIMIT) {
             movesLeftLabel.setText("Moves Left: " + controller.getMovesLeft());
         }
-
-        int newScore = controller.getScore();
-		if (newScore > score) {
-			updateScoreEffect(newScore - score);
-			score = newScore;
-		}
     }
 
-    	/**
+    /**
 	 * Displays a score effect on the game screen.
 	 * @param pointsGained the number of points gained
 	 */
@@ -262,18 +284,21 @@ public class BoardGUI implements java.awt.event.KeyListener {
 	    timer.start();
 	}
 
+    /**
+     * Create the screen that displays the game, including the tiles, the
+     * current score, the time/moves remaining, and the buttons to 
+     * toggle the color scheme and score display effect.
+     * @return void
+     * @param modeType the GameModeType that was selected
+     */
     private void setup(GameModeType modeType) {
-
-
         Font font = new Font("Clear Sans", Font.BOLD, 12);
 
-        scoreLabel = new JLabel("Current Score: " + score);
+        scoreLabel = new JLabel("Current Score: " + controller.getScore());
         scoreLabel.setFont(font);
-        // scoreLabel.setSize(750, 30);
         modeLabel = new JLabel("Mode: " + getModeString(modeType));
         modeLabel.setFont(font);
 
-        // JPanel top = new JPanel();
         JPanel top = new JPanel(new GridLayout(1, 6));
 
         top.add(scoreLabel);
@@ -359,19 +384,24 @@ public class BoardGUI implements java.awt.event.KeyListener {
 
         cardPanel.add(split);
         cardPanel.setVisible(true);
-        //frame.add(cardPanel);
-        //frame.setVisible(true);
     }
 
+    /**
+     * Turn on or off the effect that displays
+     * the amount of points earned by each successful move.
+     * @return void
+     */
     private void toggleScoreEffect() {
         scoreEffectActive = !scoreEffectActive;
         scoreEffectButton.setText("Score Effect: " + (scoreEffectActive ? "ON" : "OFF"));
 
-        // tiles.revalidate();
-        // tiles.repaint();
         tiles.requestFocusInWindow();
     }
 
+    /**
+     * Switch between the red or blue color schemes.
+     * @return void
+     */
     private void switchColorScheme() {
         // toggle between blue and red
         colorScheme = (colorScheme == ColorScheme.BLUE) 
@@ -393,6 +423,12 @@ public class BoardGUI implements java.awt.event.KeyListener {
         tiles.repaint();
         tiles.requestFocusInWindow();
     }
+    /**
+     * Switch between the red or blue color schemes.
+     * @return the Color of the tile based on the color scheme
+     * and the tile's value
+     * @param value the value of a tile
+     */
     private Color decideColor(int value) {   
         switch (colorScheme) {
             case BLUE:
@@ -404,6 +440,11 @@ public class BoardGUI implements java.awt.event.KeyListener {
         }
     }
 
+    /**
+     * Switch between the red or blue color schemes.
+     * @return the Color of a tile given its value
+     * @param value, the value of a tile
+     */
     private Color calculateColorRed(int value){
         switch (value) {
             case 0:
@@ -435,7 +476,11 @@ public class BoardGUI implements java.awt.event.KeyListener {
         }
     }
 
- 
+    /**
+     * Switch between the red or blue color schemes.
+     * @return the Color of a tile given its value
+     * @param value, the value of a tile
+     */
     private Color calculateColorBlue(int value) {
         switch (value) {
             case 0:
@@ -467,9 +512,16 @@ public class BoardGUI implements java.awt.event.KeyListener {
         }
     }
 
+    /**
+     * Set the color and numbers of a given tile.
+     * @return void
+     * @param tile, the Tile object to be changed.
+     * @param slotNum, the tile's position on the grid (0-15) 
+     */
     public void changeTile(Tile tile, int slotNum) {
         JLabel slot = slots[slotNum];
         JPanel tilePanel = (JPanel) slot.getParent();
+        //only tiles with a value of 0 will be blank
         if (tile.getValue() == 0) {
             slot.setText("");
             tilePanel.setBackground(colorScheme == ColorScheme.BLUE ? new Color(0xE1E8F0) : new Color(0xcdc1b4));
@@ -486,16 +538,12 @@ public class BoardGUI implements java.awt.event.KeyListener {
         }
         slot.setBackground(decideColor(tile.getValue()));
         slot.setOpaque(true);
-        // slot.setBorder(BorderFactory.createCompoundBorder(
-        //     BorderFactory.createLineBorder(Color.WHITE),
-        //     BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        // ));
-
-        // add round border
-        // slot.setBorder(new RoundBorder(20));
-
     }
 
+    /**
+     * @return the String representation of the GameModeType.
+     * @param modeType, the GameModeType that was selected
+     */
     private String getModeString(GameModeType modeType) {
         switch (modeType) {
             case TRADITIONAL:
@@ -509,19 +557,33 @@ public class BoardGUI implements java.awt.event.KeyListener {
         }
     }
 
+    /**
+     * @return the "game over" message from the Controller class.
+     */
     private String getGameOverMessage() {
         return controller.getGameOverMessage();
     }
 
+    /**
+     * Ask the user whether to display the top 10 scores or all scores
+     * then create a screen to display the corresponding leaderboard
+     * and a button to start a new game.
+     * @return void
+     */
     private void displayLeaderboard() {
+        //main panel that will contain other panels.
         JPanel main = new JPanel(new BorderLayout());
+        //panel that will contain the leaderboard
         JPanel leaders = new JPanel(new GridLayout());
+        //panel that will contain the Start New Game button
         JPanel buttonHolder = new JPanel();
 
         leaders.setPreferredSize(new Dimension(750, 745));
         buttonHolder.setPreferredSize((new Dimension(750,35)));
 
         JButton newGame = new JButton("Start a New Game");
+        //to start a new game, close the current window and 
+        //start a new game
         newGame.addActionListener(e ->{
             frame.dispose();
             new BoardGUI();
@@ -531,6 +593,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
         JTextArea textArea = new JTextArea();
         textArea.setFont(new Font("", Font.PLAIN, 20));
         textArea.setEditable(false);
+        //add a scroll bar to the leaderboard
         JScrollPane scroll = new JScrollPane(textArea);
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -549,11 +612,11 @@ public class BoardGUI implements java.awt.event.KeyListener {
 
         if (selected == 0) {
             sb.append("All Scores:\n");
-            scores = leaderboard.getAllScores();
+            scores = controller.getAllScores();
 
         } else {
             sb.append("Top 10 Scores:\n");
-            scores = leaderboard.getTopScore();
+            scores = controller.getTopScores();
         }
 
         for (int i = 0; i < scores.size(); i++) {
@@ -574,6 +637,12 @@ public class BoardGUI implements java.awt.event.KeyListener {
         layout.next(cardPanel);
     }
 
+    /**
+     * Once the game is over, ask user for their name and enter
+     * their name and score to the leaderboard, then call
+     * displayLeaderboard().
+     * @return void
+     */
     private void handleGameOver() {
         int finalScore = controller.getScore();
 
@@ -585,16 +654,10 @@ public class BoardGUI implements java.awt.event.KeyListener {
                 JOptionPane.INFORMATION_MESSAGE);
 
         if (playerName != null && !playerName.isEmpty()) {
-            leaderboard.addScore(playerName, finalScore);
+            controller.addScore(playerName, finalScore);
 
             displayLeaderboard();
         }
-
-        // prevent further moves
-        // disable key listener
-
-        // remove focus from the game board
-
     }
 
     // additional class for round border
@@ -621,6 +684,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
     }
 }
 
+//Additional class for rounded JPanels.
 class RoundedPanel extends JPanel {
 
     private int cornerRadius = 20;

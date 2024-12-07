@@ -4,7 +4,7 @@ This is a final project for CSC 335 (Fall 2024) at the University of Arizona.
 
 ## Overview of the Software
 
-This software is a Java implementation of the game 2048. The GUI is implemented using Java Swing.
+This software is a Java implementation of the game 2048. The GUI is implemented using Java Swing. The software uses a Model-View-Control design. The Board class acts as the model, with the Controller class as the controller and the BoardGUI class as the view.
 
 ## WOW Factors
 
@@ -29,6 +29,8 @@ This is a mode where the user has a set amount of moves to reach 2048. Current m
 
 ## Extra Features
 
+These are the extra features that we implemented for fun (!)
+
 ### Changeable Color Schemes
 
 During the game, the user can change the color scheme of the game board. By default, the color scheme is set to the color scheme of the original 2048 game (red/yellow). The user can click on the **Change Color** button to change the color scheme to blue. Colors can be changed back and forth between red and blue.
@@ -43,17 +45,26 @@ During the game, the user can change the color scheme of the game board. By defa
 
 During the game, the score earned from each move will be displayed on the center of the game board. The score effect can be toggled on and off by clicking the **Score Effect** button.
 
-### Main Menu
+<!-- ### Main Menu -->
 
 ## Instructions
 
 The code can be run by going into the directory where the code is located and running the following command:
 
-!!! we also need to show it compiles properly !!!
+```
+javac *.java
+```
+
+Once the code has been compiled, enter the following command:
 
 ```
 java BoardGUI.java
 ```
+
+The GUI will appear and the user will be prompted to click a button to select a Game Mode.\
+Once Game Mode has been selected, the user is able to play the game using either the arrow keys or the w-a-s-d keys.\
+Once the user either wins or loses the game, they are prompted to enter their name to be added to the leaderboard and to select whether to display all existing scores or only the Top 10 scores on the leaderboard.\
+After doing so, the leaderboard will be displayed along with a button that allows the user to start a new game.
 
 ## People who worked on this project
 

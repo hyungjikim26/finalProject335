@@ -1,0 +1,15 @@
+Player3;2048
+s;96
+s;16
+what;16
+what;16
+Player2;10
+HJ;8
+HJ;8
+what;8
+w;8
+juwon;4
+Player1;4
+z;0
+z;0
+z;0

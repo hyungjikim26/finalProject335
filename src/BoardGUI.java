@@ -20,6 +20,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
     private JLabel scoreLabel;
     private CardLayout layout;
     //the main frame for the GUI
+    private int prevScore;
     private JFrame frame;
     private JPanel cardPanel;
     private JLabel timerLabel;
@@ -132,6 +133,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
     @Override
     public void keyTyped(java.awt.event.KeyEvent e) {
         int keyChar = e.getKeyChar();
+        prevScore = controller.getScore();
         switch (keyChar) {
             case 'w':
                 controller.moveBoardUp();
@@ -171,6 +173,8 @@ public class BoardGUI implements java.awt.event.KeyListener {
         if (controller.isGameOver()) {
             return;
         }
+        
+        prevScore = controller.getScore();
 
         int keyCode = e.getKeyCode();
         switch (keyCode) {
@@ -214,6 +218,11 @@ public class BoardGUI implements java.awt.event.KeyListener {
         if (controller.getGameMode() == GameModeType.MOVE_LIMIT) {
             movesLeftLabel.setText("Moves Left: " + controller.getMovesLeft());
         }
+        int newScore = controller.getScore();
+		if (newScore > prevScore) {
+			updateScoreEffect(newScore - prevScore);
+			prevScore = newScore;
+		}
     }
 
     /**

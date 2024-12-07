@@ -15,14 +15,11 @@ import javax.swing.border.Border;
 
 public class BoardGUI implements java.awt.event.KeyListener {
     private Controller controller = new Controller();
-    private int score = 0;
     private JLabel[] slots = new JLabel[16];
     private JLabel scoreLabel;
     private CardLayout layout;
     private JFrame frame;
     private JPanel cardPanel;
-    // private GameState currentState;
-    private Leaderboard leaderboard;
     private JLabel timerLabel;
     private JLabel movesLeftLabel;
     private JLabel modeLabel;
@@ -31,7 +28,6 @@ public class BoardGUI implements java.awt.event.KeyListener {
     private boolean scoreEffectActive = false;
     private JButton scoreEffectButton;
     private JPanel tiles;
-    private GameModeType selected;
 
 
     public static void main(String[] args) {
@@ -39,15 +35,14 @@ public class BoardGUI implements java.awt.event.KeyListener {
     }
 
     public BoardGUI() {
-        GameModeType selectedMode = chooseGameMode();
-        //initializeGame(selectedMode);
+        chooseGameMode();
     }
 
     private GameModeType getGameMode(GameModeType mode){
         return mode;
     }
 
-    public GameModeType chooseGameMode() {
+    public void chooseGameMode() {
         frame = new JFrame("2048");
         cardPanel = new JPanel();
         layout = new CardLayout();
@@ -86,29 +81,23 @@ public class BoardGUI implements java.awt.event.KeyListener {
         cardPanel.add(main);
 
         traditional.addActionListener(e ->{
-            selected = GameModeType.TRADITIONAL;
             initializeGame(GameModeType.TRADITIONAL);
             layout.next(cardPanel);
         });
 
         time.addActionListener(e ->{
-            selected = GameModeType.TIME_LIMIT;
             initializeGame(GameModeType.TIME_LIMIT);
             layout.next(cardPanel);
         });
 
         move.addActionListener(e ->{
-            selected = GameModeType.MOVE_LIMIT;
             initializeGame(GameModeType.MOVE_LIMIT);
             layout.next(cardPanel);
         });
         frame.setVisible(true);
-        return selected;
     }
 
     public void initializeGame(GameModeType modeType) {
-        leaderboard = new Leaderboard();
-
         controller.newGame(modeType);
 
         setup(modeType);
@@ -185,15 +174,9 @@ public class BoardGUI implements java.awt.event.KeyListener {
         if (controller.getGameMode() == GameModeType.MOVE_LIMIT) {
             movesLeftLabel.setText("Moves Left: " + controller.getMovesLeft());
         }
-
-        int newScore = controller.getScore();
-		if (newScore > score) {
-			updateScoreEffect(newScore - score);
-			score = newScore;
-		}
     }
 
-    	/**
+    /**
 	 * Displays a score effect on the game screen.
 	 * @param pointsGained the number of points gained
 	 */
@@ -267,7 +250,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
 
         Font font = new Font("Clear Sans", Font.BOLD, 12);
 
-        scoreLabel = new JLabel("Current Score: " + score);
+        scoreLabel = new JLabel("Current Score: " + controller.getScore());
         scoreLabel.setFont(font);
         // scoreLabel.setSize(750, 30);
         modeLabel = new JLabel("Mode: " + getModeString(modeType));
@@ -549,11 +532,11 @@ public class BoardGUI implements java.awt.event.KeyListener {
 
         if (selected == 0) {
             sb.append("All Scores:\n");
-            scores = leaderboard.getAllScores();
+            scores = controller.getAllScores();
 
         } else {
             sb.append("Top 10 Scores:\n");
-            scores = leaderboard.getTopScore();
+            scores = controller.getTopScores();
         }
 
         for (int i = 0; i < scores.size(); i++) {
@@ -585,7 +568,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
                 JOptionPane.INFORMATION_MESSAGE);
 
         if (playerName != null && !playerName.isEmpty()) {
-            leaderboard.addScore(playerName, finalScore);
+            controller.addScore(playerName, finalScore);
 
             displayLeaderboard();
         }

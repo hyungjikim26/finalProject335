@@ -6,7 +6,6 @@
  *          displaying tiles and handling user interactions.
  * 
  */
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -48,7 +47,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
      * Create the main screen that allows the user to choose a game mode.
      * @return the GameModeType that was selected
      */
-    public void chooseGameMode() {
+    private void chooseGameMode() {
         //format the frame
         frame = new JFrame("2048");
         cardPanel = new JPanel();
@@ -120,7 +119,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
      * @return void
      * @param modeType the GameModeType that was selected
      */
-    public void initializeGame(GameModeType modeType) {
+    private void initializeGame(GameModeType modeType) {
         controller.newGame(modeType);
 
         setup(modeType);
@@ -528,7 +527,7 @@ public class BoardGUI implements java.awt.event.KeyListener {
      * @param tile, the Tile object to be changed.
      * @param slotNum, the tile's position on the grid (0-15) 
      */
-    public void changeTile(Tile tile, int slotNum) {
+    private void changeTile(Tile tile, int slotNum) {
         JLabel slot = slots[slotNum];
         JPanel tilePanel = (JPanel) slot.getParent();
         //only tiles with a value of 0 will be blank

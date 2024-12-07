@@ -659,6 +659,10 @@ public class BoardGUI implements java.awt.event.KeyListener {
 
             displayLeaderboard();
         }
+        else {
+            frame.dispose();
+        	new BoardGUI();
+        }
     }
 
     // additional class for round border
